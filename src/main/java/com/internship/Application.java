@@ -6,8 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * 毕业实习项目主启动类
  * 
- * @author hhhh
- * @version 1.0.0
+ * @author huihuizi1024
+ * @date 2025.6.22
+ * @version 1.1.0
  */
 @SpringBootApplication
 public class Application {
