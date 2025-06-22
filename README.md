@@ -27,18 +27,18 @@
 - SVN
 
 ### 集成开发环境
-- IntelliJ IDEA 2020
-- Eclipse 2020
-- HBuilderX
-- JetBrains PyCharm 2020
+- IntelliJ IDEA 2024
+- Eclipse 2024
+- HBuilderX 4.0+
+- JetBrains PyCharm 2024
 
 ### 工具
-- Visio 2013
-- PowerDesigner 16.5
-- Microsoft Project 2013
-- LoadRunner 8.0
-- QC 9.0
-- SQLyog/Navicat
+- VS Code 2024
+- PowerDesigner 16.7+
+- Microsoft Project 2024
+- LoadRunner Professional 2024
+- ALM (Quality Center) 16.0+
+- SQLyog 13.0+ / Navicat 17.0+
 
 ### 部署环境
 - Linux
