@@ -74,54 +74,11 @@ src/
     └── java/
 ```
 
-## API接口文档
+## 文档导航
 
-### 1. 积分规则管理模块 (`/api/point-rules`)
-
-| 接口 | 方法 | 描述 |
-|------|------|------|
-| `/api/point-rules` | POST | 创建积分规则 |
-| `/api/point-rules` | GET | 分页查询积分规则 |
-| `/api/point-rules/{id}` | GET | 获取积分规则详情 |
-| `/api/point-rules/{id}` | PUT | 更新积分规则 |
-| `/api/point-rules/{id}` | DELETE | 删除积分规则 |
-| `/api/point-rules/{id}/review` | POST | 审核积分规则 |
-| `/api/point-rules/{id}/status` | POST | 启用/禁用积分规则 |
-| `/api/point-rules/batch` | DELETE | 批量删除积分规则 |
-| `/api/point-rules/statistics` | GET | 获取积分规则统计 |
-| `/api/point-rules/export` | GET | 导出积分规则 |
-
-### 2. 转换规则管理模块 (`/api/conversion-rules`)
-
-| 接口 | 方法 | 描述 |
-|------|------|------|
-| `/api/conversion-rules` | POST | 创建转换规则 |
-| `/api/conversion-rules` | GET | 分页查询转换规则 |
-| `/api/conversion-rules/{id}` | GET | 获取转换规则详情 |
-| `/api/conversion-rules/{id}` | PUT | 更新转换规则 |
-| `/api/conversion-rules/{id}` | DELETE | 删除转换规则 |
-| `/api/conversion-rules/{id}/review` | POST | 审核转换规则 |
-| `/api/conversion-rules/{id}/status` | POST | 启用/禁用转换规则 |
-| `/api/conversion-rules/{id}/test` | POST | 测试转换规则 |
-| `/api/conversion-rules/ratio-recommendations` | GET | 获取转换比例推荐 |
-| `/api/conversion-rules/statistics` | GET | 获取转换规则统计 |
-
-### 3. 机构管理模块 (`/api/institutions`)
-
-| 接口 | 方法 | 描述 |
-|------|------|------|
-| `/api/institutions` | POST | 创建机构 |
-| `/api/institutions` | GET | 分页查询机构 |
-| `/api/institutions/{id}` | GET | 获取机构详情 |
-| `/api/institutions/{id}` | PUT | 更新机构信息 |
-| `/api/institutions/{id}` | DELETE | 删除机构 |
-| `/api/institutions/{id}/review` | POST | 审核机构 |
-| `/api/institutions/{id}/status` | POST | 修改机构状态 |
-| `/api/institutions/{id}/certification` | POST | 机构认证等级评定 |
-| `/api/institutions/statistics` | GET | 获取机构统计 |
-| `/api/institutions/region-statistics` | GET | 获取区域统计 |
-| `/api/institutions/type-statistics` | GET | 获取类型统计 |
-| `/api/institutions/export` | GET | 导出机构信息 |
+📖 **详细文档链接**
+- **[API接口文档](./API.md)** - 32个REST API接口详细说明
+- **[项目测试文档](./TESTING.md)** - 完整的测试指南和自动化脚本
 
 ## 运行说明
 
@@ -139,11 +96,218 @@ mvn package
 mvn dockerfile:build
 ```
 
+## 开发环境配置
+
+### 1. Docker安装配置
+
+#### macOS安装Docker Desktop
+
+1. **下载Docker Desktop**
+   - 访问：https://www.docker.com/products/docker-desktop
+   - 点击 "Download for Mac"
+   - 根据芯片类型选择：
+     - Apple Silicon (M1/M2/M3): "Mac with Apple Chip"
+     - Intel: "Mac with Intel Chip"
+
+2. **安装步骤**
+   - 打开下载的.dmg文件
+   - 拖拽Docker到Applications文件夹
+   - 从Applications启动Docker Desktop
+   - 同意许可协议并等待启动完成
+
+3. **验证安装**
+   ```bash
+   docker --version
+   ```
+
+#### Windows安装Docker Desktop
+
+1. **下载安装包**
+   - 访问：https://www.docker.com/products/docker-desktop
+   - 下载Windows版本
+
+2. **安装要求**
+   - Windows 10 Pro/Enterprise/Education (Build 16299+)
+   - 或 Windows 11
+   - 启用Hyper-V和容器功能
+
+3. **验证安装**
+   ```cmd
+   docker --version
+   ```
+
+### 2. MySQL数据库配置
+
+#### 方法一：Docker Desktop图形界面（推荐）
+
+1. **搜索MySQL镜像**
+   - 打开Docker Desktop
+   - 点击"Images"（镜像）选项卡
+   - 搜索"mysql"
+   - 选择官方MySQL镜像
+   - 下载MySQL 8.0版本
+
+2. **创建MySQL容器**
+   - 转到"Containers"（容器）选项卡
+   - 点击"Run"创建新容器
+   - 选择MySQL镜像
+
+3. **容器配置参数**
+   ```
+   容器名称：mysql-internship
+   端口映射：3306:3306
+   
+   环境变量：
+   MYSQL_ROOT_PASSWORD=123456
+   MYSQL_DATABASE=internship_db
+   MYSQL_CHARACTER_SET_SERVER=utf8mb4
+   MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
+   ```
+
+4. **启动容器**
+   - 检查配置并点击"Run"
+   - 等待容器状态变为绿色Running
+
+#### 方法二：命令行创建（快速）
+
+```bash
+# 创建MySQL容器
+docker run -d \
+  --name mysql-internship \
+  -p 3306:3306 \
+  -e MYSQL_ROOT_PASSWORD=123456 \
+  -e MYSQL_DATABASE=internship_db \
+  -e MYSQL_CHARACTER_SET_SERVER=utf8mb4 \
+  -e MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci \
+  mysql:8.0
+
+# 验证容器运行状态
+docker ps
+
+# 连接到MySQL容器
+docker exec -it mysql-internship mysql -u root -p
+```
+
+#### 方法三：Docker Compose配置
+
+创建 `docker-compose.yml` 文件：
+
+```yaml
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-internship
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: internship_db
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+```
+
+启动命令：
+```bash
+# 启动服务
+docker-compose up -d
+
+# 停止服务
+docker-compose down
+
+# 查看日志
+docker-compose logs mysql
+```
+
+### 3. 数据库连接配置
+
+在 `application.properties` 中配置数据库连接：
+
+```properties
+# Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/internship_db?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai
+spring.datasource.username=root
+spring.datasource.password=123456
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+```
+
+### 4. 数据库管理工具
+
+推荐使用以下工具管理MySQL数据库：
+
+- **MySQL Workbench**（官方工具）
+- **Navicat Premium**（商业版）
+- **DBeaver**（免费开源）
+- **phpMyAdmin**（Web界面）
+
+连接参数：
+```
+主机：localhost
+端口：3306
+用户名：root
+密码：123456
+数据库：internship_db
+```
+
+### 5. 开发环境验证
+
+1. **验证Docker运行**
+   ```bash
+   docker ps
+   ```
+
+2. **验证MySQL连接**
+   ```bash
+   docker exec -it mysql-internship mysql -u root -p123456 -e "SHOW DATABASES;"
+   ```
+
+3. **验证项目启动**
+   ```bash
+   mvn spring-boot:run
+   ```
+
+4. **验证API文档**
+   - 访问：http://localhost:8080/swagger-ui/index.html
+
+## 快速开始测试
+
+### 验证项目启动
+```bash
+# 检查Docker和MySQL容器
+docker ps | grep mysql-internship
+
+# 启动应用
+mvn spring-boot:run
+
+# 验证API文档
+curl http://localhost:8080/swagger-ui/index.html
+
+# 快速API测试
+curl -X POST http://localhost:8080/api/point-rules \
+  -H "Content-Type: application/json" \
+  -d '{"ruleName":"测试规则","ruleCode":"TEST001","pointType":1,"points":100}'
+```
+
+🧪 **完整测试指南**：详细的测试步骤、故障排除和自动化脚本请查看 [TESTING.md](./TESTING.md)
+
 ## 环境要求
 
 - JDK 17+
 - Maven 3.6+
-- MySQL 8.0+
+- Docker Desktop
+- MySQL 8.0+ (通过Docker容器)
 - Redis 6.0+
 - Apache Kafka 2.8+
 
@@ -181,5 +345,27 @@ mvn dockerfile:build
 
 ## 版本记录
 
-* v1.1.0: 完成核心实体类设计、统一响应类和所有API接口定义（2025.6.22）
-* v1.0.0: 项目初始化，技术栈配置完成 
+* **v1.1.0** (2025.6.22): 完成核心实体类设计、统一响应类和所有API接口定义，文档分离优化
+* **v1.0.0** (2025.6.22): 项目初始化，技术栈配置完成
+
+## 贡献指南
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+## 许可证
+
+本项目仅用于学习和实习目的，遵循 MIT 许可证。
+
+## 联系方式
+
+- **作者**：huihuizi1024
+- **GitHub**：https://github.com/huihuizi1024
+- **项目地址**：https://github.com/huihuizi1024/graduation_field_work_code
+
+---
+
+🎓 **毕业实习项目** - 终身学习学分银行平台积分管理系统 v1.1.0 
