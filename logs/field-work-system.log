@@ -2031,3 +2031,685 @@ java.lang.IllegalArgumentException: Name for argument of type [java.lang.Integer
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-10.1.17.jar:10.1.17]
 	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
 
+2025-06-23T11:41:52.992+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 27248 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T11:41:52.994+08:00 DEBUG 27248 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T11:41:52.994+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T11:41:53.024+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T11:41:53.026+08:00  INFO 27248 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T11:41:53.026+08:00  INFO 27248 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T11:41:53.548+08:00  INFO 27248 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T11:41:53.549+08:00  INFO 27248 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T11:41:53.563+08:00  INFO 27248 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 JPA repository interfaces.
+2025-06-23T11:41:53.960+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 19596 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T11:41:53.963+08:00 DEBUG 19596 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T11:41:53.964+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T11:41:53.990+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T11:41:53.990+08:00  INFO 19596 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T11:41:53.990+08:00  INFO 19596 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T11:41:54.011+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T11:41:54.018+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T11:41:54.018+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T11:41:54.059+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T11:41:54.060+08:00  INFO 27248 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1033 ms
+2025-06-23T11:41:54.134+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T11:41:54.169+08:00  INFO 27248 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T11:41:54.189+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T11:41:54.316+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T11:41:54.330+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T11:41:54.426+08:00  INFO 19596 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T11:41:54.427+08:00  INFO 19596 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T11:41:54.439+08:00  INFO 19596 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 JPA repository interfaces.
+2025-06-23T11:41:54.481+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6cf4bc52
+2025-06-23T11:41:54.482+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T11:41:54.516+08:00  WARN 27248 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T11:41:54.857+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T11:41:54.863+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T11:41:54.863+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T11:41:54.901+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T11:41:54.901+08:00  INFO 19596 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 910 ms
+2025-06-23T11:41:54.983+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T11:41:55.016+08:00  INFO 19596 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T11:41:55.036+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T11:41:55.168+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T11:41:55.183+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T11:41:55.218+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T11:41:55.319+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@69951d4e
+2025-06-23T11:41:55.320+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T11:41:55.351+08:00  WARN 19596 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T11:41:55.637+08:00  INFO 27248 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:41:55.716+08:00  WARN 27248 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T11:41:55.999+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T11:41:56.020+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T11:41:56.026+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.274 seconds (process running for 3.787)
+2025-06-23T11:41:56.050+08:00  INFO 19596 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T11:41:56.078+08:00  INFO 19596 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:41:56.161+08:00  WARN 19596 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T11:41:56.442+08:00  WARN 19596 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2025-06-23T11:41:56.456+08:00  WARN 19596 --- [field-work-system] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-06-23T11:41:56.457+08:00  INFO 19596 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:41:56.459+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T11:41:56.463+08:00  INFO 19596 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T11:41:56.471+08:00  INFO 19596 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T11:41:56.482+08:00 ERROR 19596 --- [field-work-system] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-06-23T11:42:04.357+08:00  INFO 27248 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 9 class path changes (0 additions, 0 deletions, 9 modifications)
+2025-06-23T11:42:04.371+08:00  INFO 27248 --- [field-work-system] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:42:04.373+08:00  INFO 27248 --- [field-work-system] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T11:42:04.374+08:00  INFO 27248 --- [field-work-system] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T11:42:04.423+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 27248 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T11:42:04.423+08:00 DEBUG 27248 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T11:42:04.423+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T11:42:04.534+08:00  INFO 27248 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T11:42:04.534+08:00  INFO 27248 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T11:42:04.535+08:00  INFO 27248 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 1 ms. Found 0 JPA repository interfaces.
+2025-06-23T11:42:04.580+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T11:42:04.581+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T11:42:04.581+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T11:42:04.600+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T11:42:04.600+08:00  INFO 27248 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 176 ms
+2025-06-23T11:42:04.613+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T11:42:04.615+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T11:42:04.618+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T11:42:04.618+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-06-23T11:42:04.625+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@933d0e9
+2025-06-23T11:42:04.625+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-06-23T11:42:04.626+08:00  WARN 27248 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T11:42:04.678+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T11:42:04.686+08:00  INFO 27248 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:42:04.705+08:00  WARN 27248 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T11:42:04.776+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T11:42:04.782+08:00  INFO 27248 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T11:42:04.784+08:00  INFO 27248 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.375 seconds (process running for 12.545)
+2025-06-23T11:42:04.785+08:00  INFO 27248 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T11:43:07.789+08:00  INFO 9408 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 9408 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T11:43:07.790+08:00 DEBUG 9408 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T11:43:07.790+08:00  INFO 9408 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T11:43:07.817+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T11:43:07.817+08:00  INFO 9408 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T11:43:07.817+08:00  INFO 9408 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T11:43:08.249+08:00  INFO 9408 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T11:43:08.250+08:00  INFO 9408 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T11:43:08.260+08:00  INFO 9408 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 JPA repository interfaces.
+2025-06-23T11:43:08.649+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T11:43:08.655+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T11:43:08.655+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T11:43:08.694+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T11:43:08.694+08:00  INFO 9408 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 877 ms
+2025-06-23T11:43:08.767+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T11:43:08.798+08:00  INFO 9408 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T11:43:08.815+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T11:43:08.940+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T11:43:08.954+08:00  INFO 9408 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T11:43:09.087+08:00  INFO 9408 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@17f15be3
+2025-06-23T11:43:09.088+08:00  INFO 9408 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T11:43:09.116+08:00  WARN 9408 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T11:43:09.795+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T11:43:09.821+08:00  INFO 9408 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:43:09.900+08:00  WARN 9408 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T11:43:10.179+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T11:43:10.199+08:00  INFO 9408 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T11:43:10.205+08:00  INFO 9408 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 2.641 seconds (process running for 3.116)
+2025-06-23T11:43:21.463+08:00  INFO 9408 --- [field-work-system] [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-23T11:43:21.463+08:00  INFO 9408 --- [field-work-system] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-23T11:43:21.464+08:00  INFO 9408 --- [field-work-system] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-06-23T11:43:32.142+08:00  INFO 9408 --- [field-work-system] [http-nio-8080-exec-1] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 274 ms
+2025-06-23T11:44:53.962+08:00  INFO 9408 --- [field-work-system] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T11:44:53.964+08:00  INFO 9408 --- [field-work-system] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T11:44:53.969+08:00  INFO 9408 --- [field-work-system] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:07:18.825+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 33068 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:07:18.826+08:00 DEBUG 33068 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:07:18.828+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:07:18.854+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:07:18.854+08:00  INFO 33068 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:07:18.854+08:00  INFO 33068 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:07:19.293+08:00  INFO 33068 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:07:19.294+08:00  INFO 33068 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:07:19.371+08:00  INFO 33068 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 1 JPA repository interface.
+2025-06-23T12:07:19.438+08:00  WARN 33068 --- [field-work-system] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.internship]' package. Please check your configuration.
+2025-06-23T12:07:19.729+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:07:19.736+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:07:19.736+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:07:19.773+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:07:19.773+08:00  INFO 33068 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 919 ms
+2025-06-23T12:07:19.846+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:07:19.877+08:00  INFO 33068 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:07:19.895+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:07:20.014+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:07:20.029+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:07:20.166+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@78b295ab
+2025-06-23T12:07:20.167+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:07:20.195+08:00  WARN 33068 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:07:20.866+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:07:20.892+08:00  INFO 33068 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:07:21.053+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:07:21.053+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:07:21.326+08:00  WARN 33068 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:07:21.644+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:07:21.667+08:00  INFO 33068 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:07:21.672+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.068 seconds (process running for 3.538)
+2025-06-23T12:07:21.676+08:00  INFO 33068 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T12:07:21.688+08:00 ERROR 33068 --- [field-work-system] [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' is expected to be of type 'org.springframework.boot.Runner' but was actually of type 'org.springframework.beans.factory.support.NullBean'
+	at org.springframework.beans.factory.support.AbstractBeanFactory.adaptBeanInstance(AbstractBeanFactory.java:410) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:391) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:778) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:341) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.internship.Application.main(Application.java:17) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.1.jar:3.2.1]
+
+2025-06-23T12:07:21.703+08:00  INFO 33068 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:07:21.704+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T12:07:21.708+08:00  INFO 33068 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:08:50.071+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 22356 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:08:50.072+08:00 DEBUG 22356 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:08:50.072+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:08:50.100+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:08:50.100+08:00  INFO 22356 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:08:50.100+08:00  INFO 22356 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:08:50.543+08:00  INFO 22356 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:08:50.544+08:00  INFO 22356 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:08:50.626+08:00  INFO 22356 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 1 JPA repository interface.
+2025-06-23T12:08:50.698+08:00  WARN 22356 --- [field-work-system] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.internship]' package. Please check your configuration.
+2025-06-23T12:08:50.992+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:08:50.998+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:08:50.998+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:08:51.037+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:08:51.037+08:00  INFO 22356 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 936 ms
+2025-06-23T12:08:51.110+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:08:51.140+08:00  INFO 22356 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:08:51.158+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:08:51.283+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:08:51.297+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:08:51.431+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@145ef5c9
+2025-06-23T12:08:51.432+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:08:51.462+08:00  WARN 22356 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:08:52.153+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:08:52.180+08:00  INFO 22356 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:08:52.350+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:08:52.350+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:08:52.624+08:00  WARN 22356 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:08:52.946+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:08:52.967+08:00  INFO 22356 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:08:52.973+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.13 seconds (process running for 3.627)
+2025-06-23T12:08:52.976+08:00  INFO 22356 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T12:08:52.987+08:00 ERROR 22356 --- [field-work-system] [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' is expected to be of type 'org.springframework.boot.Runner' but was actually of type 'org.springframework.beans.factory.support.NullBean'
+	at org.springframework.beans.factory.support.AbstractBeanFactory.adaptBeanInstance(AbstractBeanFactory.java:410) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:391) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:778) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:341) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.internship.Application.main(Application.java:17) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.1.jar:3.2.1]
+
+2025-06-23T12:08:53.002+08:00  INFO 22356 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:08:53.003+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T12:08:53.007+08:00  INFO 22356 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:09:59.989+08:00  INFO 32104 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32104 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:09:59.990+08:00 DEBUG 32104 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:09:59.990+08:00  INFO 32104 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:10:00.017+08:00  INFO 32104 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:10:00.018+08:00  INFO 32104 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:10:00.018+08:00  INFO 32104 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:10:00.418+08:00  WARN 32104 --- [field-work-system] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.support.BeanDefinitionOverrideException: Invalid bean definition with name 'ddlApplicationRunner' defined in class path resource [com/baomidou/mybatisplus/autoconfigure/MybatisPlusAutoConfiguration.class]: Cannot register bean definition [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration; factoryMethodName=ddlApplicationRunner; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/baomidou/mybatisplus/autoconfigure/MybatisPlusAutoConfiguration.class]] for bean 'ddlApplicationRunner' since there is already [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=true; factoryBeanName=dataSourceConfig; factoryMethodName=ddlApplicationRunner; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/internship/config/DataSourceConfig.class]] bound.
+2025-06-23T12:10:00.424+08:00  INFO 32104 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T12:10:00.437+08:00 ERROR 32104 --- [field-work-system] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The bean 'ddlApplicationRunner', defined in class path resource [com/baomidou/mybatisplus/autoconfigure/MybatisPlusAutoConfiguration.class], could not be registered. A bean with that name has already been defined in class path resource [com/internship/config/DataSourceConfig.class] and overriding is disabled.
+
+Action:
+
+Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+
+2025-06-23T12:10:51.111+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 7780 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:10:51.112+08:00 DEBUG 7780 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:10:51.112+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:10:51.137+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:10:51.137+08:00  INFO 7780 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:10:51.137+08:00  INFO 7780 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:10:51.579+08:00  INFO 7780 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:10:51.581+08:00  INFO 7780 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:10:51.664+08:00  INFO 7780 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 76 ms. Found 1 JPA repository interface.
+2025-06-23T12:10:51.734+08:00  WARN 7780 --- [field-work-system] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.internship]' package. Please check your configuration.
+2025-06-23T12:10:52.028+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:10:52.034+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:10:52.034+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:10:52.070+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:10:52.071+08:00  INFO 7780 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 933 ms
+2025-06-23T12:10:52.142+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:10:52.172+08:00  INFO 7780 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:10:52.190+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:10:52.310+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:10:52.324+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:10:52.455+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@b261279
+2025-06-23T12:10:52.456+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:10:52.485+08:00  WARN 7780 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:10:53.146+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:10:53.173+08:00  INFO 7780 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:10:53.336+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:10:53.336+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:10:53.613+08:00  WARN 7780 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:10:53.926+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:10:53.947+08:00  INFO 7780 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:10:53.953+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.079 seconds (process running for 3.555)
+2025-06-23T12:10:53.955+08:00  INFO 7780 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T12:10:53.966+08:00 ERROR 7780 --- [field-work-system] [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' is expected to be of type 'org.springframework.boot.Runner' but was actually of type 'org.springframework.beans.factory.support.NullBean'
+	at org.springframework.beans.factory.support.AbstractBeanFactory.adaptBeanInstance(AbstractBeanFactory.java:410) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:391) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:778) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:341) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.internship.Application.main(Application.java:17) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.1.jar:3.2.1]
+
+2025-06-23T12:10:53.982+08:00  INFO 7780 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:10:53.983+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T12:10:53.987+08:00  INFO 7780 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:12:05.301+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 31120 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:12:05.302+08:00 DEBUG 31120 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:12:05.302+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:12:05.329+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:12:05.330+08:00  INFO 31120 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:12:05.330+08:00  INFO 31120 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:12:05.774+08:00  INFO 31120 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:12:05.775+08:00  INFO 31120 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:12:05.856+08:00  INFO 31120 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 74 ms. Found 1 JPA repository interface.
+2025-06-23T12:12:05.926+08:00  WARN 31120 --- [field-work-system] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.internship]' package. Please check your configuration.
+2025-06-23T12:12:06.222+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:12:06.228+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:12:06.228+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:12:06.266+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:12:06.266+08:00  INFO 31120 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 936 ms
+2025-06-23T12:12:06.341+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:12:06.373+08:00  INFO 31120 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:12:06.390+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:12:06.520+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:12:06.534+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:12:06.672+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@b510a61
+2025-06-23T12:12:06.673+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:12:06.702+08:00  WARN 31120 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:12:07.401+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:12:07.428+08:00  INFO 31120 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:12:07.598+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:12:07.598+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:12:07.889+08:00  WARN 31120 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:12:08.209+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:12:08.231+08:00  INFO 31120 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:12:08.237+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.168 seconds (process running for 3.653)
+2025-06-23T12:12:08.239+08:00  INFO 31120 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T12:12:08.251+08:00 ERROR 31120 --- [field-work-system] [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' is expected to be of type 'org.springframework.boot.Runner' but was actually of type 'org.springframework.beans.factory.support.NullBean'
+	at org.springframework.beans.factory.support.AbstractBeanFactory.adaptBeanInstance(AbstractBeanFactory.java:410) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:391) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:778) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:341) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.internship.Application.main(Application.java:17) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.1.jar:3.2.1]
+
+2025-06-23T12:12:08.267+08:00  INFO 31120 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:12:08.269+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T12:12:08.272+08:00  INFO 31120 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:13:26.710+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 26796 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:13:26.711+08:00 DEBUG 26796 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:13:26.711+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:13:26.737+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:13:26.737+08:00  INFO 26796 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:13:26.737+08:00  INFO 26796 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:13:27.173+08:00  INFO 26796 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:13:27.177+08:00  INFO 26796 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:13:27.253+08:00  INFO 26796 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 1 JPA repository interface.
+2025-06-23T12:13:27.321+08:00  WARN 26796 --- [field-work-system] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.internship]' package. Please check your configuration.
+2025-06-23T12:13:27.624+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:13:27.630+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:13:27.630+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:13:27.670+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:13:27.670+08:00  INFO 26796 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 932 ms
+2025-06-23T12:13:27.753+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:13:27.787+08:00  INFO 26796 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:13:27.806+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:13:27.934+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:13:27.950+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:13:28.087+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@55dd2009
+2025-06-23T12:13:28.089+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:13:28.119+08:00  WARN 26796 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:13:28.800+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:13:28.826+08:00  INFO 26796 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:13:29.002+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:13:29.002+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:13:29.287+08:00  WARN 26796 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:13:29.597+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:13:29.618+08:00  INFO 26796 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:13:29.624+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.146 seconds (process running for 3.621)
+2025-06-23T12:13:29.627+08:00  INFO 26796 --- [field-work-system] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-06-23T12:13:29.638+08:00 ERROR 26796 --- [field-work-system] [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' is expected to be of type 'org.springframework.boot.Runner' but was actually of type 'org.springframework.beans.factory.support.NullBean'
+	at org.springframework.beans.factory.support.AbstractBeanFactory.adaptBeanInstance(AbstractBeanFactory.java:410) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:391) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:778) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:341) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.internship.Application.main(Application.java:17) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.2.1.jar:3.2.1]
+
+2025-06-23T12:13:29.653+08:00  INFO 26796 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:13:29.655+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T12:13:29.658+08:00  INFO 26796 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:14:39.597+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:14:39.598+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:14:39.599+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:14:39.626+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:14:39.626+08:00  INFO 32360 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:14:39.627+08:00  INFO 32360 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:14:40.043+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:14:40.044+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:14:40.126+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 78 ms. Found 1 JPA repository interface.
+2025-06-23T12:14:40.478+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:14:40.484+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:14:40.484+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:14:40.522+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:14:40.522+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 895 ms
+2025-06-23T12:14:40.594+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:14:40.627+08:00  INFO 32360 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:14:40.643+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:14:40.764+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:14:40.779+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:14:40.913+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@19abcef2
+2025-06-23T12:14:40.914+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:14:40.944+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:14:41.634+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:14:41.662+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:14:41.833+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:14:41.833+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:14:42.111+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:14:42.372+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:14:42.394+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:14:42.400+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.035 seconds (process running for 3.489)
+2025-06-23T12:42:35.650+08:00  INFO 32360 --- [field-work-system] [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-23T12:42:35.650+08:00  INFO 32360 --- [field-work-system] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-23T12:42:35.651+08:00  INFO 32360 --- [field-work-system] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-06-23T12:42:35.670+08:00  WARN 32360 --- [field-work-system] [http-nio-8080-exec-3] c.i.config.GlobalExceptionHandler        : 参数异常: Name for argument of type [java.lang.Integer] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.
+2025-06-23T12:42:35.706+08:00  WARN 32360 --- [field-work-system] [http-nio-8080-exec-3] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalArgumentException: Name for argument of type [java.lang.Integer] not specified, and parameter name information not available via reflection. Ensure that the compiler uses the '-parameters' flag.]
+2025-06-23T12:43:35.046+08:00  INFO 32360 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-23T12:43:35.061+08:00  INFO 32360 --- [field-work-system] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:35.062+08:00  INFO 32360 --- [field-work-system] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-23T12:43:35.067+08:00  INFO 32360 --- [field-work-system] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-23T12:43:35.116+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:43:35.116+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:43:35.117+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:43:35.245+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:43:35.245+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:43:35.253+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 1 JPA repository interface.
+2025-06-23T12:43:35.314+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:43:35.314+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:43:35.314+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:43:35.334+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:43:35.334+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 217 ms
+2025-06-23T12:43:35.352+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:43:35.354+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:43:35.358+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:43:35.358+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-06-23T12:43:35.370+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@73feee25
+2025-06-23T12:43:35.370+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-06-23T12:43:35.371+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:43:35.436+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:43:35.450+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:35.523+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:43:35.610+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:43:35.617+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:43:35.620+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.523 seconds (process running for 1736.709)
+2025-06-23T12:43:35.621+08:00  INFO 32360 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T12:43:47.179+08:00  INFO 32360 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-23T12:43:47.191+08:00  INFO 32360 --- [field-work-system] [Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:47.191+08:00  INFO 32360 --- [field-work-system] [Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2025-06-23T12:43:47.193+08:00  INFO 32360 --- [field-work-system] [Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2025-06-23T12:43:47.237+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:43:47.237+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:43:47.237+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:43:47.361+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:43:47.361+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:43:47.367+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 1 JPA repository interface.
+2025-06-23T12:43:47.417+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:43:47.417+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:43:47.417+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:43:47.438+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:43:47.438+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 200 ms
+2025-06-23T12:43:47.451+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:43:47.454+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:43:47.457+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:43:47.457+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2025-06-23T12:43:47.463+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4b7e847f
+2025-06-23T12:43:47.463+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2025-06-23T12:43:47.464+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:43:47.510+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:43:47.517+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:47.580+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:43:47.652+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:43:47.659+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:43:47.662+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.442 seconds (process running for 1748.75)
+2025-06-23T12:43:47.663+08:00  INFO 32360 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T12:43:57.207+08:00  INFO 32360 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-23T12:43:57.220+08:00  INFO 32360 --- [field-work-system] [Thread-11] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:57.220+08:00  INFO 32360 --- [field-work-system] [Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2025-06-23T12:43:57.222+08:00  INFO 32360 --- [field-work-system] [Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2025-06-23T12:43:57.266+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:43:57.266+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:43:57.267+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:43:57.386+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:43:57.386+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:43:57.391+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-06-23T12:43:57.449+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:43:57.450+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:43:57.450+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:43:57.469+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:43:57.469+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 202 ms
+2025-06-23T12:43:57.485+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:43:57.486+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:43:57.489+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:43:57.489+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2025-06-23T12:43:57.496+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@58385d15
+2025-06-23T12:43:57.496+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2025-06-23T12:43:57.497+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:43:57.540+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:43:57.548+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:57.612+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:43:57.682+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:43:57.689+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:43:57.691+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.441 seconds (process running for 1758.78)
+2025-06-23T12:43:57.692+08:00  INFO 32360 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T12:43:59.113+08:00  INFO 32360 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-23T12:43:59.124+08:00  INFO 32360 --- [field-work-system] [Thread-15] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:59.126+08:00  INFO 32360 --- [field-work-system] [Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2025-06-23T12:43:59.127+08:00  INFO 32360 --- [field-work-system] [Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2025-06-23T12:43:59.167+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:43:59.167+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:43:59.167+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:43:59.268+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:43:59.268+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:43:59.273+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2025-06-23T12:43:59.317+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:43:59.317+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:43:59.317+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:43:59.337+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:43:59.337+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 168 ms
+2025-06-23T12:43:59.351+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:43:59.353+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:43:59.354+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:43:59.356+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2025-06-23T12:43:59.362+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ecbf644
+2025-06-23T12:43:59.362+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2025-06-23T12:43:59.363+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:43:59.396+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:43:59.402+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:43:59.460+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:43:59.520+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:43:59.527+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:43:59.529+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.377 seconds (process running for 1760.618)
+2025-06-23T12:43:59.530+08:00  INFO 32360 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T12:44:08.074+08:00  INFO 32360 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-23T12:44:08.090+08:00  INFO 32360 --- [field-work-system] [Thread-19] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:44:08.090+08:00  INFO 32360 --- [field-work-system] [Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2025-06-23T12:44:08.093+08:00  INFO 32360 --- [field-work-system] [Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2025-06-23T12:44:08.139+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:44:08.139+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:44:08.139+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:44:08.239+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:44:08.239+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:44:08.243+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2025-06-23T12:44:08.288+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:44:08.288+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:44:08.288+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:44:08.307+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:44:08.307+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 167 ms
+2025-06-23T12:44:08.323+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:44:08.324+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:44:08.327+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:44:08.327+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2025-06-23T12:44:08.334+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@64667824
+2025-06-23T12:44:08.334+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2025-06-23T12:44:08.335+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:44:08.375+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:44:08.382+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:44:08.442+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:44:08.502+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:44:08.509+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:44:08.512+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.389 seconds (process running for 1769.601)
+2025-06-23T12:44:08.512+08:00  INFO 32360 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T12:44:18.071+08:00  INFO 32360 --- [field-work-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-23T12:44:18.084+08:00  INFO 32360 --- [field-work-system] [Thread-23] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:44:18.084+08:00  INFO 32360 --- [field-work-system] [Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2025-06-23T12:44:18.086+08:00  INFO 32360 --- [field-work-system] [Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+2025-06-23T12:44:18.127+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 32360 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:44:18.127+08:00 DEBUG 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:44:18.127+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:44:18.227+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:44:18.227+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:44:18.232+08:00  INFO 32360 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 1 JPA repository interface.
+2025-06-23T12:44:18.277+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:44:18.278+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:44:18.278+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:44:18.297+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:44:18.297+08:00  INFO 32360 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 169 ms
+2025-06-23T12:44:18.312+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:44:18.313+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:44:18.316+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:44:18.316+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2025-06-23T12:44:18.322+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Added connection com.mysql.cj.jdbc.ConnectionImpl@178cde61
+2025-06-23T12:44:18.322+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2025-06-23T12:44:18.323+08:00  WARN 32360 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:44:18.354+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:44:18.360+08:00  INFO 32360 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:44:18.418+08:00  WARN 32360 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:44:18.478+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:44:18.485+08:00  INFO 32360 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:44:18.487+08:00  INFO 32360 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 0.375 seconds (process running for 1779.576)
+2025-06-23T12:44:18.488+08:00  INFO 32360 --- [field-work-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-23T12:44:45.013+08:00  INFO 32360 --- [field-work-system] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:44:45.013+08:00  INFO 32360 --- [field-work-system] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2025-06-23T12:44:45.015+08:00  INFO 32360 --- [field-work-system] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2025-06-23T12:44:55.861+08:00  INFO 7904 --- [field-work-system] [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 7904 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-23T12:44:55.863+08:00 DEBUG 7904 --- [field-work-system] [restartedMain] com.internship.Application               : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-06-23T12:44:55.864+08:00  INFO 7904 --- [field-work-system] [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-23T12:44:55.890+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.b.devtools.restart.ChangeableUrls    : The Class-Path manifest attribute in C:\Users\huihui\.m2\repository\com\oracle\database\jdbc\ojdbc8\23.3.0.23.09\ojdbc8-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/huihui/.m2/repository/com/oracle/database/jdbc/ojdbc8/23.3.0.23.09/oraclepki.jar
+2025-06-23T12:44:55.891+08:00  INFO 7904 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-23T12:44:55.891+08:00  INFO 7904 --- [field-work-system] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-23T12:44:56.311+08:00  INFO 7904 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-06-23T12:44:56.312+08:00  INFO 7904 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23T12:44:56.395+08:00  INFO 7904 --- [field-work-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 79 ms. Found 1 JPA repository interface.
+2025-06-23T12:44:56.741+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-06-23T12:44:56.746+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-23T12:44:56.747+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-06-23T12:44:56.784+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-23T12:44:56.784+08:00  INFO 7904 --- [field-work-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 893 ms
+2025-06-23T12:44:56.857+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23T12:44:56.887+08:00  INFO 7904 --- [field-work-system] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-06-23T12:44:56.905+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-06-23T12:44:57.025+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23T12:44:57.038+08:00  INFO 7904 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-23T12:44:57.174+08:00  INFO 7904 --- [field-work-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@64e88c41
+2025-06-23T12:44:57.175+08:00  INFO 7904 --- [field-work-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-23T12:44:57.206+08:00  WARN 7904 --- [field-work-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-23T12:44:57.892+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23T12:44:57.920+08:00  INFO 7904 --- [field-work-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23T12:44:58.090+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : JSqlParser is in classpath; If applicable, JSqlParser will be used
+2025-06-23T12:44:58.090+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-23T12:44:58.364+08:00  WARN 7904 --- [field-work-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-23T12:44:58.617+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-23T12:44:58.637+08:00  INFO 7904 --- [field-work-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-06-23T12:44:58.642+08:00  INFO 7904 --- [field-work-system] [restartedMain] com.internship.Application               : Started Application in 3.008 seconds (process running for 3.467)
+2025-06-23T12:45:02.348+08:00  INFO 7904 --- [field-work-system] [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-23T12:45:02.348+08:00  INFO 7904 --- [field-work-system] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-23T12:45:02.348+08:00  INFO 7904 --- [field-work-system] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-06-23T12:46:52.437+08:00  WARN 7904 --- [field-work-system] [http-nio-8080-exec-9] c.i.config.GlobalExceptionHandler        : 参数校验失败: status: 状态不能为空
+2025-06-23T12:46:52.439+08:00  WARN 7904 --- [field-work-system] [http-nio-8080-exec-9] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.internship.dto.ApiResponse<com.internship.entity.PointRule>> com.internship.controller.PointRuleController.createPointRule(com.internship.entity.PointRule): [Field error in object 'pointRule' on field 'status': rejected value [null]; codes [NotNull.pointRule.status,NotNull.status,NotNull.java.lang.Integer,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [pointRule.status,status]; arguments []; default message [status]]; default message [状态不能为空]] ]
+2025-06-23T12:47:17.309+08:00  WARN 7904 --- [field-work-system] [http-nio-8080-exec-6] c.i.config.GlobalExceptionHandler        : 参数校验失败: status: 状态不能为空
+2025-06-23T12:47:17.310+08:00  WARN 7904 --- [field-work-system] [http-nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.internship.dto.ApiResponse<com.internship.entity.PointRule>> com.internship.controller.PointRuleController.createPointRule(com.internship.entity.PointRule): [Field error in object 'pointRule' on field 'status': rejected value [null]; codes [NotNull.pointRule.status,NotNull.status,NotNull.java.lang.Integer,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [pointRule.status,status]; arguments []; default message [status]]; default message [状态不能为空]] ]
