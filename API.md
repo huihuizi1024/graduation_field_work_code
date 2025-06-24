@@ -58,7 +58,7 @@
   "ruleName": "学习积分规则",
   "ruleCode": "STUDY_POINTS",
   "pointType": 1,
-  "points": 100,
+  "pointValue": 100,
   "description": "完成学习任务获得积分",
   "applicableObject": 1,
   "validStartTime": "2025-01-01T00:00:00",
@@ -74,7 +74,7 @@ curl -X POST http://localhost:8080/api/point-rules \
     "ruleName": "测试积分规则",
     "ruleCode": "TEST001",
     "pointType": 1,
-    "points": 100,
+    "pointValue": 100,
     "description": "这是一个测试规则"
   }'
 ```
@@ -130,7 +130,7 @@ curl -X PUT http://localhost:8080/api/point-rules/1 \
   -H "Content-Type: application/json" \
   -d '{
     "ruleName": "更新后的积分规则",
-    "points": 150
+    "pointValue": 150
   }'
 ```
 
@@ -572,7 +572,7 @@ curl -X POST http://localhost:8080/api/institutions \
 # 2. 创建积分规则
 curl -X POST http://localhost:8080/api/point-rules \
   -H "Content-Type: application/json" \
-  -d '{"ruleName":"学习积分","ruleCode":"STUDY001","pointType":1,"points":100}'
+  -d '{"ruleName":"学习积分","ruleCode":"STUDY001","pointType":1,"pointValue":100}'
 
 # 3. 创建转换规则
 curl -X POST http://localhost:8080/api/conversion-rules \

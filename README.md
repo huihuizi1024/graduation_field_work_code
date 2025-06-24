@@ -54,21 +54,14 @@ src/
 │   │   └── com/internship/
 │   │       ├── Application.java          # 主启动类
 │   │       ├── controller/               # 控制器层
-│   │       │   ├── PointRuleController.java      # 积分规则管理
-│   │       │   ├── ConversionRuleController.java # 转换规则管理
-│   │       │   └── InstitutionController.java    # 机构管理
 │   │       ├── service/                  # 服务层
-│   │       ├── repository/               # 数据访问层
+│   │       ├── mapper/                   # 数据访问层 (MyBatis Plus)
 │   │       ├── entity/                   # 实体类
-│   │       │   ├── PointRule.java        # 积分规则实体
-│   │       │   ├── ConversionRule.java   # 转换规则实体
-│   │       │   └── Institution.java     # 机构实体
 │   │       ├── dto/                      # 数据传输对象
-│   │       │   ├── ApiResponse.java      # 统一响应类
-│   │       │   └── PageResponse.java     # 分页响应类
 │   │       ├── config/                   # 配置类
 │   │       └── utils/                    # 工具类
 │   └── resources/
+│       ├── mapper/                   # MyBatis Mapper XML
 │       └── application.properties        # 应用配置文件
 └── test/
     └── java/
@@ -78,142 +71,47 @@ src/
 
 📖 **详细文档链接**
 - **[API接口文档](./API.md)** - 32个REST API接口详细说明
-- **[项目测试文档](./TESTING.md)** - 完整的测试指南和自动化脚本
+- **[数据库使用指南](./DATABASE_GUIDE.md)** - 完整的数据库构建、配置和使用手册
 
 ## 运行说明
 
+### 1. 启动数据库 (推荐)
+使用项目根目录的一键启动脚本：
 ```bash
-# 编译项目
-mvn compile
+# 添加执行权限 (仅首次需要)
+chmod +x start_database.sh
 
-# 运行项目
-mvn spring-boot:run
-
-# 打包项目
-mvn package
-
-# Docker构建
-mvn dockerfile:build
+# 启动数据库
+./start_database.sh
 ```
+
+### 2. 启动应用程序
+```bash
+# 运行Spring Boot应用
+mvn spring-boot:run
+```
+
+### 3. 访问服务
+- **API文档**: http://localhost:8080/swagger-ui/index.html
+- **数据库**: 主机 `localhost`, 端口 `3306`
 
 ## 开发环境配置
 
-### 1. Docker安装配置
+### 1. 核心依赖
+- JDK 17+
+- Maven 3.6+
+- Docker & Docker Compose
 
-#### macOS安装Docker Desktop
+### 2. 数据库配置
+项目推荐使用 `docker-compose.yml` 来管理数据库。
 
-1. **下载Docker Desktop**
-   - 访问：https://www.docker.com/products/docker-desktop
-   - 点击 "Download for Mac"
-   - 根据芯片类型选择：
-     - Apple Silicon (M1/M2/M3): "Mac with Apple Chip"
-     - Intel: "Mac with Intel Chip"
-
-2. **安装步骤**
-   - 打开下载的.dmg文件
-   - 拖拽Docker到Applications文件夹
-   - 从Applications启动Docker Desktop
-   - 同意许可协议并等待启动完成
-
-3. **验证安装**
-   ```bash
-   docker --version
-   ```
-
-#### Windows安装Docker Desktop
-
-1. **下载安装包**
-   - 访问：https://www.docker.com/products/docker-desktop
-   - 下载Windows版本
-
-2. **安装要求**
-   - Windows 10 Pro/Enterprise/Education (Build 16299+)
-   - 或 Windows 11
-   - 启用Hyper-V和容器功能
-
-3. **验证安装**
-   ```cmd
-   docker --version
-   ```
-
-### 2. MySQL数据库配置
-
-#### 方法一：Docker Desktop图形界面（推荐）
-
-1. **搜索MySQL镜像**
-   - 打开Docker Desktop
-   - 点击"Images"（镜像）选项卡
-   - 搜索"mysql"
-   - 选择官方MySQL镜像
-   - 下载MySQL 8.0版本
-
-2. **创建MySQL容器**
-   - 转到"Containers"（容器）选项卡
-   - 点击"Run"创建新容器
-   - 选择MySQL镜像
-
-3. **容器配置参数**
-   ```
-   容器名称：mysql-internship
-   端口映射：3306:3306
-   
-   环境变量：
-   MYSQL_ROOT_PASSWORD=123456
-   MYSQL_DATABASE=internship_db
-   MYSQL_CHARACTER_SET_SERVER=utf8mb4
-   MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
-   ```
-
-4. **启动容器**
-   - 检查配置并点击"Run"
-   - 等待容器状态变为绿色Running
-
-#### 方法二：命令行创建（快速）
-
+#### 方法一：一键启动脚本 (推荐)
 ```bash
-# 创建MySQL容器
-docker run -d \
-  --name mysql-internship \
-  -p 3306:3306 \
-  -e MYSQL_ROOT_PASSWORD=123456 \
-  -e MYSQL_DATABASE=internship_db \
-  -e MYSQL_CHARACTER_SET_SERVER=utf8mb4 \
-  -e MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci \
-  mysql:8.0
-
-# 验证容器运行状态
-docker ps
-
-# 连接到MySQL容器
-docker exec -it mysql-internship mysql -u root -p
+./start_database.sh
 ```
+该脚本会自动完成所有Docker操作，并进行健康检查。
 
-#### 方法三：Docker Compose配置
-
-创建 `docker-compose.yml` 文件：
-
-```yaml
-version: '3.8'
-services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-internship
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: internship_db
-      MYSQL_CHARACTER_SET_SERVER: utf8mb4
-      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
-    volumes:
-      - mysql_data:/var/lib/mysql
-    restart: unless-stopped
-
-volumes:
-  mysql_data:
-```
-
-启动命令：
+#### 方法二：手动使用Docker Compose
 ```bash
 # 启动服务
 docker-compose up -d
@@ -226,96 +124,26 @@ docker-compose logs mysql
 ```
 
 ### 3. 数据库连接配置
-
-在 `application.properties` 中配置数据库连接：
-
+`application.properties` 中的连接信息已预先配置好，对应 `docker-compose.yml` 中的设置。
 ```properties
 # Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:3306/internship_db?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai
-spring.datasource.username=root
-spring.datasource.password=123456
+spring.datasource.url=jdbc:mysql://localhost:3306/internship_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+spring.datasource.username=internship_user
+spring.datasource.password=internship_pass
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
-# JPA Configuration
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+# MyBatis Plus Configuration
+mybatis-plus.mapper-locations=classpath:mapper/*.xml
+mybatis-plus.configuration.map-underscore-to-camel-case=true
 ```
-
-### 4. 数据库管理工具
-
-推荐使用以下工具管理MySQL数据库：
-
-- **MySQL Workbench**（官方工具）
-- **Navicat Premium**（商业版）
-- **DBeaver**（免费开源）
-- **phpMyAdmin**（Web界面）
-
-连接参数：
-```
-主机：localhost
-端口：3306
-用户名：root
-密码：123456
-数据库：internship_db
-```
-
-### 5. 开发环境验证
-
-1. **验证Docker运行**
-   ```bash
-   docker ps
-   ```
-
-2. **验证MySQL连接**
-   ```bash
-   docker exec -it mysql-internship mysql -u root -p123456 -e "SHOW DATABASES;"
-   ```
-
-3. **验证项目启动**
-   ```bash
-   mvn spring-boot:run
-   ```
-
-4. **验证API文档**
-   - 访问：http://localhost:8080/swagger-ui/index.html
-
-## 快速开始测试
-
-### 验证项目启动
-```bash
-# 检查Docker和MySQL容器
-docker ps | grep mysql-internship
-
-# 启动应用
-mvn spring-boot:run
-
-# 验证API文档
-curl http://localhost:8080/swagger-ui/index.html
-
-# 快速API测试
-curl -X POST http://localhost:8080/api/point-rules \
-  -H "Content-Type: application/json" \
-  -d '{"ruleName":"测试规则","ruleCode":"TEST001","pointType":1,"points":100}'
-```
-
-🧪 **完整测试指南**：详细的测试步骤、故障排除和自动化脚本请查看 [TESTING.md](./TESTING.md)
-
-## 环境要求
-
-- JDK 17+
-- Maven 3.6+
-- Docker Desktop
-- MySQL 8.0+ (通过Docker容器)
-- Redis 6.0+
-- Apache Kafka 2.8+
 
 ## 开发计划
 
 - [x] 项目初始化，Maven基础框架搭建
 - [x] Spring Boot核心依赖配置
 - [x] 数据库多数据源配置
+- [x] MyBatis Plus 架构集成
+- [x] 移除JPA依赖
 - [x] Redis缓存配置
 - [x] Kafka消息队列配置
 - [x] 核心实体类设计
@@ -324,6 +152,10 @@ curl -X POST http://localhost:8080/api/point-rules \
 - [x] 转换规则管理API接口定义
 - [x] 机构管理API接口定义
 - [x] Swagger API文档配置
+- [x] 数据库构建脚本 (database_setup.sql)
+- [x] Docker Compose 部署方案
+- [x] 一键启动脚本 (start_database.sh)
+- [x] 数据库使用指南 (DATABASE_GUIDE.md)
 - [ ] 认证标准管理API接口
 - [ ] 业务流程管理API接口
 - [ ] 平台活动管理API接口
@@ -335,7 +167,6 @@ curl -X POST http://localhost:8080/api/point-rules \
 - [ ] Repository层数据访问实现
 - [ ] 系统监控和日志
 - [ ] 单元测试和集成测试
-- [ ] Docker部署配置
 
 ## API文档访问
 

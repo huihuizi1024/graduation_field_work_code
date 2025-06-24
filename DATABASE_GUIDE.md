@@ -8,6 +8,7 @@
 
 - `database_setup.sql` - 完整的数据库创建脚本
 - `docker-compose.yml` - Docker Compose配置文件
+- `start_database.sh` - **一键启动脚本 (推荐使用)**
 - `DATABASE_GUIDE.md` - 本使用指南
 
 ## 数据库配置信息
@@ -19,10 +20,39 @@
 - **端口**: `3306`
 - **字符集**: `utf8mb4`
 
-## 方式一：使用Docker Compose（推荐）
+## 方式一：使用一键启动脚本（强烈推荐）
+
+这是最简单、最可靠的方式，它会自动处理所有步骤。
 
 ### 1. 启动MySQL容器
+```bash
+# 添加执行权限 (仅首次需要)
+chmod +x start_database.sh
 
+# 启动并初始化数据库
+./start_database.sh
+```
+该脚本会完成以下工作：
+- 检查Docker环境
+- 停止旧容器（如果存在）
+- 启动新容器
+- 执行数据库初始化脚本
+- 进行健康检查，确保服务可用
+
+### 2. 停止服务
+```bash
+# 停止服务并保留数据
+docker-compose down
+
+# 停止并删除所有数据（用于完全重置）
+docker-compose down -v
+```
+
+## 方式二：使用Docker Compose
+
+如果你想手动控制流程，可以使用 `docker-compose`。
+
+### 1. 启动MySQL容器
 ```bash
 # 启动MySQL服务
 docker-compose up -d
@@ -54,7 +84,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-## 方式二：手动执行SQL脚本
+## 方式三：手动执行SQL脚本
 
 ### 1. 启动MySQL容器（不使用初始化脚本）
 
@@ -139,6 +169,11 @@ Password: internship_pass
 Database: internship_db
 ```
 
+**JDBC URL (推荐完整格式):**
+```
+jdbc:mysql://localhost:3306/internship_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+```
+
 ## 验证安装
 
 ### 1. 检查表结构
@@ -169,11 +204,11 @@ SELECT * FROM conversion_rule LIMIT 5;
 
 ## 项目配置
 
-确保你的 `application.properties` 文件配置正确：
+确保你的 `application.properties` 文件配置正确。项目中的配置已是最新版本，通常无需修改。
 
 ```properties
 # Database Configuration - MySQL
-spring.datasource.url=jdbc:mysql://localhost:3306/internship_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.url=jdbc:mysql://localhost:3306/internship_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
 spring.datasource.username=internship_user
 spring.datasource.password=internship_pass
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -208,17 +243,13 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 ### 重置数据库
 
-如果需要重新创建数据库：
-
+如果需要重新创建数据库，最简单的方法是：
 ```bash
-# 停止并删除容器和数据
+# 1. 停止并删除容器和数据
 docker-compose down -v
 
-# 重新启动
-docker-compose up -d
-
-# 或者直接执行脚本重置
-docker exec -it mysql-internship mysql -u root -p123456 -e "source /docker-entrypoint-initdb.d/database_setup.sql"
+# 2. 使用一键脚本重新启动
+./start_database.sh
 ```
 
 ## 备份和恢复
