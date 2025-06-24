@@ -1,77 +1,68 @@
 package com.internship.repository;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.internship.entity.PointRule;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * 积分规则数据访问层
+ * 积分规则数据访问层 (MyBatis Plus Version)
  *
  * @author huihuizi1024
  * @date 2025.6.23
- * @version 1.1.0
+ * @version 1.2.0
  */
-@Repository
-public interface PointRuleRepository extends JpaRepository<PointRule, Long> {
+@Mapper
+public interface PointRuleRepository extends BaseMapper<PointRule> {
 
     /**
      * 根据规则编码查找积分规则
      */
-    Optional<PointRule> findByRuleCode(String ruleCode);
+    @Select("SELECT * FROM point_rule WHERE rule_code = #{ruleCode}")
+    PointRule findByRuleCode(@Param("ruleCode") String ruleCode);
 
     /**
      * 根据规则编码查找积分规则（排除指定ID）
      */
-    Optional<PointRule> findByRuleCodeAndIdNot(String ruleCode, Long id);
-
-    /**
-     * 分页查询积分规则（支持多条件筛选）
-     */
-    @Query("SELECT pr FROM PointRule pr WHERE " +
-           "(:ruleName IS NULL OR pr.ruleName LIKE %:ruleName%) AND " +
-           "(:ruleCode IS NULL OR pr.ruleCode LIKE %:ruleCode%) AND " +
-           "(:pointType IS NULL OR pr.pointType = :pointType) AND " +
-           "(:applicableObject IS NULL OR pr.applicableObject = :applicableObject) AND " +
-           "(:status IS NULL OR pr.status = :status) AND " +
-           "(:reviewStatus IS NULL OR pr.reviewStatus = :reviewStatus) " +
-           "ORDER BY pr.createTime DESC")
-    Page<PointRule> findByConditions(@Param("ruleName") String ruleName,
-                                   @Param("ruleCode") String ruleCode,
-                                   @Param("pointType") Integer pointType,
-                                   @Param("applicableObject") Integer applicableObject,
-                                   @Param("status") Integer status,
-                                   @Param("reviewStatus") Integer reviewStatus,
-                                   Pageable pageable);
+    @Select("SELECT * FROM point_rule WHERE rule_code = #{ruleCode} AND id != #{id}")
+    PointRule findByRuleCodeAndIdNot(@Param("ruleCode") String ruleCode, @Param("id") Long id);
 
     /**
      * 批量查询积分规则
      */
-    List<PointRule> findByIdIn(List<Long> ids);
+    @Select("<script>" +
+            "SELECT * FROM point_rule WHERE id IN " +
+            "<foreach collection='ids' item='id' open='(' separator=',' close=')'>" +
+            "#{id}" +
+            "</foreach>" +
+            "</script>")
+    List<PointRule> findByIdIn(@Param("ids") List<Long> ids);
 
     /**
      * 根据状态查询积分规则数量
      */
-    long countByStatus(Integer status);
+    @Select("SELECT COUNT(*) FROM point_rule WHERE status = #{status}")
+    long countByStatus(@Param("status") Integer status);
 
     /**
      * 根据审核状态查询积分规则数量
      */
-    long countByReviewStatus(Integer reviewStatus);
+    @Select("SELECT COUNT(*) FROM point_rule WHERE review_status = #{reviewStatus}")
+    long countByReviewStatus(@Param("reviewStatus") Integer reviewStatus);
 
     /**
      * 根据积分类型查询积分规则数量
      */
-    long countByPointType(Integer pointType);
+    @Select("SELECT COUNT(*) FROM point_rule WHERE point_type = #{pointType}")
+    long countByPointType(@Param("pointType") Integer pointType);
 
     /**
      * 查询所有有效的积分规则
      */
-    List<PointRule> findByStatusAndReviewStatus(Integer status, Integer reviewStatus);
+    @Select("SELECT * FROM point_rule WHERE status = #{status} AND review_status = #{reviewStatus}")
+    List<PointRule> findByStatusAndReviewStatus(@Param("status") Integer status, 
+                                               @Param("reviewStatus") Integer reviewStatus);
 } 

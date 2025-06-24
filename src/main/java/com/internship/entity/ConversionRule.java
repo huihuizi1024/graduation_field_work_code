@@ -1,174 +1,170 @@
 package com.internship.entity;
 
-import jakarta.persistence.*;
+import com.baomidou.mybatisplus.annotation.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 转换规则实体类
+ * 转换规则实体类 (MyBatis Plus Version)
  * 
  * @author huihuizi1024
  * @date 2025.6.22
- * @version 1.1.0
+ * @version 1.2.0
  */
-@Entity
-@Table(name = "conversion_rule")
-public class ConversionRule {
+@TableName("conversion_rule")
+public class ConversionRule implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
      * 规则名称
      */
     @NotBlank(message = "规则名称不能为空")
-    @Column(name = "rule_name", nullable = false, length = 100)
+    @TableField("rule_name")
     private String ruleName;
 
     /**
      * 规则编码
      */
     @NotBlank(message = "规则编码不能为空")
-    @Column(name = "rule_code", nullable = false, unique = true, length = 50)
+    @TableField("rule_code")
     private String ruleCode;
 
     /**
      * 源类型：1-积分，2-学分，3-证书
      */
     @NotNull(message = "源类型不能为空")
-    @Column(name = "source_type", nullable = false)
+    @TableField("source_type")
     private Integer sourceType;
 
     /**
      * 目标类型：1-积分，2-学分，3-证书
      */
     @NotNull(message = "目标类型不能为空")
-    @Column(name = "target_type", nullable = false)
+    @TableField("target_type")
     private Integer targetType;
 
     /**
      * 转换比例（源:目标）
      */
     @NotNull(message = "转换比例不能为空")
-    @Column(name = "conversion_ratio", nullable = false, precision = 10, scale = 4)
+    @TableField("conversion_ratio")
     private BigDecimal conversionRatio;
 
     /**
      * 最小转换数量
      */
-    @Column(name = "min_conversion_amount", precision = 10, scale = 2)
+    @TableField("min_conversion_amount")
     private BigDecimal minConversionAmount;
 
     /**
      * 最大转换数量
      */
-    @Column(name = "max_conversion_amount", precision = 10, scale = 2)
+    @TableField("max_conversion_amount")
     private BigDecimal maxConversionAmount;
 
     /**
      * 转换条件描述
      */
-    @Column(name = "conversion_conditions", length = 1000)
+    @TableField("conversion_conditions")
     private String conversionConditions;
 
     /**
      * 审核要求：0-无需审核，1-需要审核
      */
     @NotNull(message = "审核要求不能为空")
-    @Column(name = "review_required", nullable = false)
+    @TableField("review_required")
     private Integer reviewRequired;
 
     /**
      * 适用机构ID
      */
-    @Column(name = "applicable_institution_id")
+    @TableField("applicable_institution_id")
     private Long applicableInstitutionId;
 
     /**
      * 适用机构名称
      */
-    @Column(name = "applicable_institution_name", length = 100)
+    @TableField("applicable_institution_name")
     private String applicableInstitutionName;
 
     /**
      * 有效期开始时间
      */
-    @Column(name = "effective_start_time")
+    @TableField("effective_start_time")
     private LocalDateTime effectiveStartTime;
 
     /**
      * 有效期结束时间
      */
-    @Column(name = "effective_end_time")
+    @TableField("effective_end_time")
     private LocalDateTime effectiveEndTime;
 
     /**
      * 状态：1-有效，0-无效
      */
     @NotNull(message = "状态不能为空")
-    @Column(name = "status", nullable = false)
+    @TableField("status")
     private Integer status;
 
     /**
      * 创建人ID
      */
-    @Column(name = "creator_id")
+    @TableField("creator_id")
     private Long creatorId;
 
     /**
      * 创建人姓名
      */
-    @Column(name = "creator_name", length = 50)
+    @TableField("creator_name")
     private String creatorName;
 
     /**
      * 审核人ID
      */
-    @Column(name = "reviewer_id")
+    @TableField("reviewer_id")
     private Long reviewerId;
 
     /**
      * 审核人姓名
      */
-    @Column(name = "reviewer_name", length = 50)
+    @TableField("reviewer_name")
     private String reviewerName;
 
     /**
      * 审核状态：0-待审核，1-审核通过，2-审核拒绝
      */
-    @Column(name = "review_status", nullable = false)
+    @TableField("review_status")
     private Integer reviewStatus = 0;
 
     /**
      * 审核时间
      */
-    @Column(name = "review_time")
+    @TableField("review_time")
     private LocalDateTime reviewTime;
 
     /**
      * 审核意见
      */
-    @Column(name = "review_comment", length = 500)
+    @TableField("review_comment")
     private String reviewComment;
 
     /**
      * 创建时间
      */
-    @CreationTimestamp
-    @Column(name = "create_time", nullable = false)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @UpdateTimestamp
-    @Column(name = "update_time", nullable = false)
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     // Constructors

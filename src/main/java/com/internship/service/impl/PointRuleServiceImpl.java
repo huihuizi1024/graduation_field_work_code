@@ -1,14 +1,14 @@
 package com.internship.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.internship.dto.PageResponse;
 import com.internship.entity.PointRule;
 import com.internship.exception.BusinessException;
 import com.internship.repository.PointRuleRepository;
 import com.internship.service.PointRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -17,14 +17,13 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * 积分规则服务实现类
+ * 积分规则服务实现类 (MyBatis Plus Version)
  *
  * @author huihuizi1024
  * @date 2025.6.23
- * @version 1.1.0
+ * @version 1.2.0
  */
 @Service
 @Transactional
@@ -35,9 +34,12 @@ public class PointRuleServiceImpl implements PointRuleService {
 
     @Override
     public PointRule createPointRule(PointRule pointRule) {
+        // 强制设置ID为null，确保执行创建操作
+        pointRule.setId(null);
+        
         // 检查规则编码是否已存在
-        Optional<PointRule> existingRule = pointRuleRepository.findByRuleCode(pointRule.getRuleCode());
-        if (existingRule.isPresent()) {
+        PointRule existingRule = pointRuleRepository.findByRuleCode(pointRule.getRuleCode());
+        if (existingRule != null) {
             throw new BusinessException("RULE_CODE_EXISTS", "规则编码已存在");
         }
 
@@ -49,11 +51,16 @@ public class PointRuleServiceImpl implements PointRuleService {
             pointRule.setReviewStatus(0); // 默认待审核
         }
 
+        // 设置创建时间
+        pointRule.setCreateTime(LocalDateTime.now());
+        pointRule.setUpdateTime(LocalDateTime.now());
+
         // 模拟当前用户信息（实际项目中应从认证上下文获取）
         pointRule.setCreatorId(1L);
         pointRule.setCreatorName("系统管理员");
 
-        return pointRuleRepository.save(pointRule);
+        pointRuleRepository.insert(pointRule);
+        return pointRule;
     }
 
     @Override
@@ -63,8 +70,8 @@ public class PointRuleServiceImpl implements PointRuleService {
         // 检查规则编码是否被其他规则使用
         if (StringUtils.hasText(pointRule.getRuleCode()) && 
             !pointRule.getRuleCode().equals(existingRule.getRuleCode())) {
-            Optional<PointRule> duplicateRule = pointRuleRepository.findByRuleCodeAndIdNot(pointRule.getRuleCode(), id);
-            if (duplicateRule.isPresent()) {
+            PointRule duplicateRule = pointRuleRepository.findByRuleCodeAndIdNot(pointRule.getRuleCode(), id);
+            if (duplicateRule != null) {
                 throw new BusinessException("RULE_CODE_EXISTS", "规则编码已存在");
             }
         }
@@ -101,8 +108,10 @@ public class PointRuleServiceImpl implements PointRuleService {
         existingRule.setReviewComment(null);
         existingRule.setReviewerId(null);
         existingRule.setReviewerName(null);
+        existingRule.setUpdateTime(LocalDateTime.now());
 
-        return pointRuleRepository.save(existingRule);
+        pointRuleRepository.updateById(existingRule);
+        return existingRule;
     }
 
     @Override
@@ -110,14 +119,18 @@ public class PointRuleServiceImpl implements PointRuleService {
         PointRule pointRule = getPointRuleById(id);
         // 软删除：设置状态为无效
         pointRule.setStatus(0);
-        pointRuleRepository.save(pointRule);
+        pointRule.setUpdateTime(LocalDateTime.now());
+        pointRuleRepository.updateById(pointRule);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PointRule getPointRuleById(Long id) {
-        return pointRuleRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("POINT_RULE_NOT_FOUND", "积分规则不存在"));
+        PointRule pointRule = pointRuleRepository.selectById(id);
+        if (pointRule == null) {
+            throw new BusinessException("POINT_RULE_NOT_FOUND", "积分规则不存在");
+        }
+        return pointRule;
     }
 
     @Override
@@ -136,15 +149,24 @@ public class PointRuleServiceImpl implements PointRuleService {
             size = 100; // 限制最大分页大小
         }
 
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<PointRule> pageResult = pointRuleRepository.findByConditions(
-                ruleName, ruleCode, pointType, applicableObject, status, reviewStatus, pageable);
+        // 构建查询条件
+        LambdaQueryWrapper<PointRule> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(ruleName), PointRule::getRuleName, ruleName)
+                   .like(StringUtils.hasText(ruleCode), PointRule::getRuleCode, ruleCode)
+                   .eq(pointType != null, PointRule::getPointType, pointType)
+                   .eq(applicableObject != null, PointRule::getApplicableObject, applicableObject)
+                   .eq(status != null, PointRule::getStatus, status)
+                   .eq(reviewStatus != null, PointRule::getReviewStatus, reviewStatus)
+                   .orderByDesc(PointRule::getCreateTime);
+
+        Page<PointRule> pageQuery = new Page<>(page, size);
+        IPage<PointRule> pageResult = pointRuleRepository.selectPage(pageQuery, queryWrapper);
 
         return new PageResponse<>(
                 page,
                 size,
-                pageResult.getTotalElements(),
-                pageResult.getContent()
+                pageResult.getTotal(),
+                pageResult.getRecords()
         );
     }
 
@@ -163,12 +185,13 @@ public class PointRuleServiceImpl implements PointRuleService {
         pointRule.setReviewStatus(reviewStatus);
         pointRule.setReviewTime(LocalDateTime.now());
         pointRule.setReviewComment(reviewComment);
+        pointRule.setUpdateTime(LocalDateTime.now());
         
         // 模拟当前审核人信息
         pointRule.setReviewerId(1L);
         pointRule.setReviewerName("系统审核员");
 
-        pointRuleRepository.save(pointRule);
+        pointRuleRepository.updateById(pointRule);
     }
 
     @Override
@@ -180,7 +203,8 @@ public class PointRuleServiceImpl implements PointRuleService {
         }
 
         pointRule.setStatus(status);
-        pointRuleRepository.save(pointRule);
+        pointRule.setUpdateTime(LocalDateTime.now());
+        pointRuleRepository.updateById(pointRule);
     }
 
     @Override
@@ -195,8 +219,13 @@ public class PointRuleServiceImpl implements PointRuleService {
         }
 
         // 批量软删除
-        pointRules.forEach(rule -> rule.setStatus(0));
-        pointRuleRepository.saveAll(pointRules);
+        pointRules.forEach(rule -> {
+            rule.setStatus(0);
+            rule.setUpdateTime(LocalDateTime.now());
+        });
+        
+        // MyBatis Plus批量更新
+        pointRules.forEach(rule -> pointRuleRepository.updateById(rule));
     }
 
     @Override
@@ -205,7 +234,7 @@ public class PointRuleServiceImpl implements PointRuleService {
         Map<String, Object> statistics = new HashMap<>();
 
         // 总数统计
-        long totalCount = pointRuleRepository.count();
+        long totalCount = pointRuleRepository.selectCount(null);
         statistics.put("totalCount", totalCount);
 
         // 按状态统计
@@ -235,10 +264,13 @@ public class PointRuleServiceImpl implements PointRuleService {
     @Override
     @Transactional(readOnly = true)
     public List<PointRule> exportPointRules(String ruleName, Integer pointType, Integer status) {
-        // 使用分页查询但获取所有符合条件的数据
-        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-        Page<PointRule> pageResult = pointRuleRepository.findByConditions(
-                ruleName, null, pointType, null, status, null, pageable);
-        return pageResult.getContent();
+        // 构建查询条件
+        LambdaQueryWrapper<PointRule> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(StringUtils.hasText(ruleName), PointRule::getRuleName, ruleName)
+                   .eq(pointType != null, PointRule::getPointType, pointType)
+                   .eq(status != null, PointRule::getStatus, status)
+                   .orderByDesc(PointRule::getCreateTime);
+
+        return pointRuleRepository.selectList(queryWrapper);
     }
 } 
