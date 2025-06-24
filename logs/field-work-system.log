@@ -290,3 +290,716 @@ java.nio.channels.AsynchronousCloseException: null
 2025-06-24T11:24:14.205+08:00  INFO 3857 --- [http-nio-8080-exec-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2a0fd2df
 2025-06-24T11:24:14.206+08:00  INFO 3857 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
 2025-06-24T11:37:09.010+08:00  WARN 3857 --- [http-nio-8080-exec-4] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.PointRuleController
+2025-06-24T16:30:28.905+08:00  INFO 19317 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 19317 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T16:30:28.908+08:00 DEBUG 19317 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T16:30:28.909+08:00  INFO 19317 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T16:30:28.934+08:00  INFO 19317 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T16:30:28.934+08:00  INFO 19317 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T16:30:29.743+08:00  INFO 19317 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T16:30:29.750+08:00  INFO 19317 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T16:30:29.750+08:00  INFO 19317 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T16:30:29.793+08:00  INFO 19317 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T16:30:29.793+08:00  INFO 19317 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 859 ms
+2025-06-24T16:30:30.361+08:00  INFO 19317 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T16:30:30.378+08:00  INFO 19317 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T16:30:30.387+08:00  INFO 19317 --- [restartedMain] com.internship.Application               : Started Application in 1.671 seconds (process running for 1.914)
+2025-06-24T16:31:09.749+08:00  INFO 19317 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24T16:31:09.750+08:00  INFO 19317 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-24T16:31:09.754+08:00  INFO 19317 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-06-24T16:31:09.885+08:00  INFO 19317 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-24T16:31:10.143+08:00  INFO 19317 --- [http-nio-8080-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@e4932f9
+2025-06-24T16:31:10.145+08:00  INFO 19317 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T16:42:23.167+08:00  INFO 19317 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-24T16:42:23.170+08:00  INFO 19317 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-24T16:50:32.402+08:00  INFO 21462 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21462 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T16:50:32.402+08:00 DEBUG 21462 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T16:50:32.403+08:00  INFO 21462 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T16:50:32.429+08:00  INFO 21462 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T16:50:32.430+08:00  INFO 21462 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T16:50:33.379+08:00  INFO 21462 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T16:50:33.385+08:00  INFO 21462 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T16:50:33.385+08:00  INFO 21462 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T16:50:33.418+08:00  INFO 21462 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T16:50:33.418+08:00  INFO 21462 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 988 ms
+2025-06-24T16:50:34.052+08:00  INFO 21462 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T16:50:34.076+08:00  INFO 21462 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T16:50:34.084+08:00  INFO 21462 --- [restartedMain] com.internship.Application               : Started Application in 1.949 seconds (process running for 2.516)
+2025-06-24T16:51:15.410+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T16:51:15.410+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T16:51:15.411+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T16:51:15.447+08:00  INFO 21576 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T16:51:15.447+08:00  INFO 21576 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T16:51:16.221+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T16:51:16.226+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T16:51:16.226+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T16:51:16.258+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T16:51:16.258+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 810 ms
+2025-06-24T16:51:16.776+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T16:51:16.794+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T16:51:16.801+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 1.598 seconds (process running for 2.066)
+2025-06-24T16:51:26.325+08:00  INFO 21576 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24T16:51:26.326+08:00  INFO 21576 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-24T16:51:26.331+08:00  INFO 21576 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-06-24T16:51:26.368+08:00  INFO 21576 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-24T16:51:26.473+08:00  INFO 21576 --- [http-nio-8080-exec-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6736c6ce
+2025-06-24T16:51:26.474+08:00  INFO 21576 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T16:57:03.476+08:00  WARN 21576 --- [http-nio-8080-exec-3] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.InstitutionController
+2025-06-24T17:05:21.342+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-06-24T17:05:22.375+08:00  WARN 21576 --- [Thread-5] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:05:22.380+08:00  INFO 21576 --- [Thread-5] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:05:22.385+08:00  INFO 21576 --- [Thread-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2025-06-24T17:05:22.375+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:05:22.392+08:00  WARN 21576 --- [Thread-5] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.15/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.15/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.15/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.15/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.15/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.15/java.lang.Thread.run(Thread.java:842)
+2025-06-24T17:05:22.402+08:00  INFO 21576 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-24T17:05:22.404+08:00  INFO 21576 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-24T17:05:22.474+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:05:22.474+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:05:22.474+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:05:22.698+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:05:22.698+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:05:22.698+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:05:22.710+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:05:22.710+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 235 ms
+2025-06-24T17:05:22.887+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:05:22.903+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:05:22.906+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.447 seconds (process running for 848.162)
+2025-06-24T17:05:22.906+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:05:35.427+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-06-24T17:05:36.450+08:00  WARN 21576 --- [Thread-7] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:05:36.450+08:00  INFO 21576 --- [Thread-7] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:05:36.450+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:05:36.555+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:05:36.555+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:05:36.555+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:05:36.745+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:05:36.745+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:05:36.745+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:05:36.755+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:05:36.755+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 199 ms
+2025-06-24T17:05:36.879+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:05:36.895+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:05:36.898+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.362 seconds (process running for 862.154)
+2025-06-24T17:05:36.898+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:05:55.495+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-06-24T17:05:56.526+08:00  WARN 21576 --- [Thread-11] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:05:56.527+08:00  INFO 21576 --- [Thread-11] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:05:56.526+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:05:56.645+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:05:56.645+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:05:56.646+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:05:56.806+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:05:56.807+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:05:56.807+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:05:56.816+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:05:56.816+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 169 ms
+2025-06-24T17:05:56.940+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:05:56.947+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:05:56.949+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.316 seconds (process running for 882.205)
+2025-06-24T17:05:56.950+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:06:11.535+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:06:12.560+08:00  WARN 21576 --- [Thread-15] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:06:12.560+08:00  INFO 21576 --- [Thread-15] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:06:12.560+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:06:12.666+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:06:12.666+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:06:12.666+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:06:12.825+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:06:12.825+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:06:12.825+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:06:12.835+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:06:12.835+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 168 ms
+2025-06-24T17:06:12.959+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:06:12.966+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:06:12.968+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.313 seconds (process running for 898.224)
+2025-06-24T17:06:12.968+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:06:14.382+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:06:15.392+08:00  WARN 21576 --- [Thread-19] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:06:15.392+08:00  INFO 21576 --- [Thread-19] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:06:15.392+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:06:15.466+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:06:15.466+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:06:15.466+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:06:15.572+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:06:15.572+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:06:15.572+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:06:15.580+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:06:15.580+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 113 ms
+2025-06-24T17:06:15.700+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:06:15.706+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:06:15.709+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.255 seconds (process running for 900.965)
+2025-06-24T17:06:15.709+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:06:25.214+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:06:26.232+08:00  WARN 21576 --- [Thread-23] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:06:26.233+08:00  INFO 21576 --- [Thread-23] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:06:26.232+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:06:26.353+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:06:26.353+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:06:26.353+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:06:26.504+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:06:26.505+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:06:26.505+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:06:26.516+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:06:26.516+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 162 ms
+2025-06-24T17:06:26.644+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:06:26.650+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:06:26.652+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.309 seconds (process running for 911.909)
+2025-06-24T17:06:26.653+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:06:28.072+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:06:29.082+08:00  WARN 21576 --- [Thread-27] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:06:29.082+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:06:29.083+08:00  INFO 21576 --- [Thread-27] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:06:29.154+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:06:29.154+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:06:29.154+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:06:29.255+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:06:29.255+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:06:29.255+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:06:29.266+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:06:29.266+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 111 ms
+2025-06-24T17:06:29.392+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:06:29.399+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:06:29.402+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.26 seconds (process running for 914.658)
+2025-06-24T17:06:29.402+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:06:36.960+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:06:38.004+08:00  WARN 21576 --- [Thread-31] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:06:38.013+08:00  INFO 21576 --- [Thread-31] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:06:38.001+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:06:38.116+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:06:38.116+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:06:38.116+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:06:38.293+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:06:38.294+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:06:38.294+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:06:38.306+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:06:38.306+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 189 ms
+2025-06-24T17:06:38.432+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:06:38.438+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:06:38.440+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.335 seconds (process running for 923.697)
+2025-06-24T17:06:38.441+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:06:39.855+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:06:40.863+08:00  WARN 21576 --- [Thread-35] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:06:40.864+08:00  INFO 21576 --- [Thread-35] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:06:40.863+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:06:40.935+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:06:40.935+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:06:40.935+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:06:41.037+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:06:41.037+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:06:41.037+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:06:41.046+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:06:41.046+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 110 ms
+2025-06-24T17:06:41.170+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:06:41.177+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:06:41.179+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.257 seconds (process running for 926.435)
+2025-06-24T17:06:41.179+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:08:02.497+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:08:03.510+08:00  WARN 21576 --- [Thread-39] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:08:03.512+08:00  INFO 21576 --- [Thread-39] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:08:03.510+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:08:03.633+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:08:03.634+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:08:03.634+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:08:03.790+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:08:03.790+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:08:03.790+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:08:03.806+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:08:03.806+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 171 ms
+2025-06-24T17:08:03.946+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:08:03.953+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:08:03.955+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.331 seconds (process running for 1009.212)
+2025-06-24T17:08:03.955+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:08:05.367+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:08:06.374+08:00  WARN 21576 --- [Thread-43] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:08:06.374+08:00  INFO 21576 --- [Thread-43] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:08:06.374+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:08:06.454+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:08:06.454+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:08:06.454+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:08:06.554+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:08:06.555+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:08:06.555+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:08:06.563+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:08:06.563+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 108 ms
+2025-06-24T17:08:06.681+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:08:06.687+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:08:06.689+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.247 seconds (process running for 1011.946)
+2025-06-24T17:08:06.690+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:08:18.222+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:08:19.237+08:00  WARN 21576 --- [Thread-47] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:08:19.237+08:00  INFO 21576 --- [Thread-47] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:08:19.237+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:08:19.359+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:08:19.360+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:08:19.360+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:08:19.510+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:08:19.510+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:08:19.510+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:08:19.526+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:08:19.526+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 165 ms
+2025-06-24T17:08:19.653+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:08:19.659+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:08:19.662+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.312 seconds (process running for 1024.919)
+2025-06-24T17:08:19.663+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:08:21.079+08:00  INFO 21576 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:08:22.091+08:00  WARN 21576 --- [Thread-51] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:08:22.092+08:00  INFO 21576 --- [Thread-51] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:08:22.091+08:00 ERROR 21576 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:08:22.206+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 21576 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:08:22.206+08:00 DEBUG 21576 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:08:22.206+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:08:22.391+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:08:22.391+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:08:22.391+08:00  INFO 21576 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:08:22.400+08:00  INFO 21576 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:08:22.400+08:00  INFO 21576 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 192 ms
+2025-06-24T17:08:22.523+08:00  INFO 21576 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:08:22.530+08:00  INFO 21576 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:08:22.532+08:00  INFO 21576 --- [restartedMain] com.internship.Application               : Started Application in 0.339 seconds (process running for 1027.789)
+2025-06-24T17:08:22.532+08:00  INFO 21576 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:08:59.817+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 23867 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:08:59.818+08:00 DEBUG 23867 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:08:59.819+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:08:59.896+08:00  INFO 23867 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T17:08:59.896+08:00  INFO 23867 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T17:09:00.803+08:00  INFO 23867 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:09:00.809+08:00  INFO 23867 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:09:00.810+08:00  INFO 23867 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:09:00.844+08:00  INFO 23867 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:09:00.844+08:00  INFO 23867 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 948 ms
+2025-06-24T17:09:01.413+08:00  INFO 23867 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:09:01.432+08:00  INFO 23867 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:09:01.439+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : Started Application in 1.871 seconds (process running for 2.296)
+2025-06-24T17:09:49.750+08:00  INFO 23867 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24T17:09:49.754+08:00  INFO 23867 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-24T17:09:49.762+08:00  INFO 23867 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2025-06-24T17:09:50.034+08:00  INFO 23867 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-24T17:09:50.200+08:00  INFO 23867 --- [http-nio-8080-exec-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@43b708da
+2025-06-24T17:09:50.201+08:00  INFO 23867 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T17:10:10.594+08:00  WARN 23867 --- [http-nio-8080-exec-4] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.InstitutionController
+2025-06-24T17:19:41.532+08:00  INFO 23867 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:19:42.565+08:00  WARN 23867 --- [Thread-5] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:19:42.565+08:00  INFO 23867 --- [Thread-5] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:19:42.569+08:00  INFO 23867 --- [Thread-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2025-06-24T17:19:42.565+08:00 ERROR 23867 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:19:42.576+08:00  WARN 23867 --- [Thread-5] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.15/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.15/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.15/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.15/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.15/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.15/java.lang.Thread.run(Thread.java:842)
+2025-06-24T17:19:42.590+08:00  INFO 23867 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-24T17:19:42.600+08:00  INFO 23867 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-24T17:19:42.682+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 23867 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:19:42.682+08:00 DEBUG 23867 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:19:42.682+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:19:42.868+08:00  INFO 23867 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:19:42.869+08:00  INFO 23867 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:19:42.869+08:00  INFO 23867 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:19:42.878+08:00  INFO 23867 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:19:42.878+08:00  INFO 23867 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 195 ms
+2025-06-24T17:19:43.029+08:00  INFO 23867 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:19:43.035+08:00  INFO 23867 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:19:43.037+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : Started Application in 0.369 seconds (process running for 643.896)
+2025-06-24T17:19:43.038+08:00  INFO 23867 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:19:44.452+08:00  INFO 23867 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:19:45.457+08:00  WARN 23867 --- [Thread-7] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:19:45.458+08:00  INFO 23867 --- [Thread-7] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:19:45.457+08:00 ERROR 23867 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:19:45.528+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 23867 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:19:45.528+08:00 DEBUG 23867 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:19:45.528+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:19:45.634+08:00  INFO 23867 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:19:45.634+08:00  INFO 23867 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:19:45.634+08:00  INFO 23867 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:19:45.642+08:00  INFO 23867 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:19:45.643+08:00  INFO 23867 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 114 ms
+2025-06-24T17:19:45.762+08:00  INFO 23867 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:19:45.768+08:00  INFO 23867 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:19:45.771+08:00  INFO 23867 --- [restartedMain] com.internship.Application               : Started Application in 0.259 seconds (process running for 646.63)
+2025-06-24T17:19:45.771+08:00  INFO 23867 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:24:49.519+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 25681 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:24:49.519+08:00 DEBUG 25681 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:24:49.520+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:24:49.547+08:00  INFO 25681 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T17:24:49.548+08:00  INFO 25681 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T17:24:50.346+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:24:50.352+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:24:50.352+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:24:50.389+08:00  INFO 25681 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:24:50.389+08:00  INFO 25681 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 841 ms
+2025-06-24T17:24:51.135+08:00  INFO 25681 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:24:51.158+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:24:51.168+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Started Application in 1.854 seconds (process running for 2.63)
+2025-06-24T17:24:58.280+08:00  INFO 25681 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24T17:24:58.280+08:00  INFO 25681 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-24T17:24:58.283+08:00  INFO 25681 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-06-24T17:24:58.698+08:00  INFO 25681 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-24T17:24:58.868+08:00  INFO 25681 --- [http-nio-8080-exec-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@698b39df
+2025-06-24T17:24:58.869+08:00  INFO 25681 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T17:25:00.638+08:00  WARN 25681 --- [http-nio-8080-exec-5] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.InstitutionController
+2025-06-24T17:26:08.331+08:00  INFO 25681 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:26:09.362+08:00  WARN 25681 --- [Thread-5] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:26:09.363+08:00  INFO 25681 --- [Thread-5] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:26:09.376+08:00  INFO 25681 --- [Thread-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2025-06-24T17:26:09.362+08:00 ERROR 25681 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:26:09.387+08:00  WARN 25681 --- [Thread-5] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [HikariPool-1 housekeeper] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.15/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.15/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.15/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.15/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.15/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.15/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.15/java.lang.Thread.run(Thread.java:842)
+2025-06-24T17:26:09.404+08:00  INFO 25681 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-24T17:26:09.420+08:00  INFO 25681 --- [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-24T17:26:09.499+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 25681 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:26:09.499+08:00 DEBUG 25681 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:26:09.499+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:26:09.692+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:26:09.692+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:26:09.692+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:26:09.702+08:00  INFO 25681 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:26:09.702+08:00  INFO 25681 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 202 ms
+2025-06-24T17:26:09.842+08:00  INFO 25681 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:26:09.849+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:26:09.851+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Started Application in 0.366 seconds (process running for 81.314)
+2025-06-24T17:26:09.852+08:00  INFO 25681 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:26:11.268+08:00  INFO 25681 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:26:12.277+08:00  WARN 25681 --- [Thread-7] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:26:12.277+08:00 ERROR 25681 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:26:12.277+08:00  INFO 25681 --- [Thread-7] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:26:12.343+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 25681 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:26:12.343+08:00 DEBUG 25681 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:26:12.343+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:26:12.465+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:26:12.466+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:26:12.466+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:26:12.475+08:00  INFO 25681 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:26:12.475+08:00  INFO 25681 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 131 ms
+2025-06-24T17:26:12.604+08:00  INFO 25681 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:26:12.610+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:26:12.612+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Started Application in 0.279 seconds (process running for 84.075)
+2025-06-24T17:26:12.613+08:00  INFO 25681 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:27:05.591+08:00  INFO 25681 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:27:06.606+08:00  WARN 25681 --- [Thread-11] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:27:06.606+08:00  INFO 25681 --- [Thread-11] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:27:06.606+08:00 ERROR 25681 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:27:06.696+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 25681 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:27:06.696+08:00 DEBUG 25681 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:27:06.696+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:27:06.845+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:27:06.846+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:27:06.846+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:27:06.855+08:00  INFO 25681 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:27:06.855+08:00  INFO 25681 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 158 ms
+2025-06-24T17:27:07.002+08:00  INFO 25681 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:27:07.008+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:27:07.011+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Started Application in 0.327 seconds (process running for 138.474)
+2025-06-24T17:27:07.011+08:00  INFO 25681 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:27:08.416+08:00  INFO 25681 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:27:09.422+08:00  WARN 25681 --- [Thread-15] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:27:09.423+08:00  INFO 25681 --- [Thread-15] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:27:09.422+08:00 ERROR 25681 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:27:09.490+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 25681 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:27:09.490+08:00 DEBUG 25681 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:27:09.490+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:27:09.601+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:27:09.601+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:27:09.601+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:27:09.609+08:00  INFO 25681 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:27:09.610+08:00  INFO 25681 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 119 ms
+2025-06-24T17:27:09.728+08:00  INFO 25681 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:27:09.734+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:27:09.737+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Started Application in 0.262 seconds (process running for 141.2)
+2025-06-24T17:27:09.737+08:00  INFO 25681 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:30:16.690+08:00  INFO 25681 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-06-24T17:30:17.723+08:00  WARN 25681 --- [Thread-19] org.apache.tomcat.util.net.NioEndpoint   : Failed to unlock acceptor for [http-nio-8080] because the local address was not available
+2025-06-24T17:30:17.723+08:00  INFO 25681 --- [Thread-19] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-24T17:30:17.723+08:00 ERROR 25681 --- [http-nio-8080-Acceptor] org.apache.tomcat.util.net.Acceptor      : Socket accept failed
+
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:202) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:376) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:399) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:521) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:79) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:128) ~[tomcat-embed-core-10.1.15.jar:10.1.15]
+	at java.base/java.lang.Thread.run(Thread.java:842) ~[na:na]
+
+2025-06-24T17:30:17.844+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 25681 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:30:17.844+08:00 DEBUG 25681 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:30:17.844+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:30:18.012+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:30:18.012+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:30:18.012+08:00  INFO 25681 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:30:18.024+08:00  INFO 25681 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:30:18.024+08:00  INFO 25681 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 179 ms
+2025-06-24T17:30:18.147+08:00  INFO 25681 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:30:18.153+08:00  INFO 25681 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:30:18.155+08:00  INFO 25681 --- [restartedMain] com.internship.Application               : Started Application in 0.322 seconds (process running for 329.619)
+2025-06-24T17:30:18.156+08:00  INFO 25681 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-24T17:36:22.941+08:00  INFO 26907 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 26907 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T17:36:22.941+08:00 DEBUG 26907 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T17:36:22.942+08:00  INFO 26907 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T17:36:22.966+08:00  INFO 26907 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T17:36:22.966+08:00  INFO 26907 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T17:36:23.746+08:00  INFO 26907 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T17:36:23.752+08:00  INFO 26907 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T17:36:23.752+08:00  INFO 26907 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T17:36:23.788+08:00  INFO 26907 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T17:36:23.789+08:00  INFO 26907 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 822 ms
+2025-06-24T17:36:24.381+08:00  INFO 26907 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T17:36:24.400+08:00  INFO 26907 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T17:36:24.406+08:00  INFO 26907 --- [restartedMain] com.internship.Application               : Started Application in 1.664 seconds (process running for 2.438)
+2025-06-24T17:37:06.787+08:00  INFO 26907 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24T17:37:06.788+08:00  INFO 26907 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-24T17:37:06.791+08:00  INFO 26907 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-06-24T17:37:07.264+08:00  INFO 26907 --- [http-nio-8080-exec-3] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-24T17:37:07.472+08:00  INFO 26907 --- [http-nio-8080-exec-3] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@74346d55
+2025-06-24T17:37:07.476+08:00  INFO 26907 --- [http-nio-8080-exec-3] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T17:37:09.530+08:00  WARN 26907 --- [http-nio-8080-exec-4] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.InstitutionController
+2025-06-24T17:44:35.599+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s24ms).
+2025-06-24T17:50:04.673+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m59s61ms).
+2025-06-24T17:55:32.904+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s231ms).
+2025-06-24T18:04:01.255+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s314ms).
+2025-06-24T18:09:29.354+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s99ms).
+2025-06-24T18:17:27.543+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s144ms).
+2025-06-24T18:23:25.627+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s77ms).
+2025-06-24T18:32:53.831+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s156ms).
+2025-06-24T18:40:51.884+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=5m28s40ms).
+2025-06-24T19:28:43.798+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=41m51s826ms).
+2025-06-24T19:47:30.894+08:00  WARN 26907 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=15m47s33ms).
+2025-06-24T19:57:27.849+08:00  WARN 26907 --- [http-nio-8080-exec-6] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.PointRuleController
+2025-06-24T19:57:28.050+08:00  WARN 26907 --- [http-nio-8080-exec-6] c.i.config.GlobalExceptionHandler        : 参数校验失败: validityType: 有效期类型不能为空
+2025-06-24T19:57:28.054+08:00  WARN 26907 --- [http-nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [1] in public org.springframework.http.ResponseEntity<com.internship.dto.ApiResponse<com.internship.entity.PointRule>> com.internship.controller.PointRuleController.updatePointRule(java.lang.Long,com.internship.entity.PointRule): [Field error in object 'pointRule' on field 'validityType': rejected value [null]; codes [NotNull.pointRule.validityType,NotNull.validityType,NotNull.java.lang.Integer,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [pointRule.validityType,validityType]; arguments []; default message [validityType]]; default message [有效期类型不能为空]] ]
+2025-06-24T19:58:02.594+08:00  WARN 26907 --- [http-nio-8080-exec-8] c.i.config.GlobalExceptionHandler        : 参数校验失败: validityType: 有效期类型不能为空
+2025-06-24T19:58:02.598+08:00  WARN 26907 --- [http-nio-8080-exec-8] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [1] in public org.springframework.http.ResponseEntity<com.internship.dto.ApiResponse<com.internship.entity.PointRule>> com.internship.controller.PointRuleController.updatePointRule(java.lang.Long,com.internship.entity.PointRule): [Field error in object 'pointRule' on field 'validityType': rejected value [null]; codes [NotNull.pointRule.validityType,NotNull.validityType,NotNull.java.lang.Integer,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [pointRule.validityType,validityType]; arguments []; default message [validityType]]; default message [有效期类型不能为空]] ]
+2025-06-24T20:11:18.985+08:00  INFO 26907 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-24T20:11:18.987+08:00  INFO 26907 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-06-24T20:11:32.613+08:00  INFO 33360 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 33360 (/Users/hhhh/IdeaProjects/graduation_field_work_code_maven/target/classes started by hhhh in /Users/hhhh/IdeaProjects/graduation_field_work_code_maven)
+2025-06-24T20:11:32.614+08:00 DEBUG 33360 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-24T20:11:32.614+08:00  INFO 33360 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-24T20:11:32.644+08:00  INFO 33360 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-24T20:11:32.644+08:00  INFO 33360 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-24T20:11:33.460+08:00  INFO 33360 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-24T20:11:33.469+08:00  INFO 33360 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-24T20:11:33.470+08:00  INFO 33360 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-24T20:11:33.517+08:00  INFO 33360 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-24T20:11:33.517+08:00  INFO 33360 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 872 ms
+2025-06-24T20:11:34.297+08:00  INFO 33360 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-24T20:11:34.320+08:00  INFO 33360 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-24T20:11:34.326+08:00  INFO 33360 --- [restartedMain] com.internship.Application               : Started Application in 1.906 seconds (process running for 2.174)
+2025-06-24T20:12:11.717+08:00  INFO 33360 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-24T20:12:11.718+08:00  INFO 33360 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-24T20:12:11.720+08:00  INFO 33360 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-06-24T20:12:11.763+08:00  INFO 33360 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-24T20:12:11.913+08:00  INFO 33360 --- [http-nio-8080-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3ae6b3cc
+2025-06-24T20:12:11.914+08:00  INFO 33360 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T20:13:49.298+08:00  WARN 33360 --- [http-nio-8080-exec-4] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.PointRuleController
+2025-06-24T20:13:49.400+08:00  WARN 33360 --- [http-nio-8080-exec-4] c.i.config.GlobalExceptionHandler        : 参数校验失败: validityType: 有效期类型不能为空
+2025-06-24T20:13:49.401+08:00  WARN 33360 --- [http-nio-8080-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [1] in public org.springframework.http.ResponseEntity<com.internship.dto.ApiResponse<com.internship.entity.PointRule>> com.internship.controller.PointRuleController.updatePointRule(java.lang.Long,com.internship.entity.PointRule): [Field error in object 'pointRule' on field 'validityType': rejected value [null]; codes [NotNull.pointRule.validityType,NotNull.validityType,NotNull.java.lang.Integer,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [pointRule.validityType,validityType]; arguments []; default message [validityType]]; default message [有效期类型不能为空]] ]

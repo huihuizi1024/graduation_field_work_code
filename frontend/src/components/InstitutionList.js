@@ -11,6 +11,13 @@ const InstitutionList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingInstitution, setEditingInstitution] = useState(null);
 
+  const institutionTypeMap = {
+    1: '高等院校',
+    2: '职业院校',
+    3: '培训机构',
+    4: '社会组织',
+  };
+
   useEffect(() => {
     fetchInstitutions();
   }, []);
@@ -18,13 +25,19 @@ const InstitutionList = () => {
   const fetchInstitutions = async () => {
     setLoading(true);
     try {
-      // 模拟数据
-      const mockData = [
-        { id: 'i1', name: '国家开放大学', code: 'GKD', type: '大学', contactPerson: '李老师', contactPhone: '010-12345678', status: 1, description: '终身教育国家级大学' },
-        { id: 'i2', name: 'XX职业技术学院', code: 'XXZY', type: '职业院校', contactPerson: '王主任', contactPhone: '021-87654321', status: 1, description: '提供多种职业技能培训' },
-        { id: 'i3', name: 'ABC教育培训中心', code: 'ABC_EDU', type: '培训机构', contactPerson: '赵经理', contactPhone: '0755-11223344', status: 0, description: '专注于成人职业技能培训' },
-      ];
-      setData(mockData);
+      const response = await fetch('/api/institutions'); // 使用相对路径，利用proxy
+      if (!response.ok) {
+        throw new Error('网络响应错误');
+      }
+      const result = await response.json();
+      console.log('API响应:', result); // 添加调试日志
+      if (result.code === 200) {
+        // 后端返回的数据结构是 { code: 200, message: "操作成功", data: { records: [...] } }
+        // 我们需要的是 data.records 数组
+        setData(result.data.records || []);
+      } else {
+        message.error(result.message || '获取机构列表失败！');
+      }
     } catch (error) {
       message.error('获取机构列表失败！');
       console.error('Error fetching institutions:', error);
@@ -83,18 +96,19 @@ const InstitutionList = () => {
   const columns = [
     {
       title: '机构名称',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'institutionName',
+      key: 'institutionName',
     },
     {
       title: '机构编码',
-      dataIndex: 'code',
-      key: 'code',
+      dataIndex: 'institutionCode',
+      key: 'institutionCode',
     },
     {
       title: '机构类型',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'institutionType',
+      key: 'institutionType',
+      render: (type) => institutionTypeMap[type] || '未知',
     },
     {
       title: '联系人',
@@ -114,8 +128,8 @@ const InstitutionList = () => {
     },
     {
       title: '描述',
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'institutionDescription',
+      key: 'institutionDescription',
     },
     {
       title: '操作',
@@ -152,24 +166,30 @@ const InstitutionList = () => {
       >
         <Form form={form} layout="vertical" name="institution_form">
           <Form.Item
-            name="name"
+            name="institutionName"
             label="机构名称"
             rules={[{ required: true, message: '请输入机构名称！' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name="code"
+            name="institutionCode"
             label="机构编码"
             rules={[{ required: true, message: '请输入机构编码！' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name="type"
+            name="institutionType"
             label="机构类型"
+            rules={[{ required: true, message: '请选择机构类型！' }]}
           >
-            <Input />
+            <Select placeholder="请选择机构类型">
+              <Option value={1}>高等院校</Option>
+              <Option value={2}>职业院校</Option>
+              <Option value={3}>培训机构</Option>
+              <Option value={4}>社会组织</Option>
+            </Select>
           </Form.Item>
           <Form.Item
             name="contactPerson"
@@ -194,7 +214,7 @@ const InstitutionList = () => {
             </Select>
           </Form.Item>
           <Form.Item
-            name="description"
+            name="institutionDescription"
             label="描述"
           >
             <Input.TextArea rows={4} />

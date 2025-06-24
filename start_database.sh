@@ -37,11 +37,11 @@ if [ ! -f "database_setup.sql" ]; then
     exit 1
 fi
 
-# 停止现有容器（如果存在）
-echo "🔄 检查并停止现有容器..."
+# 停止现有容器和数据卷，确保全新启动
+echo "🔄 检查并清理旧容器和数据..."
 if docker ps -a | grep -q mysql-internship; then
-    echo "🛑 停止现有MySQL容器..."
-    docker-compose down
+    echo "🛑 停止并删除MySQL容器及数据卷..."
+    docker-compose down -v
 fi
 
 # 启动MySQL服务
@@ -77,19 +77,25 @@ fi
 echo "🔍 验证数据库设置..."
 TABLES_COUNT=$(docker exec mysql-internship mysql -u internship_user -pinternship_pass internship_db -se "SHOW TABLES;" | wc -l)
 
-if [ $TABLES_COUNT -eq 3 ]; then
-    echo "✅ 数据库表创建成功！"
+if [ $TABLES_COUNT -eq 6 ]; then
+    echo "✅ 数据库表创建成功！(共 $TABLES_COUNT 张表)"
     
     # 显示数据统计
     echo "📊 数据库统计信息："
     docker exec mysql-internship mysql -u internship_user -pinternship_pass internship_db -se "
+    SELECT 'institution' as table_name, COUNT(*) as record_count FROM institution
+    UNION ALL
     SELECT 'point_rule' as table_name, COUNT(*) as record_count FROM point_rule
     UNION ALL
-    SELECT 'conversion_rule' as table_name, COUNT(*) as record_count FROM conversion_rule  
+    SELECT 'conversion_rule' as table_name, COUNT(*) as record_count FROM conversion_rule
     UNION ALL
-    SELECT 'institution' as table_name, COUNT(*) as record_count FROM institution;"
+    SELECT 'user' as table_name, COUNT(*) as record_count FROM user
+    UNION ALL
+    SELECT 'point_transaction' as table_name, COUNT(*) as record_count FROM point_transaction
+    UNION ALL
+    SELECT 'conversion_history' as table_name, COUNT(*) as record_count FROM conversion_history;"
 else
-    echo "⚠️  警告: 数据库表可能未正确创建，检测到 $TABLES_COUNT 个表"
+    echo "⚠️  警告: 数据库表可能未正确创建，检测到 $TABLES_COUNT 个表 (应为6个)"
 fi
 
 # 显示连接信息

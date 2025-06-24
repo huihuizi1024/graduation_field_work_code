@@ -3,8 +3,13 @@
 -- MySQL 8.0 数据库创建脚本
 -- 作者: huihuizi1024
 -- 日期: 2025.6.22
--- 版本: 1.2.0
+-- 版本: 1.2.1
 -- ========================================
+
+-- 设置客户端字符集
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+SET collation_connection = utf8mb4_unicode_ci;
 
 -- 1. 创建数据库
 DROP DATABASE IF EXISTS internship_db;
@@ -112,6 +117,58 @@ CREATE TABLE institution (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='机构表';
 
 -- ========================================
+-- 新增核心业务表
+-- ========================================
+
+-- 7. 创建用户表 (user)
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '用户ID',
+    username VARCHAR(100) NOT NULL UNIQUE COMMENT '用户名/学号',
+    password_hash VARCHAR(255) NOT NULL COMMENT '加密后的密码',
+    full_name VARCHAR(100) COMMENT '真实姓名',
+    role INT NOT NULL COMMENT '角色：1-学生, 2-教师, 3-专家, 4-管理员',
+    email VARCHAR(100) UNIQUE COMMENT '邮箱',
+    phone VARCHAR(20) UNIQUE COMMENT '手机号',
+    institution_id BIGINT COMMENT '所属机构ID',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态：1-正常, 0-禁用',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (institution_id) REFERENCES institution(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
+
+-- 8. 创建积分流水表 (point_transaction)
+DROP TABLE IF EXISTS point_transaction;
+CREATE TABLE point_transaction (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '流水ID',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    point_rule_id BIGINT COMMENT '关联的积分规则ID (可为空)',
+    transaction_type INT NOT NULL COMMENT '交易类型：1-获得, 2-消费, 3-过期',
+    points_change DECIMAL(10, 2) NOT NULL COMMENT '变动积分（正为增加，负为扣减）',
+    balance_after DECIMAL(10, 2) NOT NULL COMMENT '变动后总积分',
+    description VARCHAR(255) COMMENT '交易描述，例如：完成在线课程学习',
+    related_id VARCHAR(100) COMMENT '关联外部业务ID（如课程ID、活动ID）',
+    transaction_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '交易时间',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (point_rule_id) REFERENCES point_rule(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分流水表';
+
+-- 9. 创建转换历史表 (conversion_history)
+DROP TABLE IF EXISTS conversion_history;
+CREATE TABLE conversion_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '转换历史ID',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    conversion_rule_id BIGINT NOT NULL COMMENT '关联的转换规则ID',
+    source_amount DECIMAL(10, 2) NOT NULL COMMENT '源数量（消耗的数量）',
+    target_amount DECIMAL(10, 2) NOT NULL COMMENT '目标数量（获得的数量）',
+    status INT NOT NULL COMMENT '状态：1-成功, 2-失败, 3-审核中',
+    remark TEXT COMMENT '备注或审核意见',
+    conversion_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '转换时间',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (conversion_rule_id) REFERENCES conversion_rule(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='学分转换历史表';
+
+-- ========================================
 -- 索引创建
 -- ========================================
 
@@ -142,10 +199,30 @@ CREATE INDEX idx_institution_region ON institution(province, city, district);
 CREATE INDEX idx_institution_certification ON institution(certification_level);
 
 -- ========================================
+-- 索引创建 (新增)
+-- ========================================
+
+-- 用户表索引
+CREATE INDEX idx_user_username ON user(username);
+CREATE INDEX idx_user_role ON user(role);
+CREATE INDEX idx_user_institution_id ON user(institution_id);
+
+-- 积分流水表索引
+CREATE INDEX idx_point_transaction_user_id ON point_transaction(user_id);
+CREATE INDEX idx_point_transaction_type ON point_transaction(transaction_type);
+CREATE INDEX idx_point_transaction_time ON point_transaction(transaction_time);
+
+-- 转换历史表索引
+CREATE INDEX idx_conversion_history_user_id ON conversion_history(user_id);
+CREATE INDEX idx_conversion_history_rule_id ON conversion_history(conversion_rule_id);
+CREATE INDEX idx_conversion_history_time ON conversion_history(conversion_time);
+
+-- ========================================
 -- 初始数据插入
 -- ========================================
 
--- 插入机构初始数据
+-- 插入机构初始数据（确保UTF-8编码）
+DELETE FROM institution WHERE id > 0;
 INSERT INTO institution (
     institution_name, institution_code, institution_type, institution_level,
     social_credit_code, legal_representative, contact_person, contact_phone, contact_email,
@@ -156,7 +233,7 @@ INSERT INTO institution (
  '北京市', '北京市', '海淀区', '中国近现代第一所国立综合性大学', '高等教育、科学研究', 1, 1, '系统管理员', 1),
 
 ('清华大学', 'THU', 1, 1, '12100000400000086T', '王希勤', '李老师', '010-62793001', 'contact@tsinghua.edu.cn',
- '北京市', '北京市', '海淀区', '中国著名高等学府，中国高层次人才培养和科学技术研究的重要基地', '高等教育、科学研究', 1, 1, '系统管理员', 1),
+ '北京市', '北京市', '海淀区', '中国著名高等学府，人才培养和科学技术研究的重要基地', '高等教育、科学研究', 1, 1, '系统管理员', 1),
 
 ('中国人民大学', 'RUC', 1, 1, '12100000400000098K', '林尚立', '王老师', '010-62511340', 'contact@ruc.edu.cn',
  '北京市', '北京市', '海淀区', '中国共产党创办的第一所新型正规大学', '高等教育、人文社会科学研究', 1, 1, '系统管理员', 1),
@@ -201,6 +278,22 @@ INSERT INTO conversion_rule (
  '达到一定积分可申请相应等级的能力证书', 1, 1, '系统管理员', 1,
  '2025-01-01 00:00:00', '2025-12-31 23:59:59');
 
+-- 插入用户初始数据
+INSERT INTO user (username, password_hash, full_name, role, email, phone, institution_id, status) VALUES
+('student01', 'hashed_password_placeholder', '张三', 1, 'zhangsan@pku.edu.cn', '13800138001', 1, 1),
+('teacher01', 'hashed_password_placeholder', '李四', 2, 'lisi@tsinghua.edu.cn', '13800138002', 2, 1),
+('admin', 'hashed_password_placeholder', '管理员', 4, 'admin@system.com', '13800138000', NULL, 1);
+
+-- 插入积分流水初始数据
+INSERT INTO point_transaction (user_id, point_rule_id, transaction_type, points_change, balance_after, description) VALUES
+(1, 1, 1, 50.00, 50.00, '完成在线课程学习'),
+(1, 2, 1, 20.00, 70.00, '参与学术讲座'),
+(2, 3, 1, 200.00, 200.00, '发表学术论文');
+
+-- 插入转换历史初始数据
+INSERT INTO conversion_history (user_id, conversion_rule_id, source_amount, target_amount, status, remark) VALUES
+(1, 1, 100.00, 10.00, 1, '使用100学习积分转换为10学分');
+
 -- ========================================
 -- 验证数据插入
 -- ========================================
@@ -213,7 +306,13 @@ SELECT 'point_rule' as table_name, COUNT(*) as record_count FROM point_rule
 UNION ALL
 SELECT 'conversion_rule' as table_name, COUNT(*) as record_count FROM conversion_rule  
 UNION ALL
-SELECT 'institution' as table_name, COUNT(*) as record_count FROM institution;
+SELECT 'institution' as table_name, COUNT(*) as record_count FROM institution
+UNION ALL
+SELECT 'user' as table_name, COUNT(*) as record_count FROM user
+UNION ALL
+SELECT 'point_transaction' as table_name, COUNT(*) as record_count FROM point_transaction
+UNION ALL
+SELECT 'conversion_history' as table_name, COUNT(*) as record_count FROM conversion_history;
 
 -- 显示创建完成信息
 SELECT 

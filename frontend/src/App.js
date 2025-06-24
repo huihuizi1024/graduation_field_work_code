@@ -46,6 +46,60 @@ function App() {
     }
   };
 
+  // 菜单项配置
+  const menuItems = [
+    {
+      key: '1',
+      icon: <ScheduleOutlined />,
+      label: '积分规则管理',
+    },
+    {
+      key: '2',
+      icon: <SettingOutlined />,
+      label: '转换规则管理',
+    },
+    {
+      key: '3',
+      icon: <UserOutlined />,
+      label: '机构管理',
+    },
+    {
+      key: '4',
+      icon: <ScheduleOutlined />,
+      label: '认证标准管理',
+    },
+    {
+      key: '5',
+      icon: <SettingOutlined />,
+      label: '业务流程管理',
+    },
+    {
+      key: '6',
+      icon: <UserOutlined />,
+      label: '平台活动管理',
+    },
+    {
+      key: '7',
+      icon: <ScheduleOutlined />,
+      label: '交易管理',
+    },
+    {
+      key: '8',
+      icon: <SettingOutlined />,
+      label: '项目管理',
+    },
+    {
+      key: '9',
+      icon: <UserOutlined />,
+      label: '专家管理',
+    },
+    {
+      key: '10',
+      icon: <ScheduleOutlined />,
+      label: '管理用户管理',
+    },
+  ];
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -61,38 +115,13 @@ function App() {
         <div style={{ color: 'white', fontSize: '20px', textAlign: 'center', padding: '16px 0' }}>
           学分银行管理
         </div>
-        <Menu theme="dark" selectedKeys={[selectedKey]} mode="inline" onClick={({ key }) => setSelectedKey(key)}>
-          <Menu.Item key="1" icon={<ScheduleOutlined />}>
-            积分规则管理
-          </Menu.Item>
-          <Menu.Item key="2" icon={<SettingOutlined />}>
-            转换规则管理
-          </Menu.Item>
-          <Menu.Item key="3" icon={<UserOutlined />}>
-            机构管理
-          </Menu.Item>
-          <Menu.Item key="4" icon={<ScheduleOutlined />}>
-            认证标准管理
-          </Menu.Item>
-          <Menu.Item key="5" icon={<SettingOutlined />}>
-            业务流程管理
-          </Menu.Item>
-          <Menu.Item key="6" icon={<UserOutlined />}>
-            平台活动管理
-          </Menu.Item>
-          <Menu.Item key="7" icon={<ScheduleOutlined />}>
-            交易管理
-          </Menu.Item>
-          <Menu.Item key="8" icon={<SettingOutlined />}>
-            项目管理
-          </Menu.Item>
-          <Menu.Item key="9" icon={<UserOutlined />}>
-            专家管理
-          </Menu.Item>
-          <Menu.Item key="10" icon={<ScheduleOutlined />}>
-            管理用户管理
-          </Menu.Item>
-        </Menu>
+        <Menu
+          theme="dark"
+          selectedKeys={[selectedKey]}
+          mode="inline"
+          items={menuItems}
+          onClick={({ key }) => setSelectedKey(key)}
+        />
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} />

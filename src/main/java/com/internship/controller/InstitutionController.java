@@ -3,6 +3,7 @@ package com.internship.controller;
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
 import com.internship.entity.Institution;
+import com.internship.service.InstitutionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import java.util.List;
 
 /**
  * 机构管理Controller
@@ -23,6 +23,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/institutions")
 public class InstitutionController {
+    
+    private final InstitutionService institutionService;
+    
+    public InstitutionController(InstitutionService institutionService) {
+        this.institutionService = institutionService;
+    }
 
     /**
      * 创建机构
@@ -85,8 +91,9 @@ public class InstitutionController {
             @Parameter(description = "城市") @RequestParam(required = false) String city,
             @Parameter(description = "状态") @RequestParam(required = false) Integer status,
             @Parameter(description = "审核状态") @RequestParam(required = false) Integer reviewStatus) {
-        // TODO: 实现分页查询机构逻辑
-        PageResponse<Institution> pageResponse = new PageResponse<>(page, size, 0L, List.of());
+        PageResponse<Institution> pageResponse = institutionService.getInstitutions(
+            page, size, institutionName, institutionCode, institutionType, 
+            institutionLevel, province, city, status, reviewStatus);
         return ResponseEntity.ok(ApiResponse.success(pageResponse));
     }
 

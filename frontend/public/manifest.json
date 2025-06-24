@@ -1,0 +1,10 @@
+{
+  "short_name": "学分银行",
+  "name": "终身学习学分银行平台积分管理系统",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1890ff",
+  "background_color": "#ffffff",
+  "description": "终身学习学分银行平台积分管理系统，用于管理学习积分和学分转换"
+} 
