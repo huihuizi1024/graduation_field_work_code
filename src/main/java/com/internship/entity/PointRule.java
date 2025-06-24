@@ -1,144 +1,140 @@
 package com.internship.entity;
 
-import jakarta.persistence.*;
+import com.baomidou.mybatisplus.annotation.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 积分规则实体类
+ * 积分规则实体类 (MyBatis Plus Version)
  * 
  * @author huihuizi1024
  * @date 2025.6.22
- * @version 1.1.0
+ * @version 1.2.0
  */
-@Entity
-@Table(name = "point_rule")
-public class PointRule {
+@TableName("point_rule")
+public class PointRule implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
      * 规则名称
      */
     @NotBlank(message = "规则名称不能为空")
-    @Column(name = "rule_name", nullable = false, length = 100)
+    @TableField("rule_name")
     private String ruleName;
 
     /**
      * 规则编码
      */
     @NotBlank(message = "规则编码不能为空")
-    @Column(name = "rule_code", nullable = false, unique = true, length = 50)
+    @TableField("rule_code")
     private String ruleCode;
 
     /**
      * 规则描述
      */
-    @Column(name = "rule_description", length = 500)
+    @TableField("rule_description")
     private String ruleDescription;
 
     /**
      * 积分类型：1-学习积分，2-活动积分，3-贡献积分
      */
     @NotNull(message = "积分类型不能为空")
-    @Column(name = "point_type", nullable = false)
+    @TableField("point_type")
     private Integer pointType;
 
     /**
      * 积分值
      */
     @NotNull(message = "积分值不能为空")
-    @Column(name = "point_value", nullable = false, precision = 10, scale = 2)
+    @TableField("point_value")
     private BigDecimal pointValue;
 
     /**
      * 适用对象：1-学生，2-教师，3-专家，4-管理员
      */
     @NotNull(message = "适用对象不能为空")
-    @Column(name = "applicable_object", nullable = false)
+    @TableField("applicable_object")
     private Integer applicableObject;
 
     /**
      * 有效期类型：1-永久有效，2-固定期限，3-相对期限
      */
     @NotNull(message = "有效期类型不能为空")
-    @Column(name = "validity_type", nullable = false)
+    @TableField("validity_type")
     private Integer validityType;
 
     /**
      * 有效期（天数）
      */
-    @Column(name = "validity_days")
+    @TableField("validity_days")
     private Integer validityDays;
 
     /**
      * 状态：1-有效，0-无效
      */
     @NotNull(message = "状态不能为空")
-    @Column(name = "status", nullable = false)
+    @TableField("status")
     private Integer status;
 
     /**
      * 创建人ID
      */
-    @Column(name = "creator_id")
+    @TableField("creator_id")
     private Long creatorId;
 
     /**
      * 创建人姓名
      */
-    @Column(name = "creator_name", length = 50)
+    @TableField("creator_name")
     private String creatorName;
 
     /**
      * 审核人ID
      */
-    @Column(name = "reviewer_id")
+    @TableField("reviewer_id")
     private Long reviewerId;
 
     /**
      * 审核人姓名
      */
-    @Column(name = "reviewer_name", length = 50)
+    @TableField("reviewer_name")
     private String reviewerName;
 
     /**
      * 审核状态：0-待审核，1-审核通过，2-审核拒绝
      */
-    @Column(name = "review_status", nullable = false)
+    @TableField("review_status")
     private Integer reviewStatus = 0;
 
     /**
      * 审核时间
      */
-    @Column(name = "review_time")
+    @TableField("review_time")
     private LocalDateTime reviewTime;
 
     /**
      * 审核意见
      */
-    @Column(name = "review_comment", length = 500)
+    @TableField("review_comment")
     private String reviewComment;
 
     /**
      * 创建时间
      */
-    @CreationTimestamp
-    @Column(name = "create_time", nullable = false)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @UpdateTimestamp
-    @Column(name = "update_time", nullable = false)
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     // Constructors

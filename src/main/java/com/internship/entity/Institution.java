@@ -1,194 +1,190 @@
 package com.internship.entity;
 
-import jakarta.persistence.*;
+import com.baomidou.mybatisplus.annotation.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 机构管理实体类
+ * 机构管理实体类 (MyBatis Plus Version)
  * 
  * @author huihuizi1024
  * @date 2025.6.22
- * @version 1.1.0
+ * @version 1.2.0
  */
-@Entity
-@Table(name = "institution")
-public class Institution {
+@TableName("institution")
+public class Institution implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
      * 机构名称
      */
     @NotBlank(message = "机构名称不能为空")
-    @Column(name = "institution_name", nullable = false, length = 100)
+    @TableField("institution_name")
     private String institutionName;
 
     /**
      * 机构代码
      */
     @NotBlank(message = "机构代码不能为空")
-    @Column(name = "institution_code", nullable = false, unique = true, length = 50)
+    @TableField("institution_code")
     private String institutionCode;
 
     /**
      * 机构类型：1-高等院校，2-职业院校，3-培训机构，4-社会组织
      */
     @NotNull(message = "机构类型不能为空")
-    @Column(name = "institution_type", nullable = false)
+    @TableField("institution_type")
     private Integer institutionType;
 
     /**
      * 机构级别：1-国家级，2-省级，3-市级，4-区县级
      */
-    @Column(name = "institution_level")
+    @TableField("institution_level")
     private Integer institutionLevel;
 
     /**
      * 统一社会信用代码
      */
-    @Column(name = "social_credit_code", length = 50)
+    @TableField("social_credit_code")
     private String socialCreditCode;
 
     /**
      * 法定代表人
      */
-    @Column(name = "legal_representative", length = 50)
+    @TableField("legal_representative")
     private String legalRepresentative;
 
     /**
      * 联系人
      */
-    @Column(name = "contact_person", length = 50)
+    @TableField("contact_person")
     private String contactPerson;
 
     /**
      * 联系电话
      */
-    @Column(name = "contact_phone", length = 20)
+    @TableField("contact_phone")
     private String contactPhone;
 
     /**
      * 联系邮箱
      */
-    @Column(name = "contact_email", length = 100)
+    @TableField("contact_email")
     private String contactEmail;
 
     /**
      * 详细地址
      */
-    @Column(name = "address", length = 200)
+    @TableField("address")
     private String address;
 
     /**
      * 省份
      */
-    @Column(name = "province", length = 50)
+    @TableField("province")
     private String province;
 
     /**
      * 城市
      */
-    @Column(name = "city", length = 50)
+    @TableField("city")
     private String city;
 
     /**
      * 区县
      */
-    @Column(name = "district", length = 50)
+    @TableField("district")
     private String district;
 
     /**
      * 机构简介
      */
-    @Column(name = "institution_description", length = 1000)
+    @TableField("institution_description")
     private String institutionDescription;
 
     /**
      * 业务范围
      */
-    @Column(name = "business_scope", length = 500)
+    @TableField("business_scope")
     private String businessScope;
 
     /**
      * 认证等级：1-AAA级，2-AA级，3-A级，4-B级，5-C级
      */
-    @Column(name = "certification_level")
+    @TableField("certification_level")
     private Integer certificationLevel;
 
     /**
      * 认证有效期
      */
-    @Column(name = "certification_expiry_date")
+    @TableField("certification_expiry_date")
     private LocalDateTime certificationExpiryDate;
 
     /**
      * 状态：1-正常，2-暂停，3-注销
      */
     @NotNull(message = "状态不能为空")
-    @Column(name = "status", nullable = false)
+    @TableField("status")
     private Integer status;
 
     /**
      * 创建人ID
      */
-    @Column(name = "creator_id")
+    @TableField("creator_id")
     private Long creatorId;
 
     /**
      * 创建人姓名
      */
-    @Column(name = "creator_name", length = 50)
+    @TableField("creator_name")
     private String creatorName;
 
     /**
      * 审核人ID
      */
-    @Column(name = "reviewer_id")
+    @TableField("reviewer_id")
     private Long reviewerId;
 
     /**
      * 审核人姓名
      */
-    @Column(name = "reviewer_name", length = 50)
+    @TableField("reviewer_name")
     private String reviewerName;
 
     /**
      * 审核状态：0-待审核，1-审核通过，2-审核拒绝
      */
-    @Column(name = "review_status", nullable = false)
+    @TableField("review_status")
     private Integer reviewStatus = 0;
 
     /**
      * 审核时间
      */
-    @Column(name = "review_time")
+    @TableField("review_time")
     private LocalDateTime reviewTime;
 
     /**
      * 审核意见
      */
-    @Column(name = "review_comment", length = 500)
+    @TableField("review_comment")
     private String reviewComment;
 
     /**
      * 创建时间
      */
-    @CreationTimestamp
-    @Column(name = "create_time", nullable = false)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @UpdateTimestamp
-    @Column(name = "update_time", nullable = false)
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     // Constructors
