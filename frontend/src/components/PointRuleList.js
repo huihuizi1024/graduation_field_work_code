@@ -4,6 +4,8 @@ import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
+const API_BASE_URL = 'http://localhost:8080/api/point-rules'; // 后端API基础URL
+
 const PointRuleList = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -19,18 +21,13 @@ const PointRuleList = () => {
   const fetchPointRules = async () => {
     setLoading(true);
     try {
-      // 实际项目中这里会调用后端API
-      // const response = await fetch('/api/point-rules');
-      // const result = await response.json();
-      // setData(result.data);
-
-      // 模拟数据
-      const mockData = [
-        { id: '1', ruleName: '签到积分', ruleCode: 'SIGNIN', pointType: 1, points: 5, status: 1, description: '每日签到获取积分' },
-        { id: '2', ruleName: '课程学习', ruleCode: 'COURSE', pointType: 1, points: 100, status: 1, description: '完成一门课程获取积分' },
-        { id: '3', ruleName: '活动参与', ruleCode: 'ACTIVITY', pointType: 1, points: 50, status: 0, description: '参与平台活动获取积分' },
-      ];
-      setData(mockData);
+      const response = await fetch(API_BASE_URL);
+      const result = await response.json();
+      if (result.code === 200) {
+        setData(result.data.content); // 后端返回的是PageResponse，数据在content字段
+      } else {
+        message.error(`获取积分规则失败: ${result.message}`);
+      }
     } catch (error) {
       message.error('获取积分规则失败！');
       console.error('Error fetching point rules:', error);
@@ -53,10 +50,14 @@ const PointRuleList = () => {
 
   const handleDelete = async (id) => {
     try {
-      // 实际项目中这里会调用后端API
-      // await fetch(`/api/point-rules/${id}`, { method: 'DELETE' });
-      message.success('积分规则删除成功！');
-      fetchPointRules(); // 刷新列表
+      const response = await fetch(`${API_BASE_URL}/${id}`, { method: 'DELETE' });
+      const result = await response.json();
+      if (result.code === 200) {
+        message.success('积分规则删除成功！');
+        fetchPointRules(); // 刷新列表
+      } else {
+        message.error(`删除积分规则失败: ${result.message}`);
+      }
     } catch (error) {
       message.error('删除积分规则失败！');
       console.error('Error deleting point rule:', error);
@@ -67,21 +68,39 @@ const PointRuleList = () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
+      let response;
+      let result;
       if (editingRule) {
         // 编辑
-        // 实际项目中这里会调用后端API
-        // await fetch(`/api/point-rules/${editingRule.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...editingRule, ...values }) });
-        message.success('积分规则更新成功！');
+        response = await fetch(`${API_BASE_URL}/${editingRule.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values),
+        });
+        result = await response.json();
+        if (result.code === 200) {
+          message.success('积分规则更新成功！');
+        } else {
+          message.error(`积分规则更新失败: ${result.message}`);
+        }
       } else {
         // 添加
-        // 实际项目中这里会调用后端API
-        // await fetch('/api/point-rules', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values) });
-        message.success('积分规则添加成功！');
+        response = await fetch(API_BASE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values),
+        });
+        result = await response.json();
+        if (result.code === 200) {
+          message.success('积分规则添加成功！');
+        } else {
+          message.error(`积分规则添加失败: ${result.message}`);
+        }
       }
       setIsModalVisible(false);
       fetchPointRules(); // 刷新列表
     } catch (error) {
-      message.error('操作失败，请检查表单！');
+      message.error('操作失败，请检查表单或网络！');
       console.error('Error saving point rule:', error);
     } finally {
       setLoading(false);
