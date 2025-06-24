@@ -289,3 +289,4 @@ java.nio.channels.AsynchronousCloseException: null
 2025-06-24T11:24:14.109+08:00  INFO 3857 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
 2025-06-24T11:24:14.205+08:00  INFO 3857 --- [http-nio-8080-exec-2] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2a0fd2df
 2025-06-24T11:24:14.206+08:00  INFO 3857 --- [http-nio-8080-exec-2] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-24T11:37:09.010+08:00  WARN 3857 --- [http-nio-8080-exec-4] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.PointRuleController

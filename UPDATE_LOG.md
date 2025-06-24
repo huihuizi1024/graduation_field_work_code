@@ -157,8 +157,7 @@ GET    /api/point-rules/export         # 导出数据
 
 ### 1. Bean 冲突问题
 **问题：** `ddlApplicationRunner` Bean 冲突导致启动失败
-```
-BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' 
+```BeanNotOfRequiredTypeException: Bean named 'ddlApplicationRunner' 
 is expected to be of type 'org.springframework.boot.Runner' 
 but was actually of type 'org.springframework.beans.factory.support.NullBean'
 ```
@@ -388,7 +387,7 @@ spring.sql.init.mode=never
 
 ---
 
-## 📅 2025年6月24日 - 架构重构与数据库完善 (v1.2.0)
+## 📅 2025年6月24日 - 架构重构与数据库完善 (v1.2.1)
 
 ### 🎯 重大架构变更
 - **架构重构：** 移除JPA架构，专注使用MyBatis Plus架构
@@ -795,5 +794,5 @@ mvn spring-boot:run
 
 **更新时间：** 2025年6月24日  
 **更新人员：** huihuizi1024  
-**版本号：** v1.2.0  
+**版本号：** v1.2.1  
 **主要变更：** 架构重构 + 数据库工程化 + UTF-8编码优化

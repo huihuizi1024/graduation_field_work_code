@@ -8,19 +8,16 @@
 
 ### 开发语言
 - Java 17
-- JavaScript
 
 ### 框架及中间件
-- Spring Boot 3.2.1
-- Redis 
-- Nginx
-- Apache Kafka
-- Apache Spark
+- Spring Boot 3.1.5
+- MyBatis Plus 3.5.4.1
+- Redis (通过Spring Boot管理)
+- Kafka (通过Spring Boot管理)
+- Apache Spark 3.5.0
 
 ### 数据库
-- MySQL 8.0
-- Oracle 11g
-- SQL Server 2012
+- MySQL 8.0 (通过Docker容器)
 
 ### 配置管理系统
 - Git
@@ -33,6 +30,9 @@
 - JetBrains PyCharm 2024
 
 ### 工具
+- Docker
+- Maven 3.6+
+- Git
 - VS Code 2024
 - PowerDesigner 16.7+
 - Microsoft Project 2024
@@ -345,7 +345,8 @@ curl -X POST http://localhost:8080/api/point-rules \
 
 ## 版本记录
 
-* **v1.1.0** (2025.6.22): 完成核心实体类设计、统一响应类和所有API接口定义，文档分离优化
+* **v1.2.1** (2025.6.24): 架构重构至MyBatis Plus，完善数据库解决方案
+* **v1.1.0** (2025.6.23): 完成核心实体类设计、统一响应类和所有API接口定义
 * **v1.0.0** (2025.6.22): 项目初始化，技术栈配置完成
 
 ## 贡献指南
@@ -368,4 +369,4 @@ curl -X POST http://localhost:8080/api/point-rules \
 
 ---
 
-🎓 **毕业实习项目** - 终身学习学分银行平台积分管理系统 v1.1.0 
+🎓 **毕业实习项目** - 终身学习学分银行平台积分管理系统 v1.2.1 
