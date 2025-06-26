@@ -389,4 +389,90 @@
   .feature-card {
     margin-bottom: 16px;
   }
+}
+
+/* 认证步骤横向进度条样式 */
+.certification-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 40px auto 32px auto;
+  max-width: 900px;
+  position: relative;
+  background: none;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 120px;
+  z-index: 1;
+}
+.step-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #555;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  transition: background 0.3s, color 0.3s;
+}
+.step.active .step-circle {
+  background: #2563eb;
+  color: #fff;
+}
+.step.completed .step-circle {
+  background: #22c55e;
+  color: #fff;
+}
+.step .text-sm {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #222;
+  margin-top: 4px;
+}
+.step-line {
+  position: absolute;
+  top: 28px;
+  left: 100%;
+  width: 100%;
+  height: 4px;
+  background: #e5e7eb;
+  z-index: 0;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.step.completed ~ .step .step-line {
+  background: #2563eb;
+}
+@media (max-width: 768px) {
+  .certification-steps {
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 100%;
+  }
+  .step {
+    flex-direction: row;
+    align-items: center;
+    min-width: 0;
+    margin-bottom: 16px;
+  }
+  .step-circle {
+    margin-bottom: 0;
+    margin-right: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  .step-line {
+    top: 20px;
+    left: 100%;
+    height: 3px;
+  }
 } 

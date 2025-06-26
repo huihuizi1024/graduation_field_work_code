@@ -4,16 +4,11 @@
   "private": true,
   "proxy": "http://localhost:3000",
   "dependencies": {
-<<<<<<< HEAD
-    "@ant-design/icons": "^5.0.0",
-    "antd": "^5.0.0",
-    "axios": "^1.10.0",
-    "moment": "^2.30.1",
-=======
     "@ant-design/icons": "^5.6.1",
     "antd": "^5.26.2",
+    "axios": "^1.10.0",
     "font-awesome": "^4.7.0",
->>>>>>> 68a50f4544f37f98a99bb3e853e430aaf982e010
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.6.2",

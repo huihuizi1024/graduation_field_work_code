@@ -63,9 +63,9 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
         alert('登录成功！正在跳转...');
         loginButton.innerHTML = '登录';
         loginButton.disabled = false;
-        // 调用登录成功回调
+        // 调用登录成功回调，传递身份
         if (onLoginSuccess) {
-          onLoginSuccess();
+          onLoginSuccess(currentIdentity);
         }
       }, 1500);
     }

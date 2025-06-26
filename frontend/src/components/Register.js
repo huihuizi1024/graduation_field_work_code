@@ -6,7 +6,7 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
   const [formData, setFormData] = useState({
     personal: {
       name: '',
-      id: '',
+      email: '',
       username: '',
       phone: '',
       code: '',
@@ -85,13 +85,13 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
       isValid = false;
     }
     
-    // 验证身份证号
-    const idCardRegex = /(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-    if (!data.id.trim()) {
-      alert('请输入身份证号');
+    // 验证邮箱
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!data.email.trim()) {
+      alert('请输入邮箱');
       isValid = false;
-    } else if (!idCardRegex.test(data.id)) {
-      alert('请输入有效的身份证号');
+    } else if (!emailRegex.test(data.email)) {
+      alert('请输入有效的邮箱');
       isValid = false;
     }
     
@@ -317,19 +317,18 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
                       />
                     </div>
                   </div>
-                  
                   <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">身份证号</label>
+                    <label className="block text-sm font-medium text-neutral-600 mb-2">邮箱</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-id-card text-neutral-400"></i>
+                        <i className="fa fa-envelope text-neutral-400"></i>
                       </div>
                       <input 
-                        type="text" 
+                        type="email" 
                         className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请输入18位身份证号码"
-                        value={formData.personal.id}
-                        onChange={(e) => handleInputChange('personal', 'id', e.target.value)}
+                        placeholder="请输入邮箱"
+                        value={formData.personal.email}
+                        onChange={(e) => handleInputChange('personal', 'email', e.target.value)}
                       />
                     </div>
                   </div>

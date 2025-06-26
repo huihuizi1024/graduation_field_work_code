@@ -1,5 +1,6 @@
 package com.internship.controller;
 
+<<<<<<< HEAD
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
 import com.internship.entity.PointTransaction;
@@ -14,10 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "交易管理", description = "积分交易记录管理")
+=======
+import com.internship.entity.Transaction;
+import com.internship.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+>>>>>>> ecb1823576adb48f04118c7cefec2dd94e3ef73e
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
 
+<<<<<<< HEAD
     @Autowired
     private TransactionService transactionService;
 
@@ -63,5 +74,43 @@ public class TransactionController {
             @Parameter(description = "交易ID") @PathVariable Long id) {
         transactionService.deleteTransaction(id);
         return ResponseEntity.ok(ApiResponse.<Void>success("交易记录删除成功"));
+=======
+    private final TransactionService transactionService;
+
+    @Autowired
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    @GetMapping
+    public List<Transaction> getAllTransactions() {
+        return transactionService.getAllTransactions();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id) {
+        return ResponseEntity.ok(transactionService.getTransactionById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) {
+        return ResponseEntity.ok(transactionService.createTransaction(transaction));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
+        return ResponseEntity.ok(transactionService.updateTransaction(id, transaction));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
+        transactionService.deleteTransaction(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Transaction> getTransactionsByUser(@PathVariable String userId) {
+        return transactionService.getTransactionsByUserId(userId);
+>>>>>>> ecb1823576adb48f04118c7cefec2dd94e3ef73e
     }
 }

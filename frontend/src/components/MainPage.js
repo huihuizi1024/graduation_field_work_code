@@ -1,129 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown } from 'antd';
+import React, { useState } from 'react';
+import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, Dropdown, Avatar, Menu } from 'antd';
 import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, TeamOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
 import './MainPage.css';
 
 const { Title, Paragraph } = Typography;
 
-// API基础URL，与API文档保持一致
-const API_BASE_URL = 'http://localhost:8080';
-
-// 统一的API调用函数
-const fetchApi = async (url, options = {}) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}${url}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    });
-    const result = await response.json();
-    
-    // 检查API统一响应格式
-    if (!result.hasOwnProperty('success')) {
-      throw new Error('Invalid API response format');
-    }
-
-    return result;
-  } catch (error) {
-    console.error('API request failed:', error);
-    throw error;
-  }
+const identityInfo = {
+  student: { label: '学生', icon: <UserOutlined />, color: '#1890ff' },
+  expert: { label: '专家', icon: <TeamOutlined />, color: '#52c41a' },
+  admin: { label: '管理员', icon: <UserOutlined />, color: '#faad14' },
+  organization: { label: '机构', icon: <UserOutlined />, color: '#722ed1' },
 };
 
-const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const [pagination, setPagination] = useState({
-    page: 1,
-    size: 3,
-    total: 0
-  });
-
-  // 获取课程列表
-  const fetchCourses = async () => {
-    try {
-      setLoading(true);
-      const result = await fetchApi(`/api/courses?page=${pagination.page}&size=${pagination.size}`);
-      
-      if (result.success) {
-        setCourses(result.data.data || []);
-        setPagination({
-          page: result.data.page,
-          size: result.data.size,
-          total: result.data.total
-        });
-      } else {
-        message.error(result.message || '获取课程列表失败');
-      }
-    } catch (error) {
-      message.error('获取课程列表失败');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 搜索课程
-  const handleSearch = async () => {
-    if (!searchValue.trim()) {
-      message.warning('请输入搜索内容');
-      return;
-    }
-    try {
-      setLoading(true);
-      const result = await fetchApi(`/api/courses/search?keyword=${encodeURIComponent(searchValue)}&page=1&size=${pagination.size}`);
-      
-      if (result.success) {
-        setCourses(result.data.data || []);
-        setPagination({
-          page: result.data.page,
-          size: result.data.size,
-          total: result.data.total
-        });
-      } else {
-        message.error(result.message || '搜索失败');
-      }
-    } catch (error) {
-      message.error('搜索失败');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 跳转到积分商城
-  const handleShopClick = () => {
-    window.location.href = '/points-mall';
-  };
-
-  // 报名课程
-  const handleEnrollCourse = async (courseId) => {
-    if (!isLoggedIn) {
-      message.warning('请先登录');
-      onLoginClick();
-      return;
-    }
-    
-    try {
-      const result = await fetchApi(`/api/courses/${courseId}/enroll`, {
-        method: 'POST'
-      });
-      
-      if (result.success) {
-        message.success(result.message || '报名成功');
-      } else {
-        message.error(result.message || '报名失败');
-      }
-    } catch (error) {
-      message.error('报名失败');
-    }
-  };
-
-  useEffect(() => {
-    fetchCourses();
-  }, [pagination.page, pagination.size]);
-
+const MainPage = ({ onLoginClick, onLogout, isLoggedIn, userRole, onGoToSkillCertification, onGoToInterestTraining, onGoToLifeSkills, onCareerAdvance, onGoToSeniorEducation, onGoToEducationPromotion }) => {
   // 轮播图数据
   const carouselData = [
     {
@@ -161,20 +50,37 @@ const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
     "刘女士 完成了本周学习任务"
   ];
 
-  // 用户菜单项
-  const userMenuItems = [
-    {
-      key: 'profile',
-      icon: <UserOutlined />,
-      label: '个人中心',
-    },
-    {
-      key: 'logout',
-      icon: <LogoutOutlined />,
-      label: '退出登录',
-      onClick: onLogout,
-    },
-  ];
+  // 不同身份功能菜单
+  const getMenuItems = () => {
+    switch (userRole) {
+      case 'student':
+        return [
+          { key: 'profile', label: '个人中心', icon: <UserOutlined /> },
+          { key: 'my-courses', label: '我的课程', icon: <ScheduleOutlined /> },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+        ];
+      case 'expert':
+        return [
+          { key: 'profile', label: '专家中心', icon: <UserOutlined /> },
+          { key: 'review', label: '课程评审', icon: <ScheduleOutlined /> },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+        ];
+      case 'admin':
+        return [
+          { key: 'profile', label: '管理后台', icon: <UserOutlined /> },
+          { key: 'user-manage', label: '用户管理', icon: <TeamOutlined /> },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+        ];
+      case 'organization':
+        return [
+          { key: 'profile', label: '机构中心', icon: <UserOutlined /> },
+          { key: 'org-courses', label: '课程管理', icon: <ScheduleOutlined /> },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+        ];
+      default:
+        return [];
+    }
+  };
 
   return (
     <div className="main-page">
@@ -188,11 +94,8 @@ const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
               placeholder="搜索课程、活动..."
               prefix={<SearchOutlined />}
               className="search-input"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onPressEnter={handleSearch}
             />
-            <Button type="primary" size="large" onClick={handleSearch} loading={loading}>
+            <Button type="primary" size="large">
               搜索
             </Button>
           </div>
@@ -201,15 +104,20 @@ const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
               type="primary" 
               icon={<ShoppingOutlined />} 
               className="shop-btn"
-              onClick={handleShopClick}
             >
               积分商城
             </Button>
             {isLoggedIn ? (
-              <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
-                <Button type="primary" icon={<UserOutlined />}>
-                  我的账户
-                </Button>
+              <Dropdown 
+                menu={{ items: getMenuItems() }} 
+                placement="bottomRight"
+                trigger={["click"]}
+              >
+                <Avatar 
+                  style={{ backgroundColor: identityInfo[userRole]?.color || '#1890ff', cursor: 'pointer' }} 
+                  size={40} 
+                  icon={identityInfo[userRole]?.icon || <UserOutlined />} 
+                />
               </Dropdown>
             ) : (
               <Button 
@@ -263,7 +171,12 @@ const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
         <Row gutter={[24, 24]} justify="center">
           {features.map((feature, index) => (
             <Col xs={12} sm={8} md={6} lg={4} key={index}>
-              <Card hoverable className="feature-card">
+              <Card 
+                hoverable 
+                className="feature-card"
+                onClick={feature.title === "技能认证" ? onGoToSkillCertification : feature.title === "兴趣培养" ? onGoToInterestTraining : feature.title === "生活技能" ? onGoToLifeSkills : feature.title === "职场进阶" ? onCareerAdvance : feature.title === "老年教育" ? onGoToSeniorEducation : feature.title === "学历提升" ? onGoToEducationPromotion : undefined}
+                style={feature.title === "技能认证" ? { cursor: 'pointer' } : feature.title === "职场进阶" ? { cursor: 'pointer' } : feature.title === "老年教育" ? { cursor: 'pointer' } : feature.title === "学历提升" ? { cursor: 'pointer' } : {}}
+              >
                 <div className="feature-icon">{feature.icon}</div>
                 <Title level={4}>{feature.title}</Title>
                 <p>{feature.desc}</p>
@@ -278,47 +191,36 @@ const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
       <section className="hot-courses-section">
         <Title level={3} className="section-title">热门课程</Title>
         <Row gutter={[24, 24]}>
-          {loading ? (
-            <Col span={24} style={{ textAlign: 'center' }}>加载中...</Col>
-          ) : courses.length > 0 ? (
-            courses.map((course) => (
-              <Col xs={24} sm={12} md={8} key={course.id}>
-                <Card hoverable className="course-card">
-                  <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                    <Title level={4}>{course.title}</Title>
-                    <Space wrap>
-                      {course.tags?.map((tag, i) => (
-                        <Tag color={i === 0 ? "#f50" : "#2db7f5"} key={i}>{tag}</Tag>
-                      ))}
-                    </Space>
-                    <div className="course-info">
-                      <Space>
-                        <TeamOutlined />
-                        <span>{course.teacher}</span>
-                      </Space>
-                      <Space>
-                        <ScheduleOutlined />
-                        <span>{course.startTime}</span>
-                      </Space>
-                    </div>
-                    <div className="course-footer">
-                      <span className="course-category">{course.category}</span>
-                      <span className="course-views">{course.views} 浏览</span>
-                    </div>
-                    <Button 
-                      type="primary" 
-                      block 
-                      onClick={() => handleEnrollCourse(course.id)}
-                    >
-                      立即报名
-                    </Button>
+          {/* 这里可根据实际数据渲染课程卡片，示例为静态 */}
+          <Col xs={24} sm={12} md={8}>
+            <Card hoverable className="course-card">
+              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                <Title level={4}>示例课程A</Title>
+                <Space wrap>
+                  <Tag color="#f50">标签1</Tag>
+                  <Tag color="#2db7f5">标签2</Tag>
+                </Space>
+                <div className="course-info">
+                  <Space>
+                    <TeamOutlined />
+                    <span>张老师</span>
                   </Space>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <Col span={24} style={{ textAlign: 'center' }}>暂无课程数据</Col>
-          )}
+                  <Space>
+                    <ScheduleOutlined />
+                    <span>2024-06-01</span>
+                  </Space>
+                </div>
+                <div className="course-footer">
+                  <span className="course-category">IT</span>
+                  <span className="course-views">1000 浏览</span>
+                </div>
+                <Button type="primary" block>
+                  立即报名
+                </Button>
+              </Space>
+            </Card>
+          </Col>
+          {/* 可继续添加更多课程卡片 */}
         </Row>
       </section>
 

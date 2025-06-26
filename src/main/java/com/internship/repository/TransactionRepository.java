@@ -1,5 +1,6 @@
 package com.internship.repository;
 
+<<<<<<< HEAD
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.internship.entity.PointTransaction;
 import org.apache.ibatis.annotations.Mapper;
@@ -24,4 +25,15 @@ public interface TransactionRepository extends BaseMapper<PointTransaction> {
             @Param("userId") Long userId, 
             @Param("transactionType") Integer transactionType,
             com.baomidou.mybatisplus.extension.plugins.pagination.Page<PointTransaction> page);
+=======
+import com.internship.entity.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+    Transaction findByTransactionId(String transactionId);
+    List<Transaction> findByUserId(String userId);
+>>>>>>> ecb1823576adb48f04118c7cefec2dd94e3ef73e
 }
