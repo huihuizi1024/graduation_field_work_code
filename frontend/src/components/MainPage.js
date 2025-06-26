@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message } from 'antd';
-import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, TeamOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown } from 'antd';
+import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, TeamOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
 import './MainPage.css';
 
 const { Title, Paragraph } = Typography;
@@ -32,7 +32,7 @@ const fetchApi = async (url, options = {}) => {
   }
 };
 
-const MainPage = () => {
+const MainPage = ({ onLoginClick, onLogout, isLoggedIn }) => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -97,13 +97,14 @@ const MainPage = () => {
     window.location.href = '/points-mall';
   };
 
-  // 跳转到登录页
-  const handleLoginClick = () => {
-    window.location.href = '/login';
-  };
-
   // 报名课程
   const handleEnrollCourse = async (courseId) => {
+    if (!isLoggedIn) {
+      message.warning('请先登录');
+      onLoginClick();
+      return;
+    }
+    
     try {
       const result = await fetchApi(`/api/courses/${courseId}/enroll`, {
         method: 'POST'
@@ -160,6 +161,21 @@ const MainPage = () => {
     "刘女士 完成了本周学习任务"
   ];
 
+  // 用户菜单项
+  const userMenuItems = [
+    {
+      key: 'profile',
+      icon: <UserOutlined />,
+      label: '个人中心',
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: '退出登录',
+      onClick: onLogout,
+    },
+  ];
+
   return (
     <div className="main-page">
       {/* 顶部导航栏 */}
@@ -189,13 +205,21 @@ const MainPage = () => {
             >
               积分商城
             </Button>
-            <Button 
-              type="primary" 
-              icon={<UserOutlined />}
-              onClick={handleLoginClick}
-            >
-              登录/注册
-            </Button>
+            {isLoggedIn ? (
+              <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+                <Button type="primary" icon={<UserOutlined />}>
+                  我的账户
+                </Button>
+              </Dropdown>
+            ) : (
+              <Button 
+                type="primary" 
+                icon={<UserOutlined />}
+                onClick={onLoginClick}
+              >
+                登录/注册
+              </Button>
+            )}
           </div>
         </div>
       </header>

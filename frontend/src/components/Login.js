@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
   const [currentIdentity, setCurrentIdentity] = useState(null);
   const [activeTab, setActiveTab] = useState('password');
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -20,8 +20,12 @@ const Login = () => {
   };
 
   const handleBackClick = () => {
-    setShowLoginForm(false);
-    setCurrentIdentity(null);
+    if (showLoginForm) {
+      setShowLoginForm(false);
+      setCurrentIdentity(null);
+    } else {
+      onBackToMain();
+    }
   };
 
   const handleTabClick = (tab) => {
@@ -59,6 +63,10 @@ const Login = () => {
         alert('登录成功！正在跳转...');
         loginButton.innerHTML = '登录';
         loginButton.disabled = false;
+        // 调用登录成功回调
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
       }, 1500);
     }
   };
@@ -121,7 +129,7 @@ const Login = () => {
               <span className="text-xl font-bold text-neutral-700">学分银行系统</span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom">首页</a>
+              <button onClick={onBackToMain} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">关于我们</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">帮助中心</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">联系我们</a>
@@ -295,13 +303,13 @@ const Login = () => {
 
               <div className="mt-6 text-center">
                 <p className="text-neutral-500">
-                  还没有账号? <a href="register.html" className="text-primary hover:text-primary/80 transition-custom font-medium">立即注册</a>
+                  还没有账号? <button onClick={onGoToRegister} className="text-primary hover:text-primary/80 transition-custom font-medium">立即注册</button>
                 </p>
               </div>
 
               <div className="mt-8 text-center">
                 <button className="text-primary hover:text-primary/80 transition-custom flex items-center justify-center mx-auto" onClick={handleBackClick}>
-                  <i className="fa fa-arrow-left mr-2"></i> 返回身份选择
+                  <i className="fa fa-arrow-left mr-2"></i> {showLoginForm ? '返回身份选择' : '返回主页'}
                 </button>
               </div>
             </div>

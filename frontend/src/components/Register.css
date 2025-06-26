@@ -1,0 +1,76 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #F5F7FA;
+}
+
+.form-input:focus {
+  box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.register-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.register-tab {
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.register-tab:hover {
+  color: #165DFF;
+}
+
+.register-tab.tab-active {
+  border-color: #165DFF;
+  color: #165DFF;
+}
+
+.register-content {
+  display: none;
+}
+
+.register-content.active {
+  display: block;
+}
+
+.transition-custom {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bg-blur {
+  backdrop-filter: blur(8px);
+}
+
+.content-auto {
+  content-visibility: auto;
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-error {
+  color: #F53F3F;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+} 
