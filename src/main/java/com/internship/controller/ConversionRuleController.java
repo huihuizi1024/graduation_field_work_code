@@ -3,14 +3,17 @@ package com.internship.controller;
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
 import com.internship.entity.ConversionRule;
+import com.internship.service.ConversionRuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 转换规则管理Controller
@@ -24,6 +27,9 @@ import java.util.List;
 @RequestMapping("/api/conversion-rules")
 public class ConversionRuleController {
 
+    @Autowired
+    private ConversionRuleService conversionRuleService;
+
     /**
      * 创建转换规则
      */
@@ -31,8 +37,8 @@ public class ConversionRuleController {
     @PostMapping
     public ResponseEntity<ApiResponse<ConversionRule>> createConversionRule(
             @Valid @RequestBody ConversionRule conversionRule) {
-        // TODO: 实现创建转换规则逻辑
-        return ResponseEntity.ok(ApiResponse.success("转换规则创建成功", conversionRule));
+        ConversionRule createdRule = conversionRuleService.createConversionRule(conversionRule);
+        return ResponseEntity.ok(ApiResponse.success("转换规则创建成功", createdRule));
     }
 
     /**
@@ -43,8 +49,8 @@ public class ConversionRuleController {
     public ResponseEntity<ApiResponse<ConversionRule>> updateConversionRule(
             @Parameter(description = "转换规则ID") @PathVariable Long id,
             @Valid @RequestBody ConversionRule conversionRule) {
-        // TODO: 实现更新转换规则逻辑
-        return ResponseEntity.ok(ApiResponse.success("转换规则更新成功", conversionRule));
+        ConversionRule updatedRule = conversionRuleService.updateConversionRule(id, conversionRule);
+        return ResponseEntity.ok(ApiResponse.success("转换规则更新成功", updatedRule));
     }
 
     /**
@@ -54,8 +60,8 @@ public class ConversionRuleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteConversionRule(
             @Parameter(description = "转换规则ID") @PathVariable Long id) {
-        // TODO: 实现删除转换规则逻辑
-        return ResponseEntity.ok(ApiResponse.success("转换规则删除成功"));
+        conversionRuleService.deleteConversionRule(id);
+        return ResponseEntity.ok(ApiResponse.<Void>success("转换规则删除成功"));
     }
 
     /**
@@ -65,8 +71,8 @@ public class ConversionRuleController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ConversionRule>> getConversionRuleById(
             @Parameter(description = "转换规则ID") @PathVariable Long id) {
-        // TODO: 实现根据ID获取转换规则逻辑
-        return ResponseEntity.ok(ApiResponse.success(new ConversionRule()));
+        ConversionRule conversionRule = conversionRuleService.getConversionRuleById(id);
+        return ResponseEntity.ok(ApiResponse.success(conversionRule));
     }
 
     /**
@@ -75,15 +81,14 @@ public class ConversionRuleController {
     @Operation(summary = "分页查询转换规则", description = "支持多条件筛选的分页查询")
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<ConversionRule>>> getConversionRules(
-            @Parameter(description = "页码，从1开始") @RequestParam(defaultValue = "1") Integer page,
-            @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer size,
+            @Parameter(description = "页码，从0开始") @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @Parameter(description = "每页大小") @RequestParam(value = "size", defaultValue = "10") Integer size,
             @Parameter(description = "规则名称") @RequestParam(required = false) String ruleName,
             @Parameter(description = "源类型") @RequestParam(required = false) Integer sourceType,
             @Parameter(description = "目标类型") @RequestParam(required = false) Integer targetType,
             @Parameter(description = "状态") @RequestParam(required = false) Integer status,
             @Parameter(description = "审核状态") @RequestParam(required = false) Integer reviewStatus) {
-        // TODO: 实现分页查询转换规则逻辑
-        PageResponse<ConversionRule> pageResponse = new PageResponse<>(page, size, 0L, List.of());
+        PageResponse<ConversionRule> pageResponse = conversionRuleService.getConversionRules(page, size, ruleName, sourceType, targetType, status, reviewStatus);
         return ResponseEntity.ok(ApiResponse.success(pageResponse));
     }
 
@@ -96,8 +101,8 @@ public class ConversionRuleController {
             @Parameter(description = "转换规则ID") @PathVariable Long id,
             @Parameter(description = "审核结果：1-通过，2-拒绝") @RequestParam Integer reviewStatus,
             @Parameter(description = "审核意见") @RequestParam(required = false) String reviewComment) {
-        // TODO: 实现审核转换规则逻辑
-        return ResponseEntity.ok(ApiResponse.success("转换规则审核完成"));
+        conversionRuleService.reviewConversionRule(id, reviewStatus, reviewComment);
+        return ResponseEntity.ok(ApiResponse.<Void>success("转换规则审核完成"));
     }
 
     /**
@@ -108,8 +113,8 @@ public class ConversionRuleController {
     public ResponseEntity<ApiResponse<Void>> changeConversionRuleStatus(
             @Parameter(description = "转换规则ID") @PathVariable Long id,
             @Parameter(description = "状态：1-启用，0-禁用") @RequestParam Integer status) {
-        // TODO: 实现启用/禁用转换规则逻辑
-        return ResponseEntity.ok(ApiResponse.success("转换规则状态修改成功"));
+        conversionRuleService.changeConversionRuleStatus(id, status);
+        return ResponseEntity.ok(ApiResponse.<Void>success("转换规则状态修改成功"));
     }
 
     /**
@@ -120,7 +125,7 @@ public class ConversionRuleController {
     public ResponseEntity<ApiResponse<Object>> getConversionRatioRecommendations(
             @Parameter(description = "源类型") @RequestParam Integer sourceType,
             @Parameter(description = "目标类型") @RequestParam Integer targetType) {
-        // TODO: 实现获取转换比例推荐逻辑
+        // TODO: 实现获取转换比例推荐逻辑 - 此处未在 Service 中定义，暂时不处理
         return ResponseEntity.ok(ApiResponse.success("推荐比例获取成功", null));
     }
 
@@ -132,7 +137,7 @@ public class ConversionRuleController {
     public ResponseEntity<ApiResponse<Object>> testConversionRule(
             @Parameter(description = "转换规则ID") @PathVariable Long id,
             @Parameter(description = "测试数量") @RequestParam Double testAmount) {
-        // TODO: 实现测试转换规则逻辑
+        // TODO: 实现测试转换规则逻辑 - 此处未在 Service 中定义，暂时不处理
         return ResponseEntity.ok(ApiResponse.success("转换规则测试完成", null));
     }
 
@@ -141,8 +146,8 @@ public class ConversionRuleController {
      */
     @Operation(summary = "获取转换规则统计", description = "获取转换规则的统计信息")
     @GetMapping("/statistics")
-    public ResponseEntity<ApiResponse<Object>> getConversionRuleStatistics() {
-        // TODO: 实现获取转换规则统计信息逻辑
-        return ResponseEntity.ok(ApiResponse.success("统计信息获取成功", null));
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getConversionRuleStatistics() {
+        Map<String, Object> statistics = conversionRuleService.getConversionRuleStatistics();
+        return ResponseEntity.ok(ApiResponse.success("统计信息获取成功", statistics));
     }
 } 

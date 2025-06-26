@@ -3,6 +3,7 @@ package com.internship;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.mybatis.spring.annotation.MapperScan;
 
@@ -18,9 +19,10 @@ import org.mybatis.spring.annotation.MapperScan;
 })
 @EnableTransactionManagement
 @MapperScan("com.internship.repository")
+@ComponentScan(basePackages = "com.internship")
 public class Application {
     
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-} 
+}

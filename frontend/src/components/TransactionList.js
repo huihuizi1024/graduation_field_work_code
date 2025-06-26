@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, DatePicker, InputNumber } from 'antd';
+import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, DatePicker, InputNumber, Empty } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import * as transactionAPI from '../api/transaction';
 
 const { Option } = Select;
 
@@ -13,22 +14,36 @@ const TransactionList = () => {
   const [editingTransaction, setEditingTransaction] = useState(null);
 
   useEffect(() => {
-    fetchTransactions();
+    const controller = new AbortController();
+    fetchTransactions(controller.signal);
+    return () => controller.abort();
   }, []);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (signal) => {
     setLoading(true);
     try {
-      // 模拟数据
-      const mockData = [
-        { id: 't1', transactionId: 'TXN2025001', userId: 'user001', transactionType: 1, amount: 100, status: 1, transactionDate: '2025-06-20', description: '积分获取：签到奖励' },
-        { id: 't2', transactionId: 'TXN2025002', userId: 'user002', transactionType: 2, amount: 50, status: 1, transactionDate: '2025-06-21', description: '积分消费：兑换礼品' },
-        { id: 't3', transactionId: 'TXN2025003', userId: 'user001', transactionType: 1, amount: 200, status: 0, transactionDate: '2025-06-22', description: '学分获取：课程完成' },
-      ];
-      setData(mockData.map(item => ({ ...item, transactionDate: dayjs(item.transactionDate) })));
+      const response = await transactionAPI.getTransactions({ page: 0, size: 10 }, { signal });
+      console.log('交易记录API响应:', {
+        status: response.code,
+        data: response.data,
+        timestamp: new Date(response.timestamp).toLocaleString()
+      });
+
+      if (response.data?.records) {
+        setData(response.data.records.map(item => ({
+          ...item,
+          transactionDate: dayjs(item.transactionTime),
+          amount: item.pointsChange
+        })));
+      } else {
+        message.info('暂无交易记录数据');
+        setData([]);
+      }
     } catch (error) {
-      message.error('获取交易记录失败！');
-      console.error('Error fetching transactions:', error);
+      if (error.name !== 'AbortError') {
+        message.error('获取交易记录失败！');
+        console.error('Error fetching transactions:', error);
+      }
     } finally {
       setLoading(false);
     }
@@ -42,12 +57,16 @@ const TransactionList = () => {
 
   const handleEdit = (record) => {
     setEditingTransaction(record);
-    form.setFieldsValue({ ...record, transactionDate: dayjs(record.transactionDate) });
+    form.setFieldsValue({ 
+      ...record,
+      transactionDate: dayjs(record.transactionDate)
+    });
     setIsModalVisible(true);
   };
 
   const handleDelete = async (id) => {
     try {
+      await transactionAPI.deleteTransaction(id);
       message.success('交易记录删除成功！');
       fetchTransactions();
     } catch (error) {
@@ -60,14 +79,17 @@ const TransactionList = () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
-      const formattedValues = {
+      const transactionData = {
         ...values,
-        transactionDate: values.transactionDate ? values.transactionDate.format('YYYY-MM-DD') : null,
+        transactionTime: values.transactionDate ? values.transactionDate.startOf('day').format('YYYY-MM-DD HH:mm:ss') : null,
+        pointsChange: values.amount
       };
 
       if (editingTransaction) {
+        await transactionAPI.updateTransaction(editingTransaction.id, transactionData);
         message.success('交易记录更新成功！');
       } else {
+        await transactionAPI.createTransaction(transactionData);
         message.success('交易记录添加成功！');
       }
       setIsModalVisible(false);
@@ -89,8 +111,8 @@ const TransactionList = () => {
   const columns = [
     {
       title: '交易ID',
-      dataIndex: 'transactionId',
-      key: 'transactionId',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
       title: '用户ID',
@@ -101,18 +123,12 @@ const TransactionList = () => {
       title: '交易类型',
       dataIndex: 'transactionType',
       key: 'transactionType',
-      render: (type) => (type === 1 ? '获取' : '消费'),
+      render: (type) => (type === 1 ? '获取' : type === 2 ? '消费' : '过期'),
     },
     {
       title: '金额/分值',
       dataIndex: 'amount',
       key: 'amount',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => (status === 1 ? '成功' : '失败'),
     },
     {
       title: '交易日期',
@@ -149,7 +165,15 @@ const TransactionList = () => {
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
         添加交易记录
       </Button>
-      <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
+      <Table 
+        columns={columns} 
+        dataSource={data} 
+        rowKey="id" 
+        loading={loading}
+        locale={{
+          emptyText: <Empty description="暂无交易记录" />
+        }}
+      />
 
       <Modal
         title={editingTransaction ? '编辑交易记录' : '添加交易记录'}
@@ -159,13 +183,6 @@ const TransactionList = () => {
         confirmLoading={loading}
       >
         <Form form={form} layout="vertical" name="transaction_form">
-          <Form.Item
-            name="transactionId"
-            label="交易ID"
-            rules={[{ required: true, message: '请输入交易ID！' }]}
-          >
-            <Input />
-          </Form.Item>
           <Form.Item
             name="userId"
             label="用户ID"
@@ -181,6 +198,7 @@ const TransactionList = () => {
             <Select placeholder="请选择交易类型">
               <Option value={1}>获取</Option>
               <Option value={2}>消费</Option>
+              <Option value={3}>过期</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -189,16 +207,6 @@ const TransactionList = () => {
             rules={[{ required: true, message: '请输入金额或分值！', type: 'number' }]}
           >
             <InputNumber min={0} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item
-            name="status"
-            label="状态"
-            rules={[{ required: true, message: '请选择状态！' }]}
-          >
-            <Select placeholder="请选择状态">
-              <Option value={1}>成功</Option>
-              <Option value={0}>失败</Option>
-            </Select>
           </Form.Item>
           <Form.Item
             name="transactionDate"
@@ -219,4 +227,4 @@ const TransactionList = () => {
   );
 };
 
-export default TransactionList; 
+export default TransactionList;

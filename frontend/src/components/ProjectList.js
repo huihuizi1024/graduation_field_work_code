@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, DatePicker } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -9,6 +10,11 @@ const ProjectList = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
 
@@ -19,13 +25,30 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      // 模拟数据
-      const mockData = [
-        { id: 'p1', projectName: '学分银行系统一期', projectCode: 'XYH_P1',负责人: '张三', startDate: '2024-01-01', endDate: '2024-12-31', status: 1, description: '学分银行系统核心功能开发' },
-        { id: 'p2', projectName: '积分管理模块优化', projectCode: 'POINT_OPT',负责人: '李四', startDate: '2025-03-01', endDate: '2025-06-30', status: 1, description: '提升积分计算和兑换效率' },
-        { id: 'p3', projectName: '移动端APP开发', projectCode: 'MOBILE_APP',负责人: '王五', startDate: '2025-07-01', endDate: '2025-12-31', status: 0, description: '开发学分银行移动端应用' },
-      ];
-      setData(mockData.map(item => ({ ...item, startDate: dayjs(item.startDate), endDate: dayjs(item.endDate) })));
+      const result = await axios.get('/api/projects', {
+        params: {
+          page: pagination.current - 1,
+          size: pagination.pageSize
+        }
+      });
+      console.log('项目API响应:', result);
+      if (result.data.code === 200) {
+        const formattedProjects = result.data.data?.records?.map(item => ({
+        ...item,
+        负责人: item.manager,
+        startDate: item.startDate ? dayjs(item.startDate) : null,
+        endDate: item.endDate ? dayjs(item.endDate) : null
+      }));
+        setData(formattedProjects);
+        setPagination({
+          ...pagination,
+          total: result.data.data?.total || 0,
+          current: result.data.data?.current + 1 || 1,
+          pageSize: result.data.data?.size || 10,
+        });
+      } else {
+        message.error(result.data.message || '获取项目列表失败！');
+      }
     } catch (error) {
       message.error('获取项目列表失败！');
       console.error('Error fetching projects:', error);
@@ -48,6 +71,7 @@ const ProjectList = () => {
 
   const handleDelete = async (id) => {
     try {
+      await axios.delete(`/api/projects/${id}`);
       message.success('项目删除成功！');
       fetchProjects();
     } catch (error) {
@@ -60,15 +84,22 @@ const ProjectList = () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
-      const formattedValues = {
-        ...values,
+      const projectData = {
+        projectName: values.projectName,
+        projectCode: values.projectCode,
+        manager: values.负责人,
         startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : null,
         endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null,
+        status: values.status,
+        description: values.description || ''
       };
+      console.log('发送的项目数据:', projectData);
 
       if (editingProject) {
+        await axios.put(`/api/projects/${editingProject.id}`, projectData);
         message.success('项目更新成功！');
       } else {
+        await axios.post('/api/projects', projectData);
         message.success('项目添加成功！');
       }
       setIsModalVisible(false);
@@ -150,7 +181,17 @@ const ProjectList = () => {
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
         添加项目
       </Button>
-      <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
+      <Table 
+        columns={columns} 
+        dataSource={data} 
+        rowKey="id" 
+        loading={loading}
+        pagination={pagination}
+        onChange={(newPagination) => {
+          setPagination(newPagination);
+          fetchProjects();
+        }}
+      />
 
       <Modal
         title={editingProject ? '编辑项目' : '添加项目'}
@@ -217,4 +258,4 @@ const ProjectList = () => {
   );
 };
 
-export default ProjectList; 
+export default ProjectList;

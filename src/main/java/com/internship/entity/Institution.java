@@ -127,6 +127,12 @@ public class Institution implements Serializable {
     private LocalDateTime certificationExpiryDate;
 
     /**
+     * 认证有效期（月）
+     */
+    @TableField("validity_months")
+    private Integer validityMonths;
+
+    /**
      * 状态：1-正常，2-暂停，3-注销
      */
     @NotNull(message = "状态不能为空")
@@ -333,6 +339,14 @@ public class Institution implements Serializable {
 
     public void setCertificationExpiryDate(LocalDateTime certificationExpiryDate) {
         this.certificationExpiryDate = certificationExpiryDate;
+    }
+
+    public Integer getValidityMonths() {
+        return validityMonths;
+    }
+
+    public void setValidityMonths(Integer validityMonths) {
+        this.validityMonths = validityMonths;
     }
 
     public Integer getStatus() {
