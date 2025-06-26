@@ -6780,3 +6780,5 @@ java.lang.NullPointerException: Cannot invoke "com.internship.entity.User.getPoi
 2025-06-26T16:13:37.683+08:00  INFO 2304 --- [http-nio-8080-exec-10] c.i.service.impl.UserServiceImpl         : 查询用户列表成功, 页码: 1, 每页大小: 10, 总数: 4
 2025-06-26T16:13:37.940+08:00  INFO 2304 --- [http-nio-8080-exec-9] c.internship.controller.UserController   : 查询用户列表请求, page: 0, size: 10, username: null, role: null, status: null
 2025-06-26T16:13:37.944+08:00  INFO 2304 --- [http-nio-8080-exec-9] c.i.service.impl.UserServiceImpl         : 查询用户列表成功, 页码: 1, 每页大小: 10, 总数: 4
+2025-06-26T16:30:05.553+08:00  INFO 2304 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-26T16:30:05.555+08:00  INFO 2304 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
