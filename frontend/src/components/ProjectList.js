@@ -25,7 +25,7 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const result = await axios.get('/api/projects', {
+      const result = await axios.get('/api/auth/projects', {
         params: {
           page: pagination.current - 1,
           size: pagination.pageSize
@@ -71,7 +71,7 @@ const ProjectList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/projects/${id}`);
+      await axios.delete(`/api/auth/projects/${id}`);
       message.success('项目删除成功！');
       fetchProjects();
     } catch (error) {
@@ -96,10 +96,10 @@ const ProjectList = () => {
       console.log('发送的项目数据:', projectData);
 
       if (editingProject) {
-        await axios.put(`/api/projects/${editingProject.id}`, projectData);
+        await axios.put(`/api/auth/projects/${editingProject.id}`, projectData);
         message.success('项目更新成功！');
       } else {
-        await axios.post('/api/projects', projectData);
+        await axios.post('/api/auth/projects', projectData);
         message.success('项目添加成功！');
       }
       setIsModalVisible(false);

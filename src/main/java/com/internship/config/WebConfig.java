@@ -16,11 +16,20 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**") // 允许/api/**路径下的所有请求
-                .allowedOrigins("http://localhost:3000") // 允许来自前端的请求
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 允许的HTTP方法
-                .allowedHeaders("*") // 允许所有请求头
-                .allowCredentials(true) // 允许发送认证信息（如cookies）
-                .maxAge(3600); // 预检请求的缓存时间（秒）
+        // 公共API不需要认证
+        registry.addMapping("/api/public/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "OPTIONS")
+                .allowedHeaders("Content-Type", "Accept")
+                .allowCredentials(false)
+                .maxAge(3600);
+
+        // 需要认证的API
+        registry.addMapping("/api/auth/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("Content-Type", "Accept", "Authorization")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
-} 
+}

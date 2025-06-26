@@ -1,6 +1,5 @@
 package com.internship.service.impl;
 
-<<<<<<< HEAD
 import com.internship.dto.PageResponse;
 import com.internship.entity.PointTransaction;
 import com.internship.entity.User;
@@ -12,19 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-=======
-import com.internship.entity.Transaction;
-import com.internship.repository.TransactionRepository;
-import com.internship.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
->>>>>>> ecb1823576adb48f04118c7cefec2dd94e3ef73e
 import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-<<<<<<< HEAD
     @Autowired
     private TransactionRepository transactionRepository;
     
@@ -95,56 +86,10 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setId(id);
         transactionRepository.updateById(transaction);
         return transaction;
-=======
-    private final TransactionRepository transactionRepository;
-
-    @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository) {
-        this.transactionRepository = transactionRepository;
-    }
-
-    @Override
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAll();
-    }
-
-    @Override
-    public Transaction getTransactionById(Long id) {
-        return transactionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transaction not found with id: " + id));
-    }
-
-    @Override
-    public Transaction createTransaction(Transaction transaction) {
-        return transactionRepository.save(transaction);
-    }
-
-    @Override
-    public Transaction updateTransaction(Long id, Transaction transactionDetails) {
-        Transaction transaction = getTransactionById(id);
-        transaction.setTransactionId(transactionDetails.getTransactionId());
-        transaction.setUserId(transactionDetails.getUserId());
-        transaction.setTransactionType(transactionDetails.getTransactionType());
-        transaction.setAmount(transactionDetails.getAmount());
-        transaction.setStatus(transactionDetails.getStatus());
-        transaction.setTransactionDate(transactionDetails.getTransactionDate());
-        transaction.setDescription(transactionDetails.getDescription());
-        return transactionRepository.save(transaction);
->>>>>>> ecb1823576adb48f04118c7cefec2dd94e3ef73e
     }
 
     @Override
     public void deleteTransaction(Long id) {
-<<<<<<< HEAD
         transactionRepository.deleteById(id);
-=======
-        Transaction transaction = getTransactionById(id);
-        transactionRepository.delete(transaction);
-    }
-
-    @Override
-    public List<Transaction> getTransactionsByUserId(String userId) {
-        return transactionRepository.findByUserId(userId);
->>>>>>> ecb1823576adb48f04118c7cefec2dd94e3ef73e
     }
 }

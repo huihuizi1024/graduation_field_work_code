@@ -24,7 +24,7 @@ const AdminUserList = () => {
   const fetchAdminUsers = async () => {
     setLoading(true);
     try {
-      const result = await axios.get('/api/users', {
+      const result = await axios.get('/api/auth/users', {
         params: {
           page: pagination.current - 1,
           size: pagination.pageSize
@@ -64,7 +64,7 @@ const AdminUserList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/users/${id}`);
+      await axios.delete(`/api/auth/users/${id}`);
       message.success('管理用户删除成功！');
       fetchAdminUsers();
     } catch (error) {
@@ -78,10 +78,10 @@ const AdminUserList = () => {
       const values = await form.validateFields();
       setLoading(true);
       if (editingUser) {
-        await axios.put(`/api/users/${editingUser.id}`, values);
+        await axios.put(`/api/auth/users/${editingUser.id}`, values);
         message.success('管理用户更新成功！');
       } else {
-        await axios.post('/api/users', values);
+        await axios.post('/api/auth/users', values);
         message.success('管理用户添加成功！');
       }
       setIsModalVisible(false);
@@ -135,18 +135,18 @@ const AdminUserList = () => {
       dataIndex: 'phone',
       key: 'phone',
     },
-        {
-            title: '积分余额',
-            dataIndex: 'pointsBalance',
-            key: 'pointsBalance',
-            render: (points) => points || '0.00'
-        },
-        {
-            title: '状态', 
-            dataIndex: 'status',
-            key: 'status',
-            render: (status) => (status === 1 ? '正常' : '禁用')
-        },
+    {
+      title: '积分余额',
+      dataIndex: 'pointsBalance',
+      key: 'pointsBalance',
+      render: (points) => points || '0.00'
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => (status === 1 ? '正常' : '禁用')
+    },
     {
       title: '操作',
       key: 'action',

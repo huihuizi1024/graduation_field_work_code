@@ -1016,3 +1016,67 @@ java.nio.channels.AsynchronousCloseException: null
 2025-06-25T15:37:58.171+08:00  INFO 10580 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
 2025-06-25T15:37:58.198+08:00  INFO 10580 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2025-06-25T15:37:58.206+08:00  INFO 10580 --- [restartedMain] com.internship.Application               : Started Application in 2.567 seconds (process running for 3.031)
+2025-06-26T17:10:47.079+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 13116 (D:\mavenProject\graduation_field_work_code\target\classes started by 86180 in D:\mavenProject\graduation_field_work_code)
+2025-06-26T17:10:47.081+08:00 DEBUG 13116 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-26T17:10:47.081+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-26T17:10:47.143+08:00  INFO 13116 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-26T17:10:47.144+08:00  INFO 13116 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-26T17:10:49.036+08:00  INFO 13116 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-26T17:10:49.036+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : An older version [1.3.1] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.5]
+2025-06-26T17:10:49.036+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.3.1] using APR version [1.7.4].
+2025-06-26T17:10:49.052+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 3.0.14 4 Jun 2024]
+2025-06-26T17:10:49.061+08:00  INFO 13116 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-26T17:10:49.061+08:00  INFO 13116 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-26T17:10:49.263+08:00  INFO 13116 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-26T17:10:49.264+08:00  INFO 13116 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2119 ms
+2025-06-26T17:10:50.517+08:00  INFO 13116 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-26T17:10:50.548+08:00  INFO 13116 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-26T17:10:50.557+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : Started Application in 4.044 seconds (process running for 5.982)
+2025-06-26T17:11:05.343+08:00  INFO 13116 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 1 deletion, 0 modifications)
+2025-06-26T17:11:05.389+08:00  INFO 13116 --- [Thread-5] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-26T17:11:05.623+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 13116 (D:\mavenProject\graduation_field_work_code\target\classes started by 86180 in D:\mavenProject\graduation_field_work_code)
+2025-06-26T17:11:05.624+08:00 DEBUG 13116 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-26T17:11:05.624+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-26T17:11:06.393+08:00  INFO 13116 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-26T17:11:06.394+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : An older version [1.3.1] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.5]
+2025-06-26T17:11:06.394+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.3.1] using APR version [1.7.4].
+2025-06-26T17:11:06.395+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 3.0.14 4 Jun 2024]
+2025-06-26T17:11:06.396+08:00  INFO 13116 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-26T17:11:06.397+08:00  INFO 13116 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-26T17:11:06.792+08:00  INFO 13116 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-26T17:11:06.793+08:00  INFO 13116 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1165 ms
+2025-06-26T17:11:07.656+08:00  INFO 13116 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-26T17:11:07.681+08:00  INFO 13116 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-26T17:11:07.689+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : Started Application in 2.169 seconds (process running for 23.115)
+2025-06-26T17:11:07.693+08:00  INFO 13116 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-26T17:11:15.685+08:00  INFO 13116 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2025-06-26T17:11:15.719+08:00  INFO 13116 --- [Thread-7] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-06-26T17:11:15.921+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.15 with PID 13116 (D:\mavenProject\graduation_field_work_code\target\classes started by 86180 in D:\mavenProject\graduation_field_work_code)
+2025-06-26T17:11:15.922+08:00 DEBUG 13116 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-26T17:11:15.922+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-26T17:11:16.805+08:00  INFO 13116 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-26T17:11:16.806+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : An older version [1.3.1] of the Apache Tomcat Native library is installed, while Tomcat recommends a minimum version of [2.0.5]
+2025-06-26T17:11:16.806+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.3.1] using APR version [1.7.4].
+2025-06-26T17:11:16.807+08:00  INFO 13116 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 3.0.14 4 Jun 2024]
+2025-06-26T17:11:16.808+08:00  INFO 13116 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-26T17:11:16.808+08:00  INFO 13116 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-26T17:11:17.440+08:00  INFO 13116 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-26T17:11:17.441+08:00  INFO 13116 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1513 ms
+2025-06-26T17:11:18.100+08:00  INFO 13116 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-26T17:11:18.117+08:00  INFO 13116 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-26T17:11:18.123+08:00  INFO 13116 --- [restartedMain] com.internship.Application               : Started Application in 2.327 seconds (process running for 33.549)
+2025-06-26T17:11:18.126+08:00  INFO 13116 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-06-26T17:13:28.579+08:00  INFO 13116 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-26T17:13:28.581+08:00  INFO 13116 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-26T17:13:28.583+08:00  INFO 13116 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-06-26T17:13:28.665+08:00  INFO 13116 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-06-26T17:13:28.997+08:00  INFO 13116 --- [http-nio-8080-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@22c756ce
+2025-06-26T17:13:29.001+08:00  INFO 13116 --- [http-nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-06-26T17:13:31.376+08:00  WARN 13116 --- [http-nio-8080-exec-3] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.ConversionRuleController
+2025-06-26T17:13:32.010+08:00  WARN 13116 --- [http-nio-8080-exec-9] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.InstitutionController
+2025-06-26T17:13:32.637+08:00  WARN 13116 --- [http-nio-8080-exec-7] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.CertificationStandardController
+2025-06-26T17:13:33.105+08:00  WARN 13116 --- [http-nio-8080-exec-5] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.PlatformActivityController
+2025-06-26T17:13:33.486+08:00  WARN 13116 --- [http-nio-8080-exec-1] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.TransactionController
+2025-06-26T17:14:26.396+08:00  WARN 13116 --- [http-nio-8080-exec-7] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.internship.controller.BusinessProcessController
+2025-06-26T17:29:49.962+08:00  INFO 13116 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-06-26T17:29:49.967+08:00  INFO 13116 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

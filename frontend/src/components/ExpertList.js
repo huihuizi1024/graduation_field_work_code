@@ -19,14 +19,14 @@ const ExpertList = () => {
   const fetchExperts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/experts');
+      const response = await axios.get('/api/auth/experts');
       console.log('专家列表API响应:', {
         status: response.data.code,
         data: response.data.data,
         timestamp: new Date(response.data.timestamp).toLocaleString()
       });
       if (response.data.code === 200) {
-        setData(response.data.data.records); // 使用分页数据中的records数组
+        setData(response.data.data.records);
       } else {
         message.error(response.data.message || '获取专家列表失败！');
       }
@@ -52,7 +52,7 @@ const ExpertList = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/api/experts/${id}`);
+      const response = await axios.delete(`/api/auth/experts/${id}`);
       console.log('删除专家API响应:', {
         status: response.data.code,
         data: response.data.data,
@@ -71,7 +71,7 @@ const ExpertList = () => {
       const values = await form.validateFields();
       setLoading(true);
       if (editingExpert) {
-        const response = await axios.put(`/api/experts/${editingExpert.id}`, values);
+        const response = await axios.put(`/api/auth/experts/${editingExpert.id}`, values);
         console.log('更新专家API响应:', {
           status: response.data.code,
           data: response.data.data,
@@ -79,7 +79,7 @@ const ExpertList = () => {
         });
         message.success('专家更新成功！');
       } else {
-        const response = await axios.post('/api/experts', values);
+        const response = await axios.post('/api/auth/experts', values);
         console.log('添加专家API响应:', {
           status: response.data.code,
           data: response.data.data,

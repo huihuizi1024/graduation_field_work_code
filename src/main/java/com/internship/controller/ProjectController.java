@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @Tag(name = "项目管理", description = "项目的增删改查功能")
 @RestController
-@RequestMapping("/api/projects")
+@RequestMapping("/api/auth/projects")
 public class ProjectController {
 
     @Autowired
