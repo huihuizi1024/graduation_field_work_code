@@ -16,19 +16,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // 公共API不需要认证
-        registry.addMapping("/api/public/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "OPTIONS")
-                .allowedHeaders("Content-Type", "Accept")
-                .allowCredentials(false)
-                .maxAge(3600);
-
-        // 需要认证的API
-        registry.addMapping("/api/auth/**")
+        // 允许所有API路径的跨域请求
+        registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Content-Type", "Accept", "Authorization")
+                .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);
     }

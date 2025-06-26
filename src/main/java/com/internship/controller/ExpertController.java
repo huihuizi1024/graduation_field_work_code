@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Tag(name = "专家管理", description = "专家的增删改查功能")
 @RestController
-@RequestMapping("/api/auth/experts")
+@RequestMapping("/api/experts")
 public class ExpertController {
 
     @Autowired

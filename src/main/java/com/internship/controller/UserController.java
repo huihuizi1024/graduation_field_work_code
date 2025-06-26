@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "用户管理", description = "系统用户管理功能")
 @RestController
-@RequestMapping("/api/auth/users")
+@RequestMapping("/api/users")
 @Slf4j
 public class UserController {
 

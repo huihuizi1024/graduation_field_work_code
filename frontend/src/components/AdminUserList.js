@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, InputNumber } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import api from '../api';
 
 const { Option } = Select;
 
@@ -24,15 +24,16 @@ const AdminUserList = () => {
   const fetchAdminUsers = async () => {
     setLoading(true);
     try {
-      const result = await axios.get('/api/auth/users', {
+      const result = await api.get('/api/users', {
         params: {
           page: pagination.current - 1,
           size: pagination.pageSize
         }
       });
-      console.log('用户API响应:', result);
-      if (result.data.code === 200) {
-        setData(result.data.data?.records || []);
+      console.log('用户API响应:', result.data);
+      if (result.data) {
+        const records = result.data.records || result.data.data?.records || result.data.data || [];
+        setData(records);
         setPagination({
           ...pagination,
           total: result.data.data?.total || 0,
@@ -64,7 +65,7 @@ const AdminUserList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/auth/users/${id}`);
+      await api.delete(`/api/users/${id}`);
       message.success('管理用户删除成功！');
       fetchAdminUsers();
     } catch (error) {
@@ -78,10 +79,10 @@ const AdminUserList = () => {
       const values = await form.validateFields();
       setLoading(true);
       if (editingUser) {
-        await axios.put(`/api/auth/users/${editingUser.id}`, values);
+        await api.put(`/api/users/${editingUser.id}`, values);
         message.success('管理用户更新成功！');
       } else {
-        await axios.post('/api/auth/users', values);
+        await api.post('/api/users', values);
         message.success('管理用户添加成功！');
       }
       setIsModalVisible(false);
@@ -135,18 +136,18 @@ const AdminUserList = () => {
       dataIndex: 'phone',
       key: 'phone',
     },
-    {
-      title: '积分余额',
-      dataIndex: 'pointsBalance',
-      key: 'pointsBalance',
-      render: (points) => points || '0.00'
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => (status === 1 ? '正常' : '禁用')
-    },
+        {
+            title: '积分余额',
+            dataIndex: 'pointsBalance',
+            key: 'pointsBalance',
+            render: (points) => points || '0.00'
+        },
+        {
+            title: '状态', 
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => (status === 1 ? '正常' : '禁用')
+        },
     {
       title: '操作',
       key: 'action',

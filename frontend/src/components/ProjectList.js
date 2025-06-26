@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, DatePicker } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import axios from 'axios';
+import api from '../api';
 
 const { Option } = Select;
 
@@ -25,15 +25,16 @@ const ProjectList = () => {
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const result = await axios.get('/api/auth/projects', {
+      const result = await api.get('/api/projects', {
         params: {
           page: pagination.current - 1,
           size: pagination.pageSize
         }
       });
-      console.log('项目API响应:', result);
-      if (result.data.code === 200) {
-        const formattedProjects = result.data.data?.records?.map(item => ({
+      console.log('项目API响应:', result.data);
+      if (result.data) {
+        const records = result.data.records || result.data.data?.records || result.data.data || [];
+        const formattedProjects = records.map(item => ({
         ...item,
         负责人: item.manager,
         startDate: item.startDate ? dayjs(item.startDate) : null,
@@ -71,7 +72,7 @@ const ProjectList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/auth/projects/${id}`);
+      await api.delete(`/api/projects/${id}`);
       message.success('项目删除成功！');
       fetchProjects();
     } catch (error) {
@@ -96,10 +97,10 @@ const ProjectList = () => {
       console.log('发送的项目数据:', projectData);
 
       if (editingProject) {
-        await axios.put(`/api/auth/projects/${editingProject.id}`, projectData);
+        await api.put(`/api/projects/${editingProject.id}`, projectData);
         message.success('项目更新成功！');
       } else {
-        await axios.post('/api/auth/projects', projectData);
+        await api.post('/api/projects', projectData);
         message.success('项目添加成功！');
       }
       setIsModalVisible(false);
