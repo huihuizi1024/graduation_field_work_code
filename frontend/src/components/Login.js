@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
+const Login = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [currentIdentity, setCurrentIdentity] = useState(null);
   const [activeTab, setActiveTab] = useState('password');
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -24,7 +26,7 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
       setShowLoginForm(false);
       setCurrentIdentity(null);
     } else {
-      onBackToMain();
+      navigate('/');
     }
   };
 
@@ -60,6 +62,22 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
       loginButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 登录中...';
       loginButton.disabled = true;
       setTimeout(() => {
+        // 模拟用户数据
+        const mockUserData = {
+          id: 1,
+          username: document.getElementById('username')?.value || "student001",
+          full_name: "张三",
+          role: 1,
+          email: "zhangsan@example.com",
+          phone: "13800138000",
+          points_balance: 2580.50,
+          avatar: null
+        };
+
+        // 将用户信息存储到localStorage
+        localStorage.setItem('userInfo', JSON.stringify(mockUserData));
+        localStorage.setItem('isLoggedIn', 'true');
+
         alert('登录成功！正在跳转...');
         loginButton.innerHTML = '登录';
         loginButton.disabled = false;
@@ -67,6 +85,8 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
         if (onLoginSuccess) {
           onLoginSuccess(currentIdentity);
         }
+        // 登录成功后跳转到个人主页
+        navigate('/profile');
       }, 1500);
     }
   };
@@ -129,7 +149,7 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
               <span className="text-xl font-bold text-neutral-700">学分银行系统</span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <button onClick={onBackToMain} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
+              <button onClick={() => navigate('/')} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">关于我们</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">帮助中心</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">联系我们</a>
@@ -248,24 +268,18 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
                       <input type="text" id="username" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入用户名" />
                     </div>
                   </div>
+
                   <div className="mb-6">
                     <label htmlFor="password" className="block text-sm font-medium text-neutral-600 mb-2">密码</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i className="fa fa-lock text-neutral-400"></i>
                       </div>
-                      <input type="password" id="password" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入密码" />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={togglePasswordVisibility}>
+                      <input type="password" id="password" className="form-input block w-full pl-10 pr-12 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入密码" />
+                      <button id="toggle-password" onClick={togglePasswordVisibility} className="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <i className="fa fa-eye text-neutral-400"></i>
-                      </div>
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center">
-                      <input id="remember-me" type="checkbox" className="h-4 w-4 text-primary focus:ring-primary/30 border-neutral-300 rounded" />
-                      <label htmlFor="remember-me" className="ml-2 block text-sm text-neutral-600">记住我</label>
-                    </div>
-                    <a href="#" className="text-sm text-primary hover:text-primary/80 transition-custom">忘记密码?</a>
                   </div>
                 </div>
               )}
@@ -277,19 +291,22 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
                     <label htmlFor="phone" className="block text-sm font-medium text-neutral-600 mb-2">手机号</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-phone text-neutral-400"></i>
+                        <i className="fa fa-mobile text-neutral-400 text-xl"></i>
                       </div>
                       <input type="tel" id="phone" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入手机号" />
                     </div>
                   </div>
+
                   <div className="mb-6">
                     <label htmlFor="verify-code" className="block text-sm font-medium text-neutral-600 mb-2">验证码</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-shield text-neutral-400"></i>
+                    <div className="relative flex gap-4">
+                      <div className="flex-1 relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <i className="fa fa-shield text-neutral-400"></i>
+                        </div>
+                        <input type="text" id="verify-code" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入验证码" />
                       </div>
-                      <input type="text" id="verify-code" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入验证码" />
-                      <button id="get-code" className="absolute right-2 top-2 bottom-2 bg-primary/10 text-primary px-3 py-1 rounded-lg text-sm font-medium transition-custom hover:bg-primary/20" onClick={handleGetCode}>
+                      <button id="get-code" onClick={handleGetCode} className="px-6 py-3 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-custom font-medium">
                         获取验证码
                       </button>
                     </div>
@@ -297,20 +314,27 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
                 </div>
               )}
 
-              <button id="login-button" className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition-custom shadow-md hover:shadow-lg transform hover:-translate-y-0.5" onClick={handleLogin}>
-                登录
-              </button>
-
-              <div className="mt-6 text-center">
-                <p className="text-neutral-500">
-                  还没有账号? <button onClick={onGoToRegister} className="text-primary hover:text-primary/80 transition-custom font-medium">立即注册</button>
-                </p>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <input type="checkbox" id="remember" className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 rounded" />
+                  <label htmlFor="remember" className="ml-2 block text-sm text-neutral-600">记住我</label>
+                </div>
+                <div className="text-sm">
+                  <a href="#" className="text-primary hover:text-primary-dark">忘记密码？</a>
+                </div>
               </div>
 
-              <div className="mt-8 text-center">
-                <button className="text-primary hover:text-primary/80 transition-custom flex items-center justify-center mx-auto" onClick={handleBackClick}>
-                  <i className="fa fa-arrow-left mr-2"></i> {showLoginForm ? '返回身份选择' : '返回主页'}
+              <div className="flex flex-col gap-4">
+                <button id="login-button" onClick={handleLogin} className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-custom font-medium">
+                  登录
                 </button>
+                <button onClick={handleBackClick} className="w-full bg-neutral-100 text-neutral-600 py-3 rounded-lg hover:bg-neutral-200 transition-custom font-medium">
+                  返回
+                </button>
+              </div>
+
+              <div className="mt-6 text-center text-sm text-neutral-500">
+                还没有账号？ <a href="#" onClick={() => navigate('/register')} className="text-primary hover:text-primary-dark font-medium">立即注册</a>
               </div>
             </div>
           )}
