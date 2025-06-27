@@ -67,9 +67,9 @@ const Login = ({ onLoginSuccess }) => {
           id: 1,
           username: document.getElementById('username')?.value || "student001",
           full_name: "张三",
-          role: 1,
+          role: currentIdentity === 'admin' ? 4 : currentIdentity === 'expert' ? 3 : currentIdentity === 'organization' ? 2 : 1,
           email: "zhangsan@example.com",
-          phone: "13800138000",
+          phone: document.getElementById('phone')?.value || "13800138000",
           points_balance: 2580.50,
           avatar: null
         };
@@ -81,12 +81,28 @@ const Login = ({ onLoginSuccess }) => {
         alert('登录成功！正在跳转...');
         loginButton.innerHTML = '登录';
         loginButton.disabled = false;
+
         // 调用登录成功回调，传递身份
         if (onLoginSuccess) {
           onLoginSuccess(currentIdentity);
         }
-        // 登录成功后跳转到个人主页
-        navigate('/profile');
+
+        // 根据身份跳转到相应页面
+        switch (currentIdentity) {
+          case 'admin':
+            navigate('/admin');
+            break;
+          case 'expert':
+            navigate('/expert');
+            break;
+          case 'organization':
+            navigate('/institution');
+            break;
+          case 'student':
+          default:
+            navigate('/');
+            break;
+        }
       }, 1500);
     }
   };
@@ -149,7 +165,7 @@ const Login = ({ onLoginSuccess }) => {
               <span className="text-xl font-bold text-neutral-700">学分银行系统</span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <button onClick={() => navigate('/')} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
+              <button onClick={handleBackClick} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">关于我们</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">帮助中心</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">联系我们</a>
@@ -268,7 +284,6 @@ const Login = ({ onLoginSuccess }) => {
                       <input type="text" id="username" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入用户名" />
                     </div>
                   </div>
-
                   <div className="mb-6">
                     <label htmlFor="password" className="block text-sm font-medium text-neutral-600 mb-2">密码</label>
                     <div className="relative">
@@ -276,7 +291,7 @@ const Login = ({ onLoginSuccess }) => {
                         <i className="fa fa-lock text-neutral-400"></i>
                       </div>
                       <input type="password" id="password" className="form-input block w-full pl-10 pr-12 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入密码" />
-                      <button id="toggle-password" onClick={togglePasswordVisibility} className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                      <button id="toggle-password" className="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <i className="fa fa-eye text-neutral-400"></i>
                       </button>
                     </div>
@@ -291,7 +306,7 @@ const Login = ({ onLoginSuccess }) => {
                     <label htmlFor="phone" className="block text-sm font-medium text-neutral-600 mb-2">手机号</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-mobile text-neutral-400 text-xl"></i>
+                        <i className="fa fa-mobile text-neutral-400"></i>
                       </div>
                       <input type="tel" id="phone" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入手机号" />
                     </div>
@@ -299,14 +314,14 @@ const Login = ({ onLoginSuccess }) => {
 
                   <div className="mb-6">
                     <label htmlFor="verify-code" className="block text-sm font-medium text-neutral-600 mb-2">验证码</label>
-                    <div className="relative flex gap-4">
-                      <div className="flex-1 relative">
+                    <div className="flex gap-4">
+                      <div className="relative flex-1">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <i className="fa fa-shield text-neutral-400"></i>
+                          <i className="fa fa-key text-neutral-400"></i>
                         </div>
                         <input type="text" id="verify-code" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入验证码" />
                       </div>
-                      <button id="get-code" onClick={handleGetCode} className="px-6 py-3 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-custom font-medium">
+                      <button className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-custom">
                         获取验证码
                       </button>
                     </div>
@@ -334,7 +349,7 @@ const Login = ({ onLoginSuccess }) => {
               </div>
 
               <div className="mt-6 text-center text-sm text-neutral-500">
-                还没有账号？ <a href="#" onClick={() => navigate('/register')} className="text-primary hover:text-primary-dark font-medium">立即注册</a>
+                还没有账号？ <a href="#" className="text-primary hover:text-primary-dark font-medium">立即注册</a>
               </div>
             </div>
           )}

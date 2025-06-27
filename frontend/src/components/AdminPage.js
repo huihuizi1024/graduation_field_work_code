@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Layout, Menu, theme } from 'antd';
-import { UserOutlined, SettingOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Button } from 'antd';
+import { UserOutlined, SettingOutlined, ScheduleOutlined, HomeOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import PointRuleList from './PointRuleList';
 import ConversionRuleList from './ConversionRuleList';
 import CertificationStandardList from './CertificationStandardList';
@@ -18,6 +19,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const AdminPage = ({ onLogout }) => {
   const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
   const [selectedKey, setSelectedKey] = useState('1');
+  const navigate = useNavigate();
 
   const renderContent = () => {
     switch (selectedKey) {
@@ -63,8 +65,15 @@ const AdminPage = ({ onLogout }) => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <button onClick={onLogout} style={{ float: 'right', margin: '16px' }}>退出登录</button>
+        <Header style={{ padding: '0 16px', background: colorBgContainer, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Button 
+            type="primary" 
+            icon={<HomeOutlined />} 
+            onClick={() => navigate('/')}
+          >
+            返回主页
+          </Button>
+          <Button onClick={onLogout}>退出登录</Button>
         </Header>
         <Content style={{ margin: '24px 16px 0' }}>
           <div style={{

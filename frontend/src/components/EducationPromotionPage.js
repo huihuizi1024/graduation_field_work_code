@@ -1,18 +1,18 @@
 import React from 'react';
 
-const EducationPromotionPage = ({ onBackHome }) => (
+const EducationPromotionPage = ({ onBackToMain }) => (
   <div className="font-inter text-neutral-800">
     {/* 顶部导航栏 */}
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="#" className="flex items-center focus:outline-none" onClick={e => {e.preventDefault(); onBackHome();}}>
+        <a href="#" className="flex items-center focus:outline-none" onClick={e => {e.preventDefault(); onBackToMain();}}>
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white mr-2">
             <i className="fa fa-graduation-cap"></i>
           </div>
           <span className="text-xl font-bold">知学教育</span>
         </a>
         <nav className="hidden md:flex space-x-6">
-          <a href="#home" className="text-neutral-700 hover:text-primary" onClick={e => {e.preventDefault(); onBackHome();}}>首页</a>
+          <a href="#home" className="text-neutral-700 hover:text-primary" onClick={e => {e.preventDefault(); onBackToMain();}}>首页</a>
           <a href="#programs" className="text-neutral-700 hover:text-primary">学历项目</a>
           <a href="#advantages" className="text-neutral-700 hover:text-primary">我们的优势</a>
           <a href="#contact" className="text-neutral-700 hover:text-primary">联系我们</a>

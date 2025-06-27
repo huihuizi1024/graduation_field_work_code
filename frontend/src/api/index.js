@@ -7,7 +7,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   },
-  withCredentials: false // 禁用自动发送cookie
+  withCredentials: true // 启用跨域请求时发送cookie
 });
 
   // 请求拦截器

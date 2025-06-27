@@ -1,0 +1,436 @@
+.user-profile-layout {
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.profile-header {
+  background: white;
+  padding: 16px 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+.back-button {
+  font-size: 16px;
+  height: auto;
+  padding: 0;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  color: #1890ff;
+  transform: translateX(-4px);
+}
+
+.back-button .anticon {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.user-brief {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: white;
+}
+
+.user-brief .ant-avatar {
+  width: 100px;
+  height: 100px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-brief .ant-avatar:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.02);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-info h2 {
+  margin: 0 0 8px 0;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.points-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+}
+
+.points-display .anticon {
+  font-size: 18px;
+}
+
+.profile-sider {
+  background: white;
+  border-radius: 8px;
+  padding: 16px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.profile-content {
+  padding: 40px 24px !important;
+  background: transparent;
+}
+
+.profile-info {
+  position: relative;
+  max-width: 800px;
+  margin: 40px auto 0;
+  padding-top: 60px;
+}
+
+.avatar-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -30%);
+  text-align: center;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-wrapper .ant-avatar {
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 0;
+}
+
+.avatar-wrapper .user-name {
+  color: #1890ff;
+  font-size: 20px;
+  margin: 8px 0 4px;
+}
+
+.points-display-profile {
+  color: #f5a623;
+  font-size: 15px;
+  padding: 4px 12px;
+  background: rgba(245, 166, 35, 0.1);
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-bottom: 4px;
+}
+
+.points-display-profile:hover {
+  background: rgba(245, 166, 35, 0.2);
+  transform: translateY(-1px);
+}
+
+.points-display-profile .anticon {
+  font-size: 16px;
+}
+
+.profile-info .ant-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding-top: 40px;
+}
+
+.profile-info .ant-card-head {
+  border-bottom: none;
+  padding: 24px 24px 0;
+}
+
+.info-item {
+  margin: 0 24px 16px;
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.info-item:last-child {
+  margin-bottom: 24px;
+}
+
+.info-item .label {
+  width: 120px;
+  color: #666;
+  font-weight: 500;
+}
+
+.info-item .value {
+  flex: 1;
+  color: #333;
+}
+
+/* 课程列表样式 */
+.courses-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.courses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.courses-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.courses-filter {
+  margin-left: 16px;
+}
+
+.courses-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.courses-list .ant-card {
+  height: 100%;
+}
+
+.course-card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  height: 100%;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.course-cover {
+  position: relative;
+  height: 140px;
+  overflow: hidden;
+}
+
+.course-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover .course-cover img {
+  transform: scale(1.05);
+}
+
+.course-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.course-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-title-wrapper {
+  margin-bottom: 20px;
+}
+
+.course-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.course-progress {
+  margin: 16px 0;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1890ff 0%, #096dd9 100%);
+  transition: width 0.6s ease;
+}
+
+.course-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.course-time {
+  color: #666;
+  font-size: 14px;
+}
+
+.course-time .anticon {
+  margin-right: 4px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 20px 16px !important;
+  }
+
+  .profile-info {
+    margin-top: 20px;
+    padding-top: 80px;
+  }
+
+  .avatar-wrapper {
+    transform: translate(-50%, -25%);
+  }
+
+  .profile-info .ant-card {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .courses-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .courses-filter {
+    margin-left: 0;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .courses-list {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-item .label {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+}
+
+/* 标签样式优化 */
+.ant-tag {
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+/* 按钮样式优化 */
+.ant-btn-link {
+  padding: 4px 8px;
+  height: auto;
+  font-size: 14px;
+}
+
+/* 菜单样式优化 */
+.ant-menu-item {
+  margin: 4px 16px !important;
+  border-radius: 6px;
+}
+
+.ant-menu-item:hover {
+  background-color: #f0f7ff !important;
+}
+
+.ant-menu-item-selected {
+  background-color: #e6f7ff !important;
+}
+
+/* 响应式布局优化 */
+@media (max-width: 768px) {
+  .profile-header {
+    padding: 16px 0;
+  }
+
+  .user-brief {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .user-brief .ant-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .user-info h2 {
+    font-size: 20px;
+  }
+
+  .profile-sider {
+    margin: 0 12px;
+  }
+
+  .profile-content {
+    padding: 16px;
+    margin: 0 12px 16px;
+  }
+
+  .courses-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .info-item .label {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+} 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const CareerAdvancePage = ({ onBackHome }) => {
+const CareerAdvancePage = ({ onBackToMain }) => {
   useEffect(() => {
     // 导航栏滚动效果
     const handleScroll = () => {
@@ -39,14 +39,14 @@ const CareerAdvancePage = ({ onBackHome }) => {
       {/* 顶部导航栏 */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <a href="#" className="flex items-center focus:outline-none" onClick={e => {e.preventDefault(); onBackHome();}}>
+          <a href="#" className="flex items-center focus:outline-none" onClick={e => {e.preventDefault(); onBackToMain();}}>
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white mr-2">
               <i className="fa fa-briefcase"></i>
             </div>
             <span className="text-xl font-bold">职场进阶</span>
           </a>
           <nav className="hidden md:flex space-x-6">
-            <a href="#home" className="text-neutral-700 hover:text-primary" onClick={e => {e.preventDefault(); onBackHome();}}>首页</a>
+            <a href="#home" className="text-neutral-700 hover:text-primary" onClick={e => {e.preventDefault(); onBackToMain();}}>首页</a>
             <a href="#courses" className="text-neutral-700 hover:text-primary">热门课程</a>
             <a href="#skills" className="text-neutral-700 hover:text-primary">核心技能</a>
             <a href="#testimonials" className="text-neutral-700 hover:text-primary">学员反馈</a>
