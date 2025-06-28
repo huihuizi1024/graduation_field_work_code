@@ -33,9 +33,12 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
   };
 
   const handleLogin = () => {
+    let username = '';
+    let password = '';
+    
     if (activeTab === 'password') {
-      const username = document.getElementById('username')?.value;
-      const password = document.getElementById('password')?.value;
+      username = document.getElementById('username')?.value;
+      password = document.getElementById('password')?.value;
       if (!username || !password) {
         alert('请输入用户名和密码');
         return;
@@ -52,6 +55,7 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
         alert('请输入有效的手机号');
         return;
       }
+      username = phone; // 手机号作为用户名
     }
 
     // 模拟登录加载
@@ -59,13 +63,44 @@ const Login = ({ onGoToRegister, onBackToMain, onLoginSuccess }) => {
     if (loginButton) {
       loginButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 登录中...';
       loginButton.disabled = true;
+      
       setTimeout(() => {
-        alert('登录成功！正在跳转...');
+        // 判断用户角色
+        let userRole = currentIdentity; // 默认使用选择的身份
+        let isValidLogin = false;
+        
+        // 模拟登录验证逻辑
+        if (currentIdentity === 'admin') {
+          // 管理员账户验证
+          const adminAccounts = ['admin', 'administrator', 'root', 'manager', '18888888888'];
+          if (adminAccounts.includes(username.toLowerCase()) || 
+              (activeTab === 'password' && password === 'admin123')) {
+            isValidLogin = true;
+            userRole = 'admin';
+          }
+        } else {
+          // 其他身份验证（这里简化处理，实际应该调用后端API）
+          if (username.length > 0) {
+            isValidLogin = true;
+          }
+        }
+        
         loginButton.innerHTML = '登录';
         loginButton.disabled = false;
-        // 调用登录成功回调
-        if (onLoginSuccess) {
-          onLoginSuccess();
+        
+        if (isValidLogin) {
+          alert(`登录成功！欢迎，${currentIdentity === 'admin' ? '管理员' : '用户'}！`);
+          // 调用登录成功回调，传递用户角色和用户信息
+          if (onLoginSuccess) {
+            const userInfo = {
+              username: username,
+              identity: currentIdentity,
+              loginTime: new Date().toISOString()
+            };
+            onLoginSuccess(userRole, userInfo);
+          }
+        } else {
+          alert('登录失败！用户名或密码错误');
         }
       }, 1500);
     }

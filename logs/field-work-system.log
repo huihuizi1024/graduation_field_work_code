@@ -1016,3 +1016,19 @@ java.nio.channels.AsynchronousCloseException: null
 2025-06-25T15:37:58.171+08:00  INFO 10580 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
 2025-06-25T15:37:58.198+08:00  INFO 10580 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2025-06-25T15:37:58.206+08:00  INFO 10580 --- [restartedMain] com.internship.Application               : Started Application in 2.567 seconds (process running for 3.031)
+2025-06-26T13:52:03.578+08:00  INFO 9956 --- [restartedMain] com.internship.Application               : Starting Application using Java 17.0.14 with PID 9956 (C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code\target\classes started by huihui in C:\Users\huihui\Desktop\重大相关\实训\毕业实习\graduation_field_work_code)
+2025-06-26T13:52:03.579+08:00 DEBUG 9956 --- [restartedMain] com.internship.Application               : Running with Spring Boot v3.1.5, Spring v6.0.13
+2025-06-26T13:52:03.579+08:00  INFO 9956 --- [restartedMain] com.internship.Application               : The following 1 profile is active: "dev"
+2025-06-26T13:52:03.613+08:00  INFO 9956 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-06-26T13:52:03.613+08:00  INFO 9956 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-06-26T13:52:04.449+08:00  INFO 9956 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-06-26T13:52:04.453+08:00  INFO 9956 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-06-26T13:52:04.453+08:00  INFO 9956 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2025-06-26T13:52:04.496+08:00  INFO 9956 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-06-26T13:52:04.497+08:00  INFO 9956 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 883 ms
+2025-06-26T13:52:05.026+08:00  INFO 9956 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-06-26T13:52:05.045+08:00  INFO 9956 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-06-26T13:52:05.051+08:00  INFO 9956 --- [restartedMain] com.internship.Application               : Started Application in 1.707 seconds (process running for 2.166)
+2025-06-26T13:53:06.127+08:00  INFO 9956 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-26T13:53:06.127+08:00  INFO 9956 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-06-26T13:53:06.128+08:00  INFO 9956 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
