@@ -64,4 +64,30 @@ api.interceptors.response.use(
   }
 );
 
+// 登录API
+export const login = (username, password, identityType) => {
+  return api.post('/api/auth/login', {
+    username,
+    passwordHash: password
+  }, {
+    params: { identityType }
+  });
+
+};
+
+// 登出API
+export const logout = () => {
+  return api.post('/api/auth/logout');
+};
+
+// 获取当前用户信息
+export const getCurrentUser = () => {
+  return api.get('/api/users/me');
+};
+
+// 注册API
+export const register = (userData) => {
+  return api.post('/api/auth/register', userData);
+};
+
 export default api;

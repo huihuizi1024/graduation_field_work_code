@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { login } from '../api';
+import api from '../api';
 
 const Login = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
@@ -10,10 +12,11 @@ const Login = ({ onLoginSuccess }) => {
 
   const identityData = {
     student: { title: "学生登录", subtitle: "请选择登录方式", icon: "fa-user-circle", color: "primary" },
-    expert: { title: "专家登录", subtitle: "请选择登录方式", icon: "fa-user-o", color: "secondary" },
+    expert: { title: "专家登录", subtitle: "请选择登录方式", icon: "fa-user-tie", color: "secondary" },
     admin: { title: "管理员登录", subtitle: "请选择登录方式", icon: "fa-cog", color: "tertiary" },
     organization: { title: "机构登录", subtitle: "请选择登录方式", icon: "fa-building", color: "accent" }
   };
+
 
   const handleIdentityClick = (identity) => {
     setCurrentIdentity(identity);
@@ -34,109 +37,65 @@ const Login = ({ onLoginSuccess }) => {
     setActiveTab(tab);
   };
 
-  const handleLogin = () => {
-    if (activeTab === 'password') {
-      const username = document.getElementById('username')?.value;
-      const password = document.getElementById('password')?.value;
-      if (!username || !password) {
-        alert('请输入用户名和密码');
-        return;
-      }
-    } else {
-      const phone = document.getElementById('phone')?.value;
-      const verifyCode = document.getElementById('verify-code')?.value;
-      if (!phone || !verifyCode) {
-        alert('请输入手机号和验证码');
-        return;
-      }
-      const phoneRegex = /^1[3-9]\d{9}$/;
-      if (!phoneRegex.test(phone)) {
-        alert('请输入有效的手机号');
-        return;
-      }
-    }
+    const [loginError, setLoginError] = useState(null);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-    // 模拟登录加载
-    const loginButton = document.getElementById('login-button');
-    if (loginButton) {
-      loginButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 登录中...';
-      loginButton.disabled = true;
-      setTimeout(() => {
-        // 模拟用户数据
-        const mockUserData = {
-          id: 1,
-          username: document.getElementById('username')?.value || "student001",
-          full_name: "张三",
-          role: currentIdentity === 'admin' ? 4 : currentIdentity === 'expert' ? 3 : currentIdentity === 'organization' ? 2 : 1,
-          email: "zhangsan@example.com",
-          phone: document.getElementById('phone')?.value || "13800138000",
-          points_balance: 2580.50,
-          avatar: null
-        };
+    const handleLogin = async () => {
+        if (isLoggingIn) return;
+        
+        try {
+            setIsLoggingIn(true);
+            setLoginError(null);
+            
+            const username = document.getElementById('username')?.value.trim();
+            const password = document.getElementById('password')?.value;
 
-        // 将用户信息存储到localStorage
-        localStorage.setItem('userInfo', JSON.stringify(mockUserData));
-        localStorage.setItem('isLoggedIn', 'true');
+            if (!username || !password) {
+                throw new Error('请输入用户名和密码');
+            }
 
-        alert('登录成功！正在跳转...');
-        loginButton.innerHTML = '登录';
-        loginButton.disabled = false;
+            console.log('Sending login request with:', { username, password });
+            const response = await login(username, password, currentIdentity);
+            console.log('Login response:', response);
+            
+            // 检查响应状态
+            if (response && response.status === 200) {
+                // 存储简单认证标记
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('username', username);
+                localStorage.setItem('role', currentIdentity);
+                localStorage.setItem('userInfo', JSON.stringify(response.user));
+            } else {
+                throw new Error(response?.message || '登录失败');
+            }
 
-        // 调用登录成功回调，传递身份
-        if (onLoginSuccess) {
-          onLoginSuccess(currentIdentity);
+
+            // 根据当前选择的身份导航
+            const routes = {
+                student: '/',
+                expert: '/expert',
+                admin: '/admin',
+                organization: '/institution'
+            };
+            navigate(routes[currentIdentity] || '/');
+
+            // 通知父组件登录成功
+            onLoginSuccess?.(currentIdentity);
+
+            } catch (error) {
+                console.error('登录失败:', error);
+                setLoginError(
+                    error.response?.status === 400 
+                    ? '身份不匹配或账号密码有误'
+                    : error.response?.data?.message ||
+                      error.message ||
+                      '登录失败，请检查用户名和密码'
+                );
+
+        } finally {
+            setIsLoggingIn(false);
         }
-
-        // 根据身份跳转到相应页面
-        switch (currentIdentity) {
-          case 'admin':
-            navigate('/admin');
-            break;
-          case 'expert':
-            navigate('/expert');
-            break;
-          case 'organization':
-            navigate('/institution');
-            break;
-          case 'student':
-          default:
-            navigate('/');
-            break;
-        }
-      }, 1500);
-    }
-  };
-
-  const handleGetCode = () => {
-    const phoneInput = document.getElementById('phone');
-    const phone = phoneInput?.value.trim();
-    if (!phone) {
-      alert('请输入手机号');
-      return;
-    }
-    const phoneRegex = /^1[3-9]\d{9}$/;
-    if (!phoneRegex.test(phone)) {
-      alert('请输入有效的手机号');
-      return;
-    }
-
-    const getCodeBtn = document.getElementById('get-code');
-    if (getCodeBtn) {
-      let countdown = 60;
-      getCodeBtn.disabled = true;
-      getCodeBtn.textContent = `${countdown}秒后重新获取`;
-      const timer = setInterval(() => {
-        countdown--;
-        getCodeBtn.textContent = `${countdown}秒后重新获取`;
-        if (countdown <= 0) {
-          clearInterval(timer);
-          getCodeBtn.disabled = false;
-          getCodeBtn.textContent = '获取验证码';
-        }
-      }, 1000);
-    }
-    console.log(`向手机号 ${phone} 发送验证码`);
-  };
+    };
 
   const togglePasswordVisibility = () => {
     const passwordInput = document.getElementById('password');
@@ -152,6 +111,17 @@ const Login = ({ onLoginSuccess }) => {
     }
   };
 
+  // 添加点击事件监听器
+  React.useEffect(() => {
+    const toggleButton = document.getElementById('toggle-password');
+    if (toggleButton) {
+      toggleButton.addEventListener('click', togglePasswordVisibility);
+      return () => {
+        toggleButton.removeEventListener('click', togglePasswordVisibility);
+      };
+    }
+  }, []);
+
   return (
     <div className="min-h-screen font-inter bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* 顶部导航 */}
@@ -166,9 +136,9 @@ const Login = ({ onLoginSuccess }) => {
             </div>
             <nav className="hidden md:flex space-x-8">
               <button onClick={handleBackClick} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom">关于我们</a>
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom">帮助中心</a>
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom">联系我们</a>
+              <button className="text-neutral-600 hover:text-primary transition-custom">关于我们</button>
+              <button className="text-neutral-600 hover:text-primary transition-custom">帮助中心</button>
+              <button className="text-neutral-600 hover:text-primary transition-custom">联系我们</button>
             </nav>
             <div className="md:hidden">
               <button className="text-neutral-600 focus:outline-none">
@@ -335,13 +305,31 @@ const Login = ({ onLoginSuccess }) => {
                   <label htmlFor="remember" className="ml-2 block text-sm text-neutral-600">记住我</label>
                 </div>
                 <div className="text-sm">
-                  <a href="#" className="text-primary hover:text-primary-dark">忘记密码？</a>
+                  <button className="text-primary hover:text-primary-dark">忘记密码？</button>
                 </div>
               </div>
 
+              {loginError && (
+                <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                  {loginError}
+                </div>
+              )}
               <div className="flex flex-col gap-4">
-                <button id="login-button" onClick={handleLogin} className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition-custom font-medium">
-                  登录
+                <button 
+                  onClick={handleLogin} 
+                  disabled={isLoggingIn}
+                  className={`w-full py-3 rounded-lg transition-custom font-medium ${
+                    isLoggingIn 
+                      ? 'bg-primary/70 text-white cursor-not-allowed' 
+                      : 'bg-primary text-white hover:bg-primary-dark'
+                  }`}
+                >
+                  {isLoggingIn ? (
+                    <>
+                      <i className="fa fa-spinner fa-spin mr-2"></i>
+                      登录中...
+                    </>
+                  ) : '登录'}
                 </button>
                 <button onClick={handleBackClick} className="w-full bg-neutral-100 text-neutral-600 py-3 rounded-lg hover:bg-neutral-200 transition-custom font-medium">
                   返回
@@ -349,7 +337,7 @@ const Login = ({ onLoginSuccess }) => {
               </div>
 
               <div className="mt-6 text-center text-sm text-neutral-500">
-                还没有账号？ <a href="#" className="text-primary hover:text-primary-dark font-medium">立即注册</a>
+                还没有账号？ <button className="text-primary hover:text-primary-dark font-medium">立即注册</button>
               </div>
             </div>
           )}
@@ -359,4 +347,4 @@ const Login = ({ onLoginSuccess }) => {
   );
 };
 
-export default Login; 
+export default Login;

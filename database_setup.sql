@@ -126,7 +126,8 @@ CREATE TABLE user (
     username VARCHAR(100) NOT NULL UNIQUE COMMENT '用户名/学号',
     password_hash VARCHAR(255) NOT NULL COMMENT '加密后的密码',
     full_name VARCHAR(100) COMMENT '真实姓名',
-    role INT NOT NULL COMMENT '角色：1-学生, 2-教师, 3-专家, 4-管理员',
+    role INT NOT NULL COMMENT '角色：1-学生, 2-专家, 3-机构, 4-管理员',
+
     email VARCHAR(100) UNIQUE COMMENT '邮箱',
     phone VARCHAR(20) UNIQUE COMMENT '手机号',
     institution_id BIGINT COMMENT '所属机构ID',

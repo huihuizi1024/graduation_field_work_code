@@ -25,10 +25,10 @@ public class PointTransaction {
     @Column(nullable = false)
     private Integer transactionType; // 1-获得, 2-消费, 3-过期
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private Double pointsChange;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private Double balanceAfter;
 
     @Column(length = 255)

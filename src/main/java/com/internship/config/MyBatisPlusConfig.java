@@ -1,10 +1,12 @@
 package com.internship.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.apache.ibatis.reflection.MetaObject;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,6 +34,14 @@ public class MyBatisPlusConfig {
     }
 
     /**
+     * 配置驼峰式命名转换
+     */
+    @Bean
+    public ConfigurationCustomizer configurationCustomizer() {
+        return configuration -> configuration.setMapUnderscoreToCamelCase(true);
+    }
+
+    /**
      * 配置字段自动填充
      */
     @Bean
@@ -51,4 +61,4 @@ public class MyBatisPlusConfig {
             }
         };
     }
-} 
+}

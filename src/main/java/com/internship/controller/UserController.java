@@ -60,8 +60,8 @@ public class UserController {
             @Parameter(description = "用户名") @RequestParam(required = false) String username,
             @Parameter(description = "角色") @RequestParam(required = false) Integer role,
             @Parameter(description = "状态") @RequestParam(required = false) Integer status) {
-        log.info("查询用户列表请求, page: {}, size: {}, username: {}, role: {}, status: {}", 
-            page, size, username, role, status);
+        log.info("查询用户列表请求, page: {}, size: {}, username: {}, role: {}, status: {}",
+                page, size, username, role, status);
         return userService.getUsers(page, size, username, role, status);
     }
 

@@ -96,13 +96,13 @@ public class UserServiceImpl implements UserService {
 
             Page<User> pageResult = userRepository.selectPage(new Page<>(page, size), queryWrapper);
             PageResponse<User> response = new PageResponse<>(
-                Integer.valueOf((int)(pageResult.getCurrent() - 1)),
-                Integer.valueOf((int)pageResult.getSize()),
-                Long.valueOf(pageResult.getTotal()),
-                pageResult.getRecords()
+                    Integer.valueOf((int)(pageResult.getCurrent() - 1)),
+                    Integer.valueOf((int)pageResult.getSize()),
+                    Long.valueOf(pageResult.getTotal()),
+                    pageResult.getRecords()
             );
-            log.info("查询用户列表成功, 页码: {}, 每页大小: {}, 总数: {}", 
-                pageResult.getCurrent(), pageResult.getSize(), pageResult.getTotal());
+            log.info("查询用户列表成功, 页码: {}, 每页大小: {}, 总数: {}",
+                    pageResult.getCurrent(), pageResult.getSize(), pageResult.getTotal());
             return ApiResponse.success(response);
         } catch (Exception e) {
             log.error("查询用户列表失败: {}", e.getMessage());
