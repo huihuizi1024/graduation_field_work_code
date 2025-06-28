@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Input, InputNumber, Select, Space, message, Popconfirm, Tooltip } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, ThunderboltOutlined, BulbOutlined } from '@ant-design/icons';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Table, Button, Modal, Form, Input, InputNumber, Select, Space, message, Popconfirm, Tooltip, Tag, DatePicker } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, ThunderboltOutlined, BulbOutlined, SearchOutlined, ReloadOutlined, AuditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import api from '../api';
+import debounce from 'lodash/debounce';
 
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const PointRuleList = () => {
   const [form] = Form.useForm();
@@ -10,6 +13,19 @@ const PointRuleList = () => {
   const [data, setData] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingRule, setEditingRule] = useState(null);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const [filters, setFilters] = useState({
+    ruleName: '',
+    ruleCode: '',
+    pointType: undefined,
+    applicableObject: undefined,
+    status: undefined,
+    reviewStatus: undefined,
+  });
 
   // 智能生成规则编码
   const generateRuleCode = (ruleName) => {
@@ -130,21 +146,30 @@ const PointRuleList = () => {
     ]}
   ];
 
-  useEffect(() => {
-    fetchPointRules();
-  }, []);
-
-  const fetchPointRules = async () => {
+  const fetchPointRules = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/point-rules'); // 使用相对路径，利用proxy
-      if (!response.ok) {
-        throw new Error('网络响应错误');
-      }
-      const result = await response.json();
-      console.log('积分规则API响应:', result); // 添加调试日志
+      const { current, pageSize } = pagination;
+      const queryParams = new URLSearchParams({
+        page: current - 1, // 后端页码从0开始
+        size: pageSize,
+        ...filters,
+      }).toString();
+
+      const result = await api.get(`/api/point-rules`, {
+        params: {
+          page: current - 1,
+          size: pageSize,
+          ...filters
+        }
+      });
+      console.log('积分规则API响应:', result);
       if (result.code === 200) {
-        setData(result.data.records || []); // 后端返回的是PageResponse，数据在records字段
+        setData(result.data.records || []);
+        setPagination((prev) => ({
+          ...prev,
+          total: result.data.total,
+        }));
       } else {
         message.error(result.message || '获取积分规则失败！');
       }
@@ -154,6 +179,45 @@ const PointRuleList = () => {
     } finally {
       setLoading(false);
     }
+  }, [pagination.current, pagination.pageSize, filters]);
+
+  useEffect(() => {
+    fetchPointRules();
+  }, [fetchPointRules]);
+
+  const handleTableChange = (newPagination, newFilters, sorter) => {
+    console.log('Table Change:', newPagination, newFilters, sorter);
+    setPagination(newPagination);
+    // Ant Design filters return an array, we need to extract the first element or keep undefined
+    setFilters({
+      ...filters,
+      pointType: newFilters.pointType ? newFilters.pointType[0] : undefined,
+      applicableObject: newFilters.applicableObject ? newFilters.applicableObject[0] : undefined,
+      status: newFilters.status ? newFilters.status[0] : undefined,
+      reviewStatus: newFilters.reviewStatus ? newFilters.reviewStatus[0] : undefined,
+    });
+    // If pagination changes, fetchPointRules will be called by useEffect
+    // If filters change, fetchPointRules will be called by useEffect
+  };
+
+  const handleSearch = (value, name) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+    setPagination((prev) => ({ ...prev, current: 1 })); // Reset to first page on search
+  };
+
+  const debouncedSearchRuleName = useCallback(debounce((value) => handleSearch(value, 'ruleName'), 500), []);
+  const debouncedSearchRuleCode = useCallback(debounce((value) => handleSearch(value, 'ruleCode'), 500), []);
+
+  const handleResetFilters = () => {
+    setFilters({
+      ruleName: '',
+      ruleCode: '',
+      pointType: undefined,
+      applicableObject: undefined,
+      status: undefined,
+      reviewStatus: undefined,
+    });
+    setPagination((prev) => ({ ...prev, current: 1 }));
   };
 
   const handleAdd = () => {
@@ -170,59 +234,55 @@ const PointRuleList = () => {
   };
 
   const handleEdit = (record) => {
-    console.log('编辑规则:', record); // 添加调试日志
+    console.log('编辑规则:', record);
     setEditingRule(record);
-    // 处理pointValue的显示格式
     const formValues = {
       ...record,
       pointValue: record.pointValue ? parseFloat(record.pointValue) : 0
     };
-    console.log('设置表单值:', formValues); // 添加调试日志
+    console.log('设置表单值:', formValues);
     form.setFieldsValue(formValues);
     setIsModalVisible(true);
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`/api/point-rules/${id}`, { method: 'DELETE' });
-      const result = await response.json();
+      setLoading(true);
+      const result = await api.delete(`/api/point-rules/${id}`);
       if (result.code === 200) {
         message.success('积分规则删除成功！');
-        fetchPointRules(); // 刷新列表
+        fetchPointRules();
       } else {
         message.error(result.message || '删除积分规则失败！');
       }
     } catch (error) {
       message.error('删除积分规则失败！');
       console.error('Error deleting point rule:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      console.log('表单提交值:', values); // 添加调试日志
+      console.log('表单提交值:', values);
       
-      // 确保pointValue是数字格式
       const submitData = {
         ...values,
-        pointValue: values.pointValue ? values.pointValue.toString() : "0"
+        // 确保pointValue是字符串，后端Decimal类型接收字符串
+        pointValue: values.pointValue !== undefined && values.pointValue !== null ? values.pointValue.toString() : "0"
       };
-      console.log('提交给后端的数据:', submitData); // 添加调试日志
+      console.log('提交给后端的数据:', submitData);
       
       setLoading(true);
       let response;
       let result;
       if (editingRule) {
         // 编辑
-        console.log('执行编辑操作，ID:', editingRule.id); // 添加调试日志
-        response = await fetch(`/api/point-rules/${editingRule.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(submitData),
-        });
-        result = await response.json();
-        console.log('编辑响应:', result); // 添加调试日志
+        console.log('执行编辑操作，ID:', editingRule.id);
+        result = await api.put(`/api/point-rules/${editingRule.id}`, submitData);
+        console.log('编辑响应:', result);
         if (result.code === 200) {
           message.success('积分规则更新成功！');
         } else {
@@ -230,14 +290,9 @@ const PointRuleList = () => {
         }
       } else {
         // 添加
-        console.log('执行添加操作'); // 添加调试日志
-        response = await fetch('/api/point-rules', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(submitData),
-        });
-        result = await response.json();
-        console.log('添加响应:', result); // 添加调试日志
+        console.log('执行添加操作');
+        result = await api.post('/api/point-rules', submitData);
+        console.log('添加响应:', result);
         if (result.code === 200) {
           message.success('积分规则添加成功！');
         } else {
@@ -248,7 +303,7 @@ const PointRuleList = () => {
       fetchPointRules(); // 刷新列表
     } catch (error) {
       message.error('操作失败，请检查表单或网络！');
-      console.error('Error saving point rule:', error);
+      console.error('Operation failed:', error);
     } finally {
       setLoading(false);
     }
@@ -260,225 +315,411 @@ const PointRuleList = () => {
     form.resetFields();
   };
 
+  const handleReview = async (id, currentReviewStatus) => {
+    Modal.confirm({
+      title: '审核积分规则',
+      content: (
+        <div>
+          <p>请选择审核结果：</p>
+          <Input.TextArea 
+            id="reviewComment" 
+            placeholder="请输入审核意见（可选）" 
+            rows={4} 
+            maxLength={500} 
+          />
+        </div>
+      ),
+      okText: '通过',
+      cancelText: '拒绝',
+      onOk: async () => {
+        const reviewComment = document.getElementById('reviewComment').value;
+        try {
+          setLoading(true);
+          const result = await api.post(`/api/point-rules/${id}/review`, null, {
+            params: {
+              reviewStatus: 1,
+              reviewComment: reviewComment
+            }
+          });
+          if (result.code === 200) {
+            message.success('积分规则审核通过！');
+            fetchPointRules();
+          } else {
+            message.error(result.message || '审核操作失败！');
+          }
+        } catch (error) {
+          message.error('审核操作失败！');
+          console.error('Error reviewing point rule:', error);
+        } finally {
+          setLoading(false);
+        }
+      },
+      onCancel: async () => {
+        const reviewComment = document.getElementById('reviewComment').value;
+        try {
+          setLoading(true);
+          const result = await api.post(`/api/point-rules/${id}/review`, null, {
+            params: {
+              reviewStatus: 2,
+              reviewComment: reviewComment
+            }
+          });
+          if (result.code === 200) {
+            message.success('积分规则审核拒绝！');
+            fetchPointRules();
+          } else {
+            message.error(result.message || '审核操作失败！');
+          }
+        } catch (error) {
+          message.error('审核操作失败！');
+          console.error('Error reviewing point rule:', error);
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
+  };
+
+  const handleChangeStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    try {
+      setLoading(true);
+      const result = await api.post(`/api/point-rules/${id}/status`, null, {
+        params: {
+          status: newStatus
+        }
+      });
+      if (result.code === 200) {
+        message.success(`积分规则已${newStatus === 1 ? '启用' : '禁用'}！`);
+        fetchPointRules();
+      } else {
+        message.error(result.message || '状态更改失败！');
+      }
+    } catch (error) {
+      message.error('状态更改失败！');
+      console.error('Error changing point rule status:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const columns = [
     {
       title: '规则名称',
       dataIndex: 'ruleName',
       key: 'ruleName',
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="搜索规则名称"
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              setSelectedKeys(e.target.value ? [e.target.value] : []);
+              debouncedSearchRuleName(e.target.value);
+            }}
+            onPressEnter={() => confirm()}
+            style={{ marginBottom: 8, display: 'block' }}
+          />
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => confirm()}
+              icon={<SearchOutlined />}
+              size="small"
+              style={{ width: 90 }}
+            >
+              搜索
+            </Button>
+            <Button onClick={() => { clearFilters(); handleSearch('', 'ruleName'); }} size="small" style={{ width: 90 }}>
+              重置
+            </Button>
+          </Space>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
     },
     {
       title: '规则编码',
       dataIndex: 'ruleCode',
       key: 'ruleCode',
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="搜索规则编码"
+            value={selectedKeys[0]}
+            onChange={(e) => {
+              setSelectedKeys(e.target.value ? [e.target.value] : []);
+              debouncedSearchRuleCode(e.target.value);
+            }}
+            onPressEnter={() => confirm()}
+            style={{ marginBottom: 8, display: 'block' }}
+          />
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => confirm()}
+              icon={<SearchOutlined />}
+              size="small"
+              style={{ width: 90 }}
+            >
+              搜索
+            </Button>
+            <Button onClick={() => { clearFilters(); handleSearch('', 'ruleCode'); }} size="small" style={{ width: 90 }}>
+              重置
+            </Button>
+          </Space>
+        </div>
+      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+    },
+    {
+      title: '积分值',
+      dataIndex: 'pointValue',
+      key: 'pointValue',
+      sorter: (a, b) => a.pointValue - b.pointValue,
     },
     {
       title: '积分类型',
       dataIndex: 'pointType',
       key: 'pointType',
-      render: (type) => {
-        const typeMap = {
-          1: '学习积分',
-          2: '活动积分', 
-          3: '贡献积分'
-        };
-        return typeMap[type] || '未知类型';
+      render: (text) => {
+        switch (text) {
+          case 1: return <Tag color="blue">学习积分</Tag>;
+          case 2: return <Tag color="green">活动积分</Tag>;
+          case 3: return <Tag color="purple">贡献积分</Tag>;
+          default: return <Tag>未知</Tag>;
+        }
       },
-    },
-    {
-      title: '分值',
-      dataIndex: 'pointValue',
-      key: 'pointValue',
-      render: (value) => {
-        // 确保数值正确显示
-        return typeof value === 'number' ? value : parseFloat(value) || 0;
-      },
+      filters: [
+        { text: '学习积分', value: 1 },
+        { text: '活动积分', value: 2 },
+        { text: '贡献积分', value: 3 },
+      ],
+      filterMultiple: false,
     },
     {
       title: '适用对象',
       dataIndex: 'applicableObject',
       key: 'applicableObject',
-      render: (obj) => {
-        const objMap = {
-          1: '学生',
-          2: '教师',
-          3: '专家',
-          4: '管理员'
-        };
-        return objMap[obj] || '未知对象';
+      render: (text) => {
+        switch (text) {
+          case 1: return <Tag color="cyan">学生</Tag>;
+          case 2: return <Tag color="geekblue">教师</Tag>;
+          case 3: return <Tag color="volcano">专家</Tag>;
+          case 4: return <Tag color="magenta">管理员</Tag>;
+          default: return <Tag>未知</Tag>;
+        }
+      },
+      filters: [
+        { text: '学生', value: 1 },
+        { text: '教师', value: 2 },
+        { text: '专家', value: 3 },
+        { text: '管理员', value: 4 },
+      ],
+      filterMultiple: false,
+    },
+    {
+      title: '有效期类型',
+      dataIndex: 'validityType',
+      key: 'validityType',
+      render: (text) => {
+        switch (text) {
+          case 1: return <Tag>永久有效</Tag>;
+          case 2: return <Tag>固定期限</Tag>;
+          case 3: return <Tag>相对期限</Tag>;
+          default: return <Tag>未知</Tag>;
+        }
       },
     },
     {
-      title: '有效期',
-      dataIndex: 'validityType',
-      key: 'validityType',
-      render: (type, record) => {
-        const typeMap = {
-          1: '永久有效',
-          2: '固定期限',
-          3: '相对期限'
-        };
-        const typeText = typeMap[type] || '未知';
-        const days = record.validityDays;
-        if (type === 1 || !days) {
-          return typeText;
-        }
-        return `${typeText}(${days}天)`;
-      },
+      title: '有效期（天）',
+      dataIndex: 'validityDays',
+      key: 'validityDays',
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: (status) => (status === 1 ? '启用' : '禁用'),
+      render: (text) => {
+        switch (text) {
+          case 1: return <Tag color="green">启用</Tag>;
+          case 0: return <Tag color="red">禁用</Tag>;
+          default: return <Tag>未知</Tag>;
+        }
+      },
+      filters: [
+        { text: '启用', value: 1 },
+        { text: '禁用', value: 0 },
+      ],
+      filterMultiple: false,
     },
     {
-      title: '描述',
-      dataIndex: 'ruleDescription',
-      key: 'ruleDescription',
-      ellipsis: true,
+      title: '审核状态',
+      dataIndex: 'reviewStatus',
+      key: 'reviewStatus',
+      render: (text) => {
+        switch (text) {
+          case 0: return <Tag color="orange">待审核</Tag>;
+          case 1: return <Tag color="green">审核通过</Tag>;
+          case 2: return <Tag color="red">审核拒绝</Tag>;
+          default: return <Tag>未知</Tag>;
+        }
+      },
+      filters: [
+        { text: '待审核', value: 0 },
+        { text: '审核通过', value: 1 },
+        { text: '审核拒绝', value: 2 },
+      ],
+      filterMultiple: false,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (text) => text ? new Date(text).toLocaleString() : '-',
+      sorter: (a, b) => new Date(a.createTime) - new Date(b.createTime),
     },
     {
       title: '操作',
-      key: 'action',
+      key: 'actions',
       render: (_, record) => (
-        <Space size="middle">
-          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>编辑</Button>
+        <Space size="small">
+          <Button 
+            icon={<EditOutlined />} 
+            onClick={() => handleEdit(record)}
+            type="link"
+            size="small"
+            title="编辑"
+          />
           <Popconfirm
             title="确定删除此规则吗？"
             onConfirm={() => handleDelete(record.id)}
             okText="是"
             cancelText="否"
           >
-            <Button icon={<DeleteOutlined />} danger>删除</Button>
+            <Button 
+              icon={<DeleteOutlined />} 
+              danger 
+              type="link"
+              size="small"
+              title="删除"
+            />
           </Popconfirm>
+          {record.reviewStatus === 0 && (
+            <Button 
+              icon={<AuditOutlined />} 
+              onClick={() => handleReview(record.id, record.reviewStatus)}
+              type="link"
+              size="small"
+              title="审核"
+            />
+          )}
+          <Button
+            icon={record.status === 1 ? <CloseCircleOutlined /> : <CheckCircleOutlined />}
+            onClick={() => handleChangeStatus(record.id, record.status)}
+            type="link"
+            size="small"
+            title={record.status === 1 ? "禁用" : "启用"}
+            danger={record.status === 1}
+          />
         </Space>
       ),
     },
   ];
 
   return (
-    <div>
-      <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
-        添加积分规则
-      </Button>
-      <Table columns={columns} dataSource={data} rowKey="id" loading={loading} />
+    <div style={{ padding: 24 }}>
+      <h2 style={{ marginBottom: 24 }}>积分规则管理</h2>
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between' }}>
+        <Space>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+            添加积分规则
+          </Button>
+          <Button icon={<ReloadOutlined />} onClick={fetchPointRules}>
+            刷新
+          </Button>
+          <Button onClick={handleResetFilters}>
+            重置筛选
+          </Button>
+        </Space>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        loading={loading}
+        pagination={pagination}
+        onChange={handleTableChange}
+        scroll={{ x: 'max-content' }}
+      />
 
       <Modal
         title={editingRule ? '编辑积分规则' : '添加积分规则'}
-        open={isModalVisible}
+        visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        width={800}
         confirmLoading={loading}
-        width={600}
       >
-        <Form form={form} layout="vertical" name="point_rule_form">
+        <Form
+          form={form}
+          layout="vertical"
+          name="point_rule_form"
+          initialValues={{
+            pointType: 1,
+            applicableObject: 1,
+            validityType: 1,
+            status: 1,
+            reviewStatus: 0 // 默认待审核
+          }}
+        >
           <Form.Item
             name="ruleName"
             label="规则名称"
             rules={[{ required: true, message: '请输入规则名称！' }]}
           >
             <Input 
-              placeholder="请输入规则名称" 
+              placeholder="例如：完成在线课程学习" 
               onChange={(e) => {
-                const ruleName = e.target.value;
-                // 如果是新增且编码为空，自动生成编码
-                if (!editingRule && ruleName) {
-                  const generatedCode = generateRuleCode(ruleName);
-                  form.setFieldsValue({ ruleCode: generatedCode });
-                }
+                const generatedCode = generateRuleCode(e.target.value);
+                form.setFieldsValue({ ruleCode: generatedCode });
               }}
             />
           </Form.Item>
           <Form.Item
-            label={
-              <Space>
-                规则编码
-                <Tooltip title="点击闪电图标自动生成编码，或点击灯泡图标选择模板">
-                  <BulbOutlined style={{ color: '#1890ff' }} />
-                </Tooltip>
-              </Space>
+            name="ruleCode"
+            label="规则编码"
+            rules={[{ required: true, message: '请输入规则编码！' }]}
+            tooltip={
+                <div>
+                    <p>规则编码是规则的唯一标识。建议使用大写字母和下划线，例如：ONLINE_COURSE_COMPLETE。</p>
+                    <p>您也可以从常用模板中选择或根据规则名称智能生成。</p>
+                </div>
             }
-            tooltip="规则编码是积分规则的唯一标识符，用于系统内部识别和API调用。建议格式：ONLINE_COURSE_COMPLETE"
           >
-            <Input.Group compact>
-              <Form.Item
-                name="ruleCode"
-                style={{ width: 'calc(100% - 80px)', display: 'inline-block' }}
-                rules={[
-                  { required: true, message: '请输入规则编码！' },
-                  { 
-                    pattern: /^[A-Z][A-Z0-9_]*[A-Z0-9]$/, 
-                    message: '编码格式：大写字母开头，可包含大写字母、数字、下划线！' 
-                  }
-                ]}
-              >
-                <Input 
-                  placeholder="请输入规则编码，如：ONLINE_COURSE_COMPLETE" 
-                  style={{ textTransform: 'uppercase' }}
-                />
-              </Form.Item>
-              <Tooltip title="根据规则名称自动生成编码">
-                <Button 
-                  type="default"
-                  icon={<ThunderboltOutlined />}
-                  style={{ width: '40px' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log('点击了自动生成按钮'); // 调试日志
-                    const ruleName = form.getFieldValue('ruleName');
-                    console.log('当前规则名称:', ruleName); // 调试日志
-                    if (ruleName) {
-                      const generatedCode = generateRuleCode(ruleName);
-                      console.log('生成的编码:', generatedCode); // 调试日志
-                      form.setFieldsValue({ ruleCode: generatedCode });
-                      message.success(`编码已自动生成: ${generatedCode}`);
-                    } else {
-                      message.warning('请先输入规则名称！');
-                    }
-                  }}
-                />
-              </Tooltip>
-              <Tooltip title="选择编码模板">
-                <Button 
-                  type="default"
-                  icon={<BulbOutlined />}
-                  style={{ width: '40px' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log('点击了模板选择按钮'); // 调试日志
-                    const modal = Modal.info({
-                      title: '常用编码模板',
-                      width: 600,
-                      content: (
-                        <div>
-                          {codeTemplates.map(category => (
-                            <div key={category.label} style={{ marginBottom: 16 }}>
-                              <h4>{category.label}</h4>
-                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                                {category.codes.map(code => (
-                                  <Button
-                                    key={code}
-                                    size="small"
-                                    onClick={() => {
-                                      console.log('选择了模板:', code); // 调试日志
-                                      form.setFieldsValue({ ruleCode: code });
-                                      modal.destroy();
-                                      message.success(`编码模板 ${code} 已应用！`);
-                                    }}
-                                  >
-                                    {code}
-                                  </Button>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ),
-                    });
-                  }}
-                />
-              </Tooltip>
-            </Input.Group>
+            <Input 
+              placeholder="例如：ONLINE_COURSE_COMPLETE" 
+              addonAfter={
+                <Tooltip title="智能生成编码">
+                  <ThunderboltOutlined 
+                    onClick={() => {
+                      const ruleName = form.getFieldValue('ruleName');
+                      if (ruleName) {
+                        form.setFieldsValue({ ruleCode: generateRuleCode(ruleName) });
+                      } else {
+                        message.warning('请先输入规则名称以生成编码！');
+                      }
+                    }}
+                  />
+                </Tooltip>
+              }
+            />
+          </Form.Item>
+          <Form.Item
+            name="ruleDescription"
+            label="规则描述"
+          >
+            <Input.TextArea rows={4} placeholder="请输入规则的详细描述" />
           </Form.Item>
           <Form.Item
             name="pointType"
@@ -493,10 +734,10 @@ const PointRuleList = () => {
           </Form.Item>
           <Form.Item
             name="pointValue"
-            label="分值"
-            rules={[{ required: true, message: '请输入分值！', type: 'number' }]}
+            label="积分值"
+            rules={[{ required: true, message: '请输入积分值！' }, { type: 'number', min: 0.01, message: '积分值必须是大于0的数字！' }]}
           >
-            <InputNumber min={0} step={0.1} style={{ width: '100%' }} placeholder="请输入分值" />
+            <InputNumber min={0.01} step={0.01} style={{ width: '100%' }} placeholder="请输入积分值" />
           </Form.Item>
           <Form.Item
             name="applicableObject"
@@ -515,53 +756,35 @@ const PointRuleList = () => {
             label="有效期类型"
             rules={[{ required: true, message: '请选择有效期类型！' }]}
           >
-            <Select placeholder="请选择有效期类型">
+            <Select 
+              placeholder="请选择有效期类型"
+              onChange={(value) => {
+                if (value === 1) { // 永久有效
+                  form.setFieldsValue({ validityDays: null });
+                }
+              }}
+            >
               <Option value={1}>永久有效</Option>
               <Option value={2}>固定期限</Option>
               <Option value={3}>相对期限</Option>
             </Select>
           </Form.Item>
           <Form.Item
-            name="validityDays"
-            label="有效期（天数）"
-            dependencies={['validityType']}
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  const validityType = getFieldValue('validityType');
-                  if (validityType === 1) {
-                    // 永久有效时不需要填写天数
-                    return Promise.resolve();
-                  }
-                  if (validityType === 2 || validityType === 3) {
-                    if (!value || value <= 0) {
-                      return Promise.reject(new Error('请输入有效的天数！'));
-                    }
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
+            noStyle
+            shouldUpdate={(prevValues, currentValues) => prevValues.validityType !== currentValues.validityType}
           >
-            <Form.Item noStyle shouldUpdate={(prevValues, currentValues) => 
-              prevValues.validityType !== currentValues.validityType
-            }>
-              {({ getFieldValue }) => {
-                const validityType = getFieldValue('validityType');
-                return (
-                  <InputNumber 
-                    min={1} 
-                    style={{ width: '100%' }} 
-                    placeholder={
-                      validityType === 1 
-                        ? "永久有效，无需填写" 
-                        : "请输入有效期天数"
-                    }
-                    disabled={validityType === 1}
-                  />
-                );
-              }}
-            </Form.Item>
+            {({ getFieldValue }) => {
+              const validityType = getFieldValue('validityType');
+              return validityType === 3 ? (
+                <Form.Item
+                  name="validityDays"
+                  label="有效期（天数）"
+                  rules={[{ required: true, message: '请输入有效期天数！' }, { type: 'integer', min: 1, message: '天数必须是正整数！' }]}
+                >
+                  <InputNumber min={1} style={{ width: '100%' }} placeholder="请输入有效期天数" />
+                </Form.Item>
+              ) : null;
+            }}
           </Form.Item>
           <Form.Item
             name="status"
@@ -573,16 +796,32 @@ const PointRuleList = () => {
               <Option value={0}>禁用</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="ruleDescription"
-            label="描述"
-          >
-            <Input.TextArea rows={4} placeholder="请输入规则描述" />
-          </Form.Item>
+          {editingRule && (
+            <>
+              <Form.Item name="creatorName" label="创建人">
+                <Input disabled />
+              </Form.Item>
+              <Form.Item name="createTime" label="创建时间">
+                <Input disabled />
+              </Form.Item>
+              <Form.Item name="reviewerName" label="审核人">
+                <Input disabled />
+              </Form.Item>
+              <Form.Item name="reviewTime" label="审核时间">
+                <Input disabled />
+              </Form.Item>
+              <Form.Item name="reviewComment" label="审核意见">
+                <Input.TextArea rows={2} disabled />
+              </Form.Item>
+              <Form.Item name="updateTime" label="更新时间">
+                <Input disabled />
+              </Form.Item>
+            </>
+          )}
         </Form>
       </Modal>
     </div>
   );
 };
 
-export default PointRuleList; 
+export default PointRuleList;

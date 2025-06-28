@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm } from 'antd';
+import api from '../api';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -18,13 +19,22 @@ const ExpertList = () => {
   const fetchExperts = async () => {
     setLoading(true);
     try {
-      // 模拟数据
-      const mockData = [
-        { id: 'e1', name: '张专家', expertise: '人工智能', contact: '13812345678', status: 1, description: '在人工智能领域有深厚研究' },
-        { id: 'e2', name: '李教授', expertise: '区块链技术', contact: 'expert_li@example.com', status: 1, description: '区块链技术资深专家' },
-        { id: 'e3', name: '王博士', expertise: '数据分析', contact: 'wang.phd@example.com', status: 0, description: '数据挖掘和分析专家' },
-      ];
-      setData(mockData);
+      const response = await api.get('/api/experts');
+      console.log('专家列表API响应:', response.data);
+      
+      if (response.data) {
+        if (response.data.records) {
+          setData(response.data.records);
+        } else if (Array.isArray(response.data)) {
+          setData(response.data);
+        } else if (response.data.data) {
+          setData(response.data.data.records || response.data.data || []);
+        } else {
+          setData([]);
+        }
+      } else {
+        message.error('获取专家列表失败！');
+      }
     } catch (error) {
       message.error('获取专家列表失败！');
       console.error('Error fetching experts:', error);
@@ -47,6 +57,12 @@ const ExpertList = () => {
 
   const handleDelete = async (id) => {
     try {
+      const response = await api.delete(`/api/experts/${id}`);
+      console.log('删除专家API响应:', {
+        status: response.data.code,
+        data: response.data.data,
+        timestamp: new Date(response.data.timestamp).toLocaleString()
+      });
       message.success('专家删除成功！');
       fetchExperts();
     } catch (error) {
@@ -60,8 +76,20 @@ const ExpertList = () => {
       const values = await form.validateFields();
       setLoading(true);
       if (editingExpert) {
+        const response = await api.put(`/api/experts/${editingExpert.id}`, values);
+        console.log('更新专家API响应:', {
+          status: response.data.code,
+          data: response.data.data,
+          timestamp: new Date(response.data.timestamp).toLocaleString()
+        });
         message.success('专家更新成功！');
       } else {
+        const response = await api.post('/api/experts', values);
+        console.log('添加专家API响应:', {
+          status: response.data.code,
+          data: response.data.data,
+          timestamp: new Date(response.data.timestamp).toLocaleString()
+        });
         message.success('专家添加成功！');
       }
       setIsModalVisible(false);
@@ -184,4 +212,4 @@ const ExpertList = () => {
   );
 };
 
-export default ExpertList; 
+export default ExpertList;

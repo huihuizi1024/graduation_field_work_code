@@ -207,167 +207,155 @@
 }
 
 @keyframes scrollFirst {
-  0%, 100% { transform: translateY(100%); opacity: 0; }
-  5%, 22% { transform: translateY(0); opacity: 1; }
-  27%, 95% { transform: translateY(-100%); opacity: 0; }
+  0%, 25% { opacity: 1; transform: translateY(0); }
+  26%, 100% { opacity: 0; transform: translateY(-100%); }
 }
 
 @keyframes scrollSecond {
-  0%, 22% { transform: translateY(100%); opacity: 0; }
-  27%, 47% { transform: translateY(0); opacity: 1; }
-  52%, 100% { transform: translateY(-100%); opacity: 0; }
+  0%, 25% { opacity: 0; transform: translateY(100%); }
+  26%, 50% { opacity: 1; transform: translateY(0); }
+  51%, 100% { opacity: 0; transform: translateY(-100%); }
 }
 
 @keyframes scrollThird {
-  0%, 47% { transform: translateY(100%); opacity: 0; }
-  52%, 72% { transform: translateY(0); opacity: 1; }
-  77%, 100% { transform: translateY(-100%); opacity: 0; }
+  0%, 50% { opacity: 0; transform: translateY(100%); }
+  51%, 75% { opacity: 1; transform: translateY(0); }
+  76%, 100% { opacity: 0; transform: translateY(-100%); }
 }
 
 @keyframes scrollFourth {
-  0%, 72% { transform: translateY(100%); opacity: 0; }
-  77%, 95% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-100%); opacity: 0; }
+  0%, 75% { opacity: 0; transform: translateY(100%); }
+  76%, 100% { opacity: 1; transform: translateY(0); }
 }
 
 /* 功能板块 */
 .features-section {
   max-width: 1200px;
   margin: 48px auto;
-  padding: 24px;
-  position: relative;
-  z-index: 1;
+  padding: 0 24px;
 }
 
 .section-title {
   text-align: center;
-  margin-bottom: 32px !important;
+  margin-bottom: 48px !important;
   position: relative;
-  display: inline-block;
+  color: #1a1a1a;
 }
 
 .section-title::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
   width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #1890ff, #36cfc9);
+  height: 4px;
+  background: linear-gradient(45deg, #1890ff, #36cfc9);
   border-radius: 2px;
 }
 
 .feature-card {
   text-align: center;
+  padding: 24px;
+  height: 100%;
   transition: all 0.3s;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  height: 100%;
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .feature-icon {
-  font-size: 36px;
+  font-size: 48px;
   margin-bottom: 16px;
 }
 
 .feature-count {
-  margin-top: 12px;
-  font-size: 14px;
-  color: #1890ff;
+  margin-top: 16px;
+  font-size: 20px;
   font-weight: bold;
+  color: #1890ff;
 }
 
 /* 热门课程 */
 .hot-courses-section {
   max-width: 1200px;
   margin: 48px auto;
-  padding: 24px;
-  position: relative;
-  z-index: 1;
+  padding: 0 24px;
 }
 
 .course-card {
   height: 100%;
+  transition: all 0.3s;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
-  border: none;
-  transition: all 0.3s;
 }
 
 .course-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .course-info {
+  margin: 16px 0;
   display: flex;
   justify-content: space-between;
   color: #666;
-  margin: 12px 0;
 }
 
 .course-footer {
+  margin-top: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 12px 0;
-  padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
 }
 
 .course-category {
-  color: #1890ff;
-  font-weight: 500;
-}
-
-.course-views {
-  color: #999;
   font-size: 14px;
 }
 
-/* 底部信息 */
+.course-views {
+  color: #666;
+  font-size: 14px;
+}
+
+/* 底部 */
 .main-footer {
-  background-color: rgba(240, 242, 245, 0.8);
-  backdrop-filter: blur(10px);
-  padding: 48px 24px 24px;
-  margin-top: 48px;
   text-align: center;
-  position: relative;
-  z-index: 1;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  margin-top: 48px;
 }
 
 .main-footer h4 {
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 16px;
 }
 
 .main-footer .ant-space {
   justify-content: center;
 }
 
-/* 响应式设计 */
+/* 响应式布局 */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
-    padding: 12px;
+    gap: 16px;
+    padding: 16px;
   }
 
   .search-section {
-    margin: 16px 0;
     width: 100%;
-    max-width: none;
+    margin: 16px 0;
   }
 
   .login-section {
-    margin: 8px 0;
+    width: 100%;
+    justify-content: center;
   }
 
   .carousel-item {
@@ -389,4 +377,21 @@
   .feature-card {
     margin-bottom: 16px;
   }
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 16px;
+}
+
+.user-avatar:hover {
+  opacity: 0.8;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 } 

@@ -1,13 +1,12 @@
 package com.internship.service;
 
-import com.internship.entity.Transaction;
-import java.util.List;
+import com.internship.dto.PageResponse;
+import com.internship.entity.PointTransaction;
 
 public interface TransactionService {
-    List<Transaction> getAllTransactions();
-    Transaction getTransactionById(Long id);
-    Transaction createTransaction(Transaction transaction);
-    Transaction updateTransaction(Long id, Transaction transaction);
+    PageResponse<PointTransaction> getTransactions(Integer page, Integer size, Long userId, Integer transactionType);
+    PointTransaction getTransactionById(Long id);
+    PointTransaction createTransaction(PointTransaction transaction);
+    PointTransaction updateTransaction(Long id, PointTransaction transaction);
     void deleteTransaction(Long id);
-    List<Transaction> getTransactionsByUserId(String userId);
 }

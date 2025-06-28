@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './NewLogin.css';
 
-const NewLogin = () => {
+const NewLogin = ({ onLoginSuccess }) => {
   const [selectedIdentity, setSelectedIdentity] = useState(null);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [loginType, setLoginType] = useState('password'); // 'password' 或 'phone'
@@ -23,7 +23,7 @@ const NewLogin = () => {
       subtitle: "请输入您的账号和密码",
       icon: "fa-user-circle",
       color: "primary",
-      route: "/student",
+      route: "/",
       loginType: "password" // 学生使用账号密码登录
     },
     expert: {
@@ -132,20 +132,63 @@ const NewLogin = () => {
         alert('请输入手机号和验证码');
         return;
       }
+      const phoneRegex = /^1[3-9]\d{9}$/;
+      if (!phoneRegex.test(phone)) {
+        alert('请输入有效的手机号');
+        return;
+      }
     }
 
     setLoading(true);
     
-    // 模拟登录请求
-    setTimeout(() => {
-      setLoading(false);
-      alert('登录成功！正在跳转...');
+    try {
+      // 模拟登录请求
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // 根据选择的身份跳转到相应页面
-      if (selectedIdentity && identityData[selectedIdentity]) {
-        navigate(identityData[selectedIdentity].route);
+      // 模拟用户数据
+      const mockUserData = {
+        id: 1,
+        username: username || phone,
+        full_name: "张三",
+        role: selectedIdentity === 'admin' ? 4 : selectedIdentity === 'expert' ? 3 : selectedIdentity === 'organization' ? 2 : 1,
+        email: "zhangsan@example.com",
+        phone: phone || "13800138000",
+        points_balance: 2580.50,
+        avatar: null
+      };
+
+      // 将用户信息存储到localStorage
+      localStorage.setItem('userInfo', JSON.stringify(mockUserData));
+      localStorage.setItem('isLoggedIn', 'true');
+
+      // 调用登录成功回调
+      if (onLoginSuccess) {
+        onLoginSuccess(selectedIdentity);
       }
-    }, 1500);
+
+      // 根据身份跳转到相应页面
+      if (selectedIdentity) {
+        switch (selectedIdentity) {
+          case 'admin':
+            navigate('/admin');
+            break;
+          case 'expert':
+            navigate('/expert');
+            break;
+          case 'organization':
+            navigate('/institution');
+            break;
+          case 'student':
+          default:
+            navigate('/');
+            break;
+        }
+      }
+    } catch (error) {
+      alert('登录失败，请稍后重试');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 处理键盘事件
