@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, Typography, Tag, message } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, GiftOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser } from '../api';
 import './PointsMall.css';
 
 const { Title, Text } = Typography;
@@ -11,6 +12,26 @@ const PointsMall = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pointsLoading, setPointsLoading] = useState(false);
+
+  // 获取当前用户信息
+  const fetchCurrentUser = async () => {
+    setPointsLoading(true);
+    try {
+      const response = await getCurrentUser();
+      const userData = response.data;
+      setUserInfo({
+        ...userData,
+        pointsBalance: userData.pointsBalance || 0
+      });
+      // 更新localStorage缓存
+      localStorage.setItem('userInfo', JSON.stringify(userData));
+    } catch (error) {
+      console.error('获取用户信息失败:', error);
+    } finally {
+      setPointsLoading(false);
+    }
+  };
 
   // 模拟商品数据（实际项目中应该从API获取）
   const mockProducts = [
@@ -65,11 +86,19 @@ const PointsMall = () => {
   ];
 
   useEffect(() => {
-    // 从localStorage获取用户信息
+    // 先从localStorage读取用户信息
     const storedUserInfo = localStorage.getItem('userInfo');
     if (storedUserInfo) {
-      setUserInfo(JSON.parse(storedUserInfo));
+      try {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        setUserInfo(parsedUserInfo);
+      } catch (error) {
+        console.error('解析localStorage用户信息失败:', error);
+      }
     }
+    
+    // 仍然从API获取最新用户信息
+    fetchCurrentUser();
     // 设置商品数据
     setProducts(mockProducts);
   }, []);
@@ -82,7 +111,7 @@ const PointsMall = () => {
       return;
     }
 
-    if (userInfo.points_balance < product.points) {
+    if (userInfo.pointsBalance < product.points) {
       message.error('积分不足');
       return;
     }
@@ -95,9 +124,8 @@ const PointsMall = () => {
       // 更新用户积分（实际项目中应该调用API）
       const newUserInfo = {
         ...userInfo,
-        points_balance: userInfo.points_balance - product.points
+        pointsBalance: userInfo.pointsBalance - product.points
       };
-      localStorage.setItem('userInfo', JSON.stringify(newUserInfo));
       setUserInfo(newUserInfo);
     } catch (error) {
       message.error('兑换失败，请稍后重试');
@@ -127,14 +155,14 @@ const PointsMall = () => {
           </Title>
         </div>
         <div className="points-info">
-          {userInfo ? (
+        {pointsLoading ? (
             <Tag color="blue" icon={<UserOutlined />}>
-              当前积分：{userInfo.points_balance}
+              加载中...
             </Tag>
           ) : (
-            <Button type="primary" onClick={() => navigate('/login')}>
-              登录查看积分
-            </Button>
+            <Tag color="blue" icon={<UserOutlined />}>
+              当前积分：{userInfo?.pointsBalance || 0}
+            </Tag>
           )}
         </div>
       </div>
@@ -176,4 +204,4 @@ const PointsMall = () => {
   );
 };
 
-export default PointsMall; 
+export default PointsMall;
