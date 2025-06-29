@@ -126,7 +126,7 @@ CREATE TABLE user (
     username VARCHAR(100) NOT NULL UNIQUE COMMENT '用户名/学号',
     password_hash VARCHAR(255) NOT NULL COMMENT '加密后的密码',
     full_name VARCHAR(100) COMMENT '真实姓名',
-    role INT NOT NULL COMMENT '角色：1-学生, 2-专家, 3-机构, 4-管理员',
+    role INT NOT NULL COMMENT '角色：1-学生, 2-机构, 3-专家, 4-管理员',
 
     email VARCHAR(100) UNIQUE COMMENT '邮箱',
     phone VARCHAR(20) UNIQUE COMMENT '手机号',
@@ -397,7 +397,7 @@ INSERT INTO user (
     username, password_hash, full_name, role, email, phone, institution_id, status, points_balance
 ) VALUES
 ('admin', '123', '系统管理员', 4, 'admin@example.com', '13800138000', 1, 1, 1000.00),
-('teacher1', '123', '张老师', 2, 'teacher1@example.com', '13800138001', 1, 1, 500.00),
+('organization1', '123', '重庆大学', 2, 'organization1@example.com', '13800138001', 1, 1, 500.00),
 ('student1', '123', '李同学', 1, 'student1@example.com', '13800138002', 2, 1, 200.00),
 ('expert1', '123', '王专家', 3, 'expert1@example.com', '13800138003', 3, 1, 800.00);
 

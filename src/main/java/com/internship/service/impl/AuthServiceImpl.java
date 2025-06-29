@@ -47,10 +47,10 @@ public class AuthServiceImpl implements AuthService {
                 expectedRole = 1;
                 break;
             case "expert":
-                expectedRole = 2;
+                expectedRole = 3;
                 break;
             case "organization":
-                expectedRole = 3;
+                expectedRole = 2;
                 break;
             case "admin":
                 expectedRole = 4;
