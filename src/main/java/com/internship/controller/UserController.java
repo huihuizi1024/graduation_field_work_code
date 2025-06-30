@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "用户管理", description = "系统用户管理功能")
@@ -19,6 +21,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Operation(summary = "获取当前用户信息")
+    @GetMapping("/me")
+    public ApiResponse<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        log.info("获取当前用户信息请求, 用户名: {}", username);
+        return userService.getCurrentUser(username);
+    }
 
     @Operation(summary = "创建用户")
     @PostMapping

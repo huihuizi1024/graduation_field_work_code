@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,6 +22,23 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Override
+    public ApiResponse<User> getCurrentUser(String username) {
+        try {
+            Optional<User> userOpt = userRepository.findByUsername(username);
+            if (!userOpt.isPresent()) {
+                log.error("用户不存在: {}", username);
+                throw new BusinessException("用户不存在");
+            }
+            User user = userOpt.get();
+            log.info("获取当前用户信息成功: {}", username);
+            return ApiResponse.success(user);
+        } catch (Exception e) {
+            log.error("获取当前用户信息失败: {}", e.getMessage());
+            throw new BusinessException("获取用户信息失败");
+        }
+    }
 
     @Override
     @Transactional

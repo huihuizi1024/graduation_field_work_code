@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio } from 'antd';
+import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input } from 'antd';
 import { 
   UserOutlined, 
   UploadOutlined, 
@@ -14,64 +14,70 @@ import {
   ArrowLeftOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser, updateUserInfo } from '../api';
 import './UserProfile.css';
 
 const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
 
-// 模拟用户数据
-const mockUserData = {
-  id: 1,
-  username: "student001",
-  full_name: "张三",
-  role: 1,
-  email: "zhangsan@example.com",
-  phone: "13800138000",
-  points_balance: 2580.50,
-  avatar: null
-};
-
-// 模拟课程数据
-const mockCourses = [
-  {
-    id: 1,
-    name: "Python编程入门",
-    progress: 60,
-    status: "学习中",
-    startTime: "2025-06-01"
-  },
-  {
-    id: 2,
-    name: "数据结构与算法",
-    progress: 100,
-    status: "已完成",
-    startTime: "2025-05-15"
-  }
-];
-
-// 模拟订单数据
-const mockOrders = [
-  {
-    id: 1,
-    productName: "高级学习笔记本",
-    points: 500,
-    status: "已完成",
-    orderTime: "2025-06-20"
-  },
-  {
-    id: 2,
-    name: "Python进阶课程",
-    points: 2000,
-    status: "处理中",
-    orderTime: "2025-06-25"
-  }
-];
-
 const UserProfile = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(mockUserData);
-  const [activeTab, setActiveTab] = useState('courses');
   const [selectedMenuItem, setSelectedMenuItem] = useState('profile');
+  const [activeTab, setActiveTab] = useState('1');
+  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    username: '',
+    email: '',
+    phone: ''
+  });
+
+  // 获取当前用户信息
+  const fetchCurrentUser = async () => {
+    setLoading(true);
+    try {
+      const response = await getCurrentUser();
+      if (!response || !response.data) {
+        throw new Error('无效的API响应');
+      }
+      const userData = response.data;
+      setUserInfo({
+        username: userData.username || '',
+        fullName: userData.fullName || '',
+        role: userData.role || 0,
+        email: userData.email || '',
+        phone: userData.phone || '',
+        pointsBalance: userData.pointsBalance || 0,
+        institution: userData.institution || '',
+        status: userData.status === 1 ? '正常' : '禁用',
+        avatar: userData.avatar || ''
+      });
+      // 更新localStorage缓存
+      localStorage.setItem('userInfo', JSON.stringify(userData));
+    } catch (error) {
+      console.error('获取用户信息失败:', error);
+      message.error('获取用户信息失败: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // 先从localStorage读取用户信息
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUserInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        setUserInfo(parsedUserInfo);
+      } catch (error) {
+        console.error('解析localStorage用户信息失败:', error);
+      }
+    }
+    
+    // 仍然从API获取最新用户信息
+    fetchCurrentUser();
+  }, []);
 
   // 头像上传配置
   const uploadProps = {
@@ -93,7 +99,7 @@ const UserProfile = () => {
       // 这里使用FileReader模拟预览
       const reader = new FileReader();
       reader.onload = (e) => {
-        setUserData(prev => ({
+        setUserInfo(prev => ({
           ...prev,
           avatar: e.target.result
         }));
@@ -137,144 +143,148 @@ const UserProfile = () => {
     setSelectedMenuItem(key);
   };
 
+  const handleEditClick = () => {
+    setEditing(true);
+    setEditForm({
+      username: userInfo.username,
+      email: userInfo.email,
+      phone: userInfo.phone
+    });
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      await updateUserInfo(editForm);
+      setUserInfo({
+        ...userInfo,
+        ...editForm
+      });
+      setEditing(false);
+      message.success('信息更新成功');
+    } catch (error) {
+      message.error('更新失败: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 渲染个人信息
   const renderProfile = () => (
     <div className="profile-info">
-      <div className="avatar-wrapper">
-        <Upload {...uploadProps}>
-          <Badge 
-            count={
-              <div
-                style={{
-                  width: 24,
-                  height: 24,
-                  lineHeight: '24px',
-                  borderRadius: '50%',
-                  backgroundColor: '#1890ff',
-                  color: '#fff',
-                  textAlign: 'center',
-                }}
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '40px 0' }}>
+          <Spin size="large" />
+        </div>
+      ) : userInfo ? (
+        <>
+          <div className="avatar-wrapper">
+            <Upload {...uploadProps}>
+              <Badge 
+                count={
+                  <div
+                    style={{
+                      width: 24,
+                      height: 24,
+                      lineHeight: '24px',
+                      borderRadius: '50%',
+                      backgroundColor: '#1890ff',
+                      color: '#fff',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <UploadOutlined style={{ fontSize: '14px' }} />
+                  </div>
+                } 
+                offset={[-12, 85]}
               >
-                <UploadOutlined style={{ fontSize: '14px' }} />
-              </div>
-            } 
-            offset={[-12, 85]}
-          >
-            <Avatar 
-              size={120}
-              src={userData.avatar} 
-              icon={<UserOutlined />}
-            />
-          </Badge>
-        </Upload>
-        <div 
-          className="points-display-profile"
-          onClick={() => navigate('/points-mall')}
-          style={{ cursor: 'pointer' }}
-        >
-          <GiftOutlined /> {userData.points_balance} 积分
-        </div>
-      </div>
-      <Card title="基本信息" extra={<Button type="link" icon={<EditOutlined />}>编辑</Button>}>
-        <div className="info-item">
-          <span className="label">用户名：</span>
-          <span className="value">{userData.username}</span>
-        </div>
-        <div className="info-item">
-          <span className="label">真实姓名：</span>
-          <span className="value">{userData.full_name}</span>
-        </div>
-        <div className="info-item">
-          <span className="label">角色：</span>
-          <span className="value">
-            <Tag color="blue">{userData.role === 1 ? '学生' : '教师'}</Tag>
-          </span>
-        </div>
-        <div className="info-item">
-          <span className="label">邮箱：</span>
-          <span className="value">{userData.email}</span>
-        </div>
-        <div className="info-item">
-          <span className="label">手机号：</span>
-          <span className="value">{userData.phone}</span>
-        </div>
-      </Card>
-    </div>
-  );
-
-  // 渲染课程列表
-  const renderCourses = () => (
-    <div className="courses-container">
-      <div className="courses-header">
-        <h2>我的课程</h2>
-        <div className="courses-filter">
-          <Radio.Group defaultValue="all" buttonStyle="solid">
-            <Radio.Button value="all">全部课程</Radio.Button>
-            <Radio.Button value="learning">学习中</Radio.Button>
-            <Radio.Button value="completed">已完成</Radio.Button>
-          </Radio.Group>
-        </div>
-      </div>
-      <div className="courses-list">
-        {mockCourses.map(course => (
-          <Card 
-            key={course.id} 
-            className="course-card" 
-            hoverable
-            extra={
-              <Tag color={course.status === "已完成" ? "success" : "processing"}>
-                {course.status}
-              </Tag>
-            }
-          >
-            <div className="course-info">
-              <div className="course-title-wrapper">
-                <h3 className="course-title">{course.name}</h3>
-              </div>
-              <div className="course-progress">
-                <div className="progress-text">
-                  <span>学习进度</span>
-                  <span>{course.progress}%</span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: `${course.progress}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="course-meta">
-                <div className="course-time">
-                  <ClockCircleOutlined /> 开始时间：{course.startTime}
-                </div>
-                <Button type="link" icon={<RightOutlined />}>继续学习</Button>
-              </div>
-            </div>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-
-  // 渲染订单列表
-  const renderOrders = () => (
-    <div className="orders-list">
-      {mockOrders.map(order => (
-        <Card key={order.id} className="order-card">
-          <div className="order-info">
-            <h3>{order.productName}</h3>
-            <div className="order-meta">
-              <Tag color="gold">{order.points} 积分</Tag>
-              <Tag color={order.status === "已完成" ? "success" : "processing"}>
-                {order.status}
-              </Tag>
-            </div>
-            <div className="order-time">
-              下单时间：{order.orderTime}
+                <Avatar 
+                  size={120}
+                  src={userInfo.avatar} 
+                  icon={<UserOutlined />}
+                />
+              </Badge>
+            </Upload>
+            <div 
+              className="points-display-profile"
+              onClick={() => navigate('/points-mall')}
+              style={{ cursor: 'pointer' }}
+            >
+              <GiftOutlined /> {userInfo.pointsBalance} 积分
             </div>
           </div>
-        </Card>
-      ))}
+            <Card title="基本信息" extra={
+              <Button 
+                type="link" 
+                icon={<EditOutlined />}
+                onClick={handleEditClick}
+              >
+                编辑
+              </Button>
+            }>
+            <div className="info-item">
+              <span className="label">用户名：</span>
+              {editing ? (
+                <Input 
+                  value={editForm.username}
+                  onChange={(e) => setEditForm({...editForm, username: e.target.value})}
+                />
+              ) : (
+                <span className="value">{userInfo.username}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <span className="label">真实姓名：</span>
+              <span className="value">{userInfo.fullName}</span>
+            </div>
+            <div className="info-item">
+              <span className="label">角色：</span>
+              <span className="value">
+                <Tag color="blue">
+                  {userInfo.role === 1 ? '学生' : 
+                   userInfo.role === 2 ? '专家' : 
+                   userInfo.role === 3 ? '机构' : 
+                   userInfo.role === 4 ? '管理员' : '未知角色'}
+                </Tag>
+              </span>
+            </div>
+            <div className="info-item">
+              <span className="label">邮箱：</span>
+              {editing ? (
+                <Input 
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                />
+              ) : (
+                <span className="value">{userInfo.email}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <span className="label">手机号：</span>
+              {editing ? (
+                <Input 
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                />
+              ) : (
+                <span className="value">{userInfo.phone}</span>
+              )}
+            </div>
+            {editing && (
+              <div className="edit-buttons">
+                <Button type="primary" onClick={handleSave}>保存</Button>
+                <Button onClick={() => setEditing(false)}>取消</Button>
+              </div>
+            )}
+          </Card>
+        </>
+      ) : (
+        <div style={{ textAlign: 'center', padding: '40px 0' }}>
+          <Button type="primary" onClick={() => navigate('/login')}>
+            请先登录
+          </Button>
+        </div>
+      )}
     </div>
   );
 
@@ -303,8 +313,28 @@ const UserProfile = () => {
         <Layout style={{ padding: '24px 0', background: 'transparent' }}>
           <Content className="profile-content">
             {selectedMenuItem === 'profile' && renderProfile()}
-            {selectedMenuItem === 'courses' && renderCourses()}
-            {selectedMenuItem === 'orders' && renderOrders()}
+            {selectedMenuItem === 'courses' && (
+              <div className="courses-container">
+                <div className="courses-header">
+                  <h2>我的课程</h2>
+                  <div className="courses-filter">
+                    <Radio.Group defaultValue="all" buttonStyle="solid">
+                      <Radio.Button value="all">全部课程</Radio.Button>
+                      <Radio.Button value="learning">学习中</Radio.Button>
+                      <Radio.Button value="completed">已完成</Radio.Button>
+                    </Radio.Group>
+                  </div>
+                </div>
+                <div className="courses-list">
+                  {/* 课程列表渲染逻辑 */}
+                </div>
+              </div>
+            )}
+            {selectedMenuItem === 'orders' && (
+              <div className="orders-list">
+                {/* 订单列表渲染逻辑 */}
+              </div>
+            )}
             {selectedMenuItem === 'points' && (
               <div className="points-history">
                 <Card 
@@ -342,4 +372,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile; 
+export default UserProfile;

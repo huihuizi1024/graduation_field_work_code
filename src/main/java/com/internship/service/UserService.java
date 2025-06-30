@@ -12,4 +12,5 @@ public interface UserService {
     ApiResponse<User> getUserById(Long id);
     ApiResponse<PageResponse<User>> getUsers(Integer page, Integer size, String username, Integer role, Integer status);
     ApiResponse<Void> changeUserStatus(Long id, Integer status);
+    ApiResponse<User> getCurrentUser(String username);
 }
