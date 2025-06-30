@@ -15,6 +15,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, updateUserInfo } from '../api';
+import EditProfileModal from './EditProfileModal'; 
 import './UserProfile.css';
 
 const { Header, Content, Sider } = Layout;
@@ -26,12 +27,7 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState('1');
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState({
-    username: '',
-    email: '',
-    phone: ''
-  });
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // 获取当前用户信息
   const fetchCurrentUser = async () => {
@@ -64,7 +60,6 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    // 先从localStorage读取用户信息
     const storedUserInfo = localStorage.getItem('userInfo');
     if (storedUserInfo) {
       try {
@@ -74,10 +69,38 @@ const UserProfile = () => {
         console.error('解析localStorage用户信息失败:', error);
       }
     }
-    
-    // 仍然从API获取最新用户信息
     fetchCurrentUser();
   }, []);
+
+  const handleEdit = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleUpdateProfile = async (values) => {
+    try {
+      setLoading(true);
+      // This is the actual API call to the backend.
+      const response = await updateUserInfo(values); 
+      
+      if (response && response.code === 200) {
+        // Refetch to get the most updated data and update localStorage
+        await fetchCurrentUser(); 
+        
+        setIsModalVisible(false);
+        message.success('信息更新成功！');
+      } else {
+        throw new Error(response?.message || '更新失败');
+      }
+    } catch (error) {
+      message.error('更新失败: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 头像上传配置
   const uploadProps = {
@@ -143,36 +166,10 @@ const UserProfile = () => {
     setSelectedMenuItem(key);
   };
 
-  const handleEditClick = () => {
-    setEditing(true);
-    setEditForm({
-      username: userInfo.username,
-      email: userInfo.email,
-      phone: userInfo.phone
-    });
-  };
-
-  const handleSave = async () => {
-    try {
-      setLoading(true);
-      await updateUserInfo(editForm);
-      setUserInfo({
-        ...userInfo,
-        ...editForm
-      });
-      setEditing(false);
-      message.success('信息更新成功');
-    } catch (error) {
-      message.error('更新失败: ' + error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // 渲染个人信息
   const renderProfile = () => (
     <div className="profile-info">
-      {loading ? (
+      {loading && !userInfo ? ( // Show spinner only on initial load
         <div style={{ textAlign: 'center', padding: '40px 0' }}>
           <Spin size="large" />
         </div>
@@ -217,21 +214,14 @@ const UserProfile = () => {
               <Button 
                 type="link" 
                 icon={<EditOutlined />}
-                onClick={handleEditClick}
+                onClick={handleEdit}
               >
                 编辑
               </Button>
             }>
             <div className="info-item">
               <span className="label">用户名：</span>
-              {editing ? (
-                <Input 
-                  value={editForm.username}
-                  onChange={(e) => setEditForm({...editForm, username: e.target.value})}
-                />
-              ) : (
-                <span className="value">{userInfo.username}</span>
-              )}
+              <span className="value">{userInfo.username}</span>
             </div>
             <div className="info-item">
               <span className="label">真实姓名：</span>
@@ -250,33 +240,23 @@ const UserProfile = () => {
             </div>
             <div className="info-item">
               <span className="label">邮箱：</span>
-              {editing ? (
-                <Input 
-                  value={editForm.email}
-                  onChange={(e) => setEditForm({...editForm, email: e.target.value})}
-                />
-              ) : (
-                <span className="value">{userInfo.email}</span>
-              )}
+              <span className="value">{userInfo.email}</span>
             </div>
             <div className="info-item">
               <span className="label">手机号：</span>
-              {editing ? (
-                <Input 
-                  value={editForm.phone}
-                  onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
-                />
-              ) : (
-                <span className="value">{userInfo.phone}</span>
-              )}
+              <span className="value">{userInfo.phone}</span>
             </div>
-            {editing && (
-              <div className="edit-buttons">
-                <Button type="primary" onClick={handleSave}>保存</Button>
-                <Button onClick={() => setEditing(false)}>取消</Button>
-              </div>
-            )}
           </Card>
+
+          {userInfo && (
+              <EditProfileModal
+                  visible={isModalVisible}
+                  onCancel={handleCancelModal}
+                  onOk={handleUpdateProfile}
+                  initialData={userInfo}
+                  role="student" 
+              />
+          )}
         </>
       ) : (
         <div style={{ textAlign: 'center', padding: '40px 0' }}>

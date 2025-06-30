@@ -255,7 +255,14 @@ const Register = () => {
           alert('请输入您的专业领域');
           return;
         }
-        await registerExpert(data);
+        
+        // Prepare data for expert registration, ensuring 'fullName' is included
+        const expertData = {
+          ...data,
+          fullName: data.name 
+        };
+        
+        await registerExpert(expertData);
         alert('专家账号注册成功！');
       }
       navigate('/login');

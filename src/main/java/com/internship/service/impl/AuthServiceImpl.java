@@ -8,6 +8,7 @@ import com.internship.dto.PersonalRegistrationRequest;
 import com.internship.entity.Expert;
 import com.internship.entity.Institution;
 import com.internship.entity.User;
+import com.internship.config.JwtTokenProvider;
 import com.internship.repository.ExpertRepository;
 import com.internship.repository.InstitutionRepository;
 import com.internship.repository.UserRepository;
@@ -32,6 +33,8 @@ public class AuthServiceImpl implements AuthService {
     private ExpertRepository expertRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public ResponseEntity<?> authenticate(LoginRequest loginRequest) {
@@ -50,7 +53,8 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.badRequest().body(Map.of("message", "身份不匹配，请选择正确的登录类型"));
         }
 
-        String token = UUID.randomUUID().toString();
+        final String token = jwtTokenProvider.generateToken(dbUser);
+        
         return ResponseEntity.ok(Map.of(
             "message", "登录成功",
             "token", token,

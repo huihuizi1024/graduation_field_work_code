@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
+import com.internship.dto.UserUpdateDTO;
 import com.internship.entity.User;
 import com.internship.exception.BusinessException;
 import com.internship.repository.UserRepository;
@@ -12,13 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserRepository, User> implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -143,5 +145,18 @@ public class UserServiceImpl implements UserService {
             log.error("更新用户状态失败: {}", e.getMessage());
             throw new BusinessException("更新用户状态失败");
         }
+    }
+
+    @Override
+    public boolean updateCurrentUser(String username, UserUpdateDTO userUpdateDTO) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setFullName(userUpdateDTO.getFullName());
+            user.setEmail(userUpdateDTO.getEmail());
+            user.setPhone(userUpdateDTO.getPhone());
+            return userRepository.updateById(user) > 0;
+        }
+        return false;
     }
 }

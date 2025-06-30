@@ -125,7 +125,7 @@ const MainPage = ({
         ];
       case '3': // expert
         return [
-          { key: 'profile', label: '专家中心', icon: <UserOutlined /> },
+          { key: 'profile', label: '专家中心', icon: <UserOutlined />, onClick: () => navigate('/expert/profile') },
           { key: 'review', label: '课程评审', icon: <ScheduleOutlined /> },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];

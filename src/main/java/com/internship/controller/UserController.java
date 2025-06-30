@@ -2,6 +2,7 @@ package com.internship.controller;
 
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
+import com.internship.dto.UserUpdateDTO;
 import com.internship.entity.User;
 import com.internship.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,9 +10,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 @Tag(name = "用户管理", description = "系统用户管理功能")
 @RestController
@@ -83,5 +88,19 @@ public class UserController {
             @Parameter(description = "状态: 0-禁用, 1-启用") @RequestParam Integer status) {
         log.info("修改用户状态请求, ID: {}, 状态: {}", id, status);
         return userService.changeUserStatus(id, status);
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<ApiResponse<Void>> updateCurrentUser(@Valid @RequestBody UserUpdateDTO userUpdateDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        boolean success = userService.updateCurrentUser(username, userUpdateDTO);
+
+        if (success) {
+            return ResponseEntity.ok(ApiResponse.success("用户信息更新成功"));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("用户信息更新失败"));
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.internship.service;
 
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
+import com.internship.dto.UserUpdateDTO;
 import com.internship.entity.User;
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface UserService {
     ApiResponse<PageResponse<User>> getUsers(Integer page, Integer size, String username, Integer role, Integer status);
     ApiResponse<Void> changeUserStatus(Long id, Integer status);
     ApiResponse<User> getCurrentUser(String username);
+    boolean updateCurrentUser(String username, UserUpdateDTO userUpdateDTO);
 }

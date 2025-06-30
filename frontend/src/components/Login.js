@@ -73,17 +73,12 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
             }
 
 
-            // 根据当前选择的身份导航
-            const routes = {
-                student: '/',
-                expert: '/expert',
-                admin: '/admin',
-                organization: '/institution'
-            };
-            navigate(routes[currentIdentity] || '/');
-
-            // 通知父组件登录成功
-            onLoginSuccess?.(currentIdentity);
+            // Redirect user based on role
+            if (response.user.role === 4) { // 4 is for admin
+                navigate('/admin');
+            } else {
+                navigate('/');
+            }
 
             } catch (error) {
                 console.error('登录失败:', error);

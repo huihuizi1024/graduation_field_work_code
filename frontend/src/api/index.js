@@ -81,14 +81,10 @@ export const logout = () => {
 };
 
 // 获取当前用户信息
-export const getCurrentUser = () => {
-  return api.get('/api/users/me');
-};
+export const getCurrentUser = () => api.get('/api/users/me');
 
 // 更新用户信息
-export const updateUserInfo = (userData) => {
-  return api.put('/api/users/me', userData);
-};
+export const updateUserInfo = (data) => api.put('/api/users/me', data);
 
 // 个人和专家注册
 export const registerPersonal = (userData) => {
@@ -104,5 +100,11 @@ export const registerOrganization = (userData) => {
 export const registerExpert = (registrationData) => {
   return api.post('/api/auth/register/expert', registrationData);
 };
+
+// 获取当前专家信息
+export const getCurrentExpert = () => api.get('/api/experts/me');
+
+// 更新当前专家信息
+export const updateCurrentExpert = (data) => api.put('/api/experts/me', data);
 
 export default api;
