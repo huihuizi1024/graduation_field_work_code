@@ -1,13 +1,66 @@
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #F5F7FA;
+:root {
+  --primary: #165DFF;
+  --primary-light: #4080FF;
+  --primary-dark: #0E4BD6;
+  --neutral-50: #FAFBFC;
+  --neutral-100: #F2F3F5;
+  --neutral-200: #E5E6EB;
+  --neutral-300: #C9CDD4;
+  --neutral-400: #A9AEB8;
+  --neutral-500: #86909C;
+  --neutral-600: #6B7785;
+  --neutral-700: #4E5969;
+  --neutral-800: #272E3B;
+  --neutral-900: #1D2129;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.form-input:focus {
-  box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: linear-gradient(135deg, #EBF4FF 0%, #E0F2FE 100%);
+  line-height: 1.6;
+  color: var(--neutral-700);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.1);
+  border-color: var(--primary);
+}
+
+.form-input,
+.form-textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--neutral-300);
+  background-color: #ffffff;
+}
+
+.form-input:hover,
+.form-textarea:hover {
+  border-color: var(--neutral-400);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--neutral-400);
+  opacity: 1;
 }
 
 @keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -19,34 +72,59 @@ body {
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.4s ease-out forwards;
 }
 
 .register-tabs {
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
+  border-bottom: 1px solid var(--neutral-200);
 }
 
 .register-tab {
-  padding: 0.5rem 1rem;
-  border-bottom: 2px solid transparent;
+  padding: 1rem 2rem;
+  border-bottom: 3px solid transparent;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--neutral-600);
+  position: relative;
+  border-radius: 8px 8px 0 0;
 }
 
 .register-tab:hover {
-  color: #165DFF;
+  color: var(--primary);
+  background-color: var(--neutral-50);
 }
 
 .register-tab.tab-active {
-  border-color: #165DFF;
-  color: #165DFF;
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: #ffffff;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.register-tab.tab-active::before {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 2px;
 }
 
 .register-content {
   display: none;
+  animation: slideUp 0.4s ease-out;
 }
 
 .register-content.active {
@@ -58,7 +136,8 @@ body {
 }
 
 .bg-blur {
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .content-auto {
@@ -72,5 +151,285 @@ body {
 .form-error {
   color: #F53F3F;
   font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-error::before {
+  content: '⚠️';
+  font-size: 0.875rem;
+}
+
+/* 自定义复选框样式 */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  border: 2px solid var(--neutral-300);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--primary);
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.1);
+}
+
+/* 自定义单选按钮样式 */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #ffffff;
+  border: 2px solid var(--neutral-300);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input[type="radio"]:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+input[type="radio"]:hover {
+  border-color: var(--primary);
+}
+
+input[type="radio"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.1);
+}
+
+/* 按钮悬停效果 */
+button[type="submit"] {
+  position: relative;
+  overflow: hidden;
+}
+
+button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+/* 响应式设计优化 */
+@media (max-width: 768px) {
+  .register-tabs {
+    margin-bottom: 1.5rem;
+  }
+  
+  .register-tab {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-100);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-500);
+}
+
+/* 选择框下拉箭头 */
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+}
+
+/* 禁用状态样式 */
+select:disabled {
+  background-color: var(--neutral-50);
+  color: var(--neutral-400);
+  cursor: not-allowed;
+  border-color: var(--neutral-200);
+}
+
+input:disabled {
+  background-color: var(--neutral-50);
+  color: var(--neutral-400);
+  cursor: not-allowed;
+  border-color: var(--neutral-200);
+}
+
+/* 错误状态样式 */
+.border-red-300 {
+  border-color: #fca5a5;
+}
+
+.focus\:border-red-500:focus {
+  border-color: #ef4444;
+}
+
+.text-red-400 {
+  color: #f87171;
+}
+
+/* 表单错误提示增强 */
+.form-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.form-error::before {
+  content: '⚠️';
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* 成功状态样式 */
+.border-green-300 {
+  border-color: #86efac;
+}
+
+.focus\:border-green-500:focus {
+  border-color: #22c55e;
+}
+
+.text-green-400 {
+  color: #4ade80;
+}
+
+/* 验证成功提示 */
+.form-success {
+  color: #16a34a;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.form-success::before {
+  content: '✅';
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* 统一社会信用代码格式化显示 */
+.credit-code-format {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* 级联选择器动画 */
+.region-select {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.region-select:disabled {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+
+/* 表单加载状态 */
+.form-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.form-loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+}
+
+/* 提示信息样式 */
+.validation-hint {
+  font-size: 0.75rem;
+  color: var(--neutral-500);
   margin-top: 0.25rem;
+  line-height: 1.3;
+}
+
+/* 响应式改进 */
+@media (max-width: 640px) {
+  .form-error {
+    font-size: 0.8rem;
+  }
+  
+  .validation-hint {
+    font-size: 0.7rem;
+  }
 } 
