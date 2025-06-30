@@ -3,6 +3,7 @@ import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Ta
 import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, TeamOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
 import './MainPage.css';
 import { useNavigate } from 'react-router-dom';
+import api from '../api';
 
 const { Title, Paragraph } = Typography;
 
@@ -40,31 +41,19 @@ const MainPage = ({
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setCourses([
-        {
-          id: 1,
-          title: "Python编程基础",
-          description: "零基础入门Python编程",
-          category: "编程技术",
-          views: 1200
-        },
-        {
-          id: 2,
-          title: "数据分析实战",
-          description: "使用Excel和Python进行数据分析",
-          category: "数据分析",
-          views: 800
-        },
-        {
-          id: 3,
-          title: "职场沟通技巧",
-          description: "提升职场沟通能力",
-          category: "职场技能",
-          views: 1500
-        }
-      ]);
+      const res = await api.get('/api/platform-activities', {
+        params: { page: 0, size: 3 }
+      });
+      if (res.code === 200 && res.data && res.data.records) {
+        const mapped = res.data.records.map(item => ({
+          id: item.id,
+          title: item.activityName || item.title || '活动',
+          description: item.description || item.activityDesc || '',
+          category: item.activityType,
+          views: item.participantCount || 0
+        }));
+        setCourses(mapped);
+      }
       setLoading(false);
     } catch (error) {
       message.error('获取课程列表失败');

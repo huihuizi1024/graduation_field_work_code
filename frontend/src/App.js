@@ -16,8 +16,8 @@ import UserProfile from './components/UserProfile';
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState('main');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('isAuthenticated') === 'true');
+  const [userRole, setUserRole] = useState(() => localStorage.getItem('role') || '');
   const navigate = useNavigate();
 
   const handleLoginSuccess = (role) => {
@@ -37,7 +37,9 @@ function AppContent() {
     setUserRole('');
     setCurrentPage('main');
     localStorage.removeItem('userInfo');
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    localStorage.removeItem('role');
+    localStorage.removeItem('isAuthenticated');
     navigate('/');
   };
 

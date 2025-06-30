@@ -3,6 +3,7 @@ import { Card, Row, Col, Button, Typography, Tag, message } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, GiftOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './PointsMall.css';
+import api from '../api';
 
 const { Title, Text } = Typography;
 
@@ -12,7 +13,7 @@ const PointsMall = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 模拟商品数据（实际项目中应该从API获取）
+  // 本地占位数据
   const mockProducts = [
     {
       id: 1,
@@ -70,8 +71,31 @@ const PointsMall = () => {
     if (storedUserInfo) {
       setUserInfo(JSON.parse(storedUserInfo));
     }
-    // 设置商品数据
-    setProducts(mockProducts);
+
+    // 尝试从后端获取商品列表（使用积分规则接口示例）
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get('/api/point-rules', { params: { page: 0, size: 10 } });
+        if (res.code === 200 && res.data && res.data.records) {
+          const mapped = res.data.records.map(rule => ({
+            id: rule.id,
+            name: rule.ruleName || '积分商品',
+            description: rule.description || rule.ruleDesc || '',
+            points: rule.points || 100,
+            image: 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg',
+            category: '积分规则'
+          }));
+          setProducts(mapped);
+          return;
+        }
+      } catch (e) {
+        console.error('获取商品列表失败，使用本地mock', e);
+      }
+      // 如果失败则使用mock数据
+      setProducts(mockProducts);
+    };
+
+    fetchProducts();
   }, []);
 
   // 兑换商品

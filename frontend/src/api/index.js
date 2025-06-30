@@ -52,6 +52,12 @@ api.interceptors.request.use(config => {
     config.url = baseUrl + (params.toString() ? `?${params.toString()}` : '');
   }
 
+  // 注入令牌
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+
   return config;
 });
 

@@ -108,7 +108,27 @@ public class PlatformActivityServiceImpl implements PlatformActivityService {
     @Override
     public Map<String, Object> getPlatformActivityStatistics() {
         Map<String, Object> stats = new HashMap<>();
-        // TODO: 实现统计逻辑
+        // 统计全部活动数量
+        long total = platformActivityRepository.selectCount(null);
+
+        // 统计不同状态的活动数量
+        LambdaQueryWrapper<PlatformActivity> inProgressWrapper = new LambdaQueryWrapper<>();
+        inProgressWrapper.eq(PlatformActivity::getStatus, 1);
+        long inProgress = platformActivityRepository.selectCount(inProgressWrapper);
+
+        LambdaQueryWrapper<PlatformActivity> finishedWrapper = new LambdaQueryWrapper<>();
+        finishedWrapper.eq(PlatformActivity::getStatus, 0);
+        long finished = platformActivityRepository.selectCount(finishedWrapper);
+
+        LambdaQueryWrapper<PlatformActivity> canceledWrapper = new LambdaQueryWrapper<>();
+        canceledWrapper.eq(PlatformActivity::getStatus, 2);
+        long canceled = platformActivityRepository.selectCount(canceledWrapper);
+
+        stats.put("total", total);
+        stats.put("inProgress", inProgress);
+        stats.put("finished", finished);
+        stats.put("canceled", canceled);
+
         return stats;
     }
 

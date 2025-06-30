@@ -59,12 +59,15 @@ const Login = ({ onLoginSuccess }) => {
             console.log('Login response:', response);
             
             // 检查响应状态
-            if (response && response.status === 200) {
+            if (response && (response.code === 200 || response.status === 200)) {
                 // 存储简单认证标记
                 localStorage.setItem('isAuthenticated', 'true');
                 localStorage.setItem('username', username);
                 localStorage.setItem('role', currentIdentity);
                 localStorage.setItem('userInfo', JSON.stringify(response.user));
+                if (response.token) {
+                  localStorage.setItem('token', response.token);
+                }
             } else {
                 throw new Error(response?.message || '登录失败');
             }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -66,9 +67,12 @@ public class AuthServiceImpl implements AuthService {
         
         System.out.println("Authentication successful for user: " + user.getUsername());
 
+        String token = UUID.randomUUID().toString();
+
         return ResponseEntity.ok().body(Map.of(
             "status", 200,
             "message", "Login successful",
+            "token", token,
             "user", dbUser
         ));
     }
