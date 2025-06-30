@@ -44,3 +44,6 @@ frontend/.env
 frontend/npm-debug.log*
 frontend/yarn-error.log*
 node_modules
+
+# Log files
+logs/
