@@ -85,6 +85,11 @@ export const getCurrentUser = () => {
   return api.get('/api/users/me');
 };
 
+// 更新用户信息
+export const updateUserInfo = (userData) => {
+  return api.put('/api/users/me', userData);
+};
+
 // 注册API
 export const register = (userData) => {
   return api.post('/api/auth/register', userData);

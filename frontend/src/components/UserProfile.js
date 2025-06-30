@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin } from 'antd';
+import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input } from 'antd';
 import { 
   UserOutlined, 
   UploadOutlined, 
@@ -14,7 +14,7 @@ import {
   ArrowLeftOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../api';
+import { getCurrentUser, updateUserInfo } from '../api';
 import './UserProfile.css';
 
 const { Header, Content, Sider } = Layout;
@@ -26,28 +26,38 @@ const UserProfile = () => {
   const [activeTab, setActiveTab] = useState('1');
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    username: '',
+    email: '',
+    phone: ''
+  });
 
   // 获取当前用户信息
   const fetchCurrentUser = async () => {
     setLoading(true);
     try {
       const response = await getCurrentUser();
+      if (!response || !response.data) {
+        throw new Error('无效的API响应');
+      }
       const userData = response.data;
       setUserInfo({
-        username: userData.username,
-        fullName: userData.fullName,
-        role: userData.role === 1 ? '学生' : userData.role === 2 ? '专家' : userData.role === 3 ? '机构' : '管理员',
-        email: userData.email,
-        phone: userData.phone,
-        pointsBalance: userData.pointsBalance,
-        institution: userData.institution,
+        username: userData.username || '',
+        fullName: userData.fullName || '',
+        role: userData.role || 0,
+        email: userData.email || '',
+        phone: userData.phone || '',
+        pointsBalance: userData.pointsBalance || 0,
+        institution: userData.institution || '',
         status: userData.status === 1 ? '正常' : '禁用',
-        avatar: userData.avatar
+        avatar: userData.avatar || ''
       });
       // 更新localStorage缓存
       localStorage.setItem('userInfo', JSON.stringify(userData));
     } catch (error) {
       console.error('获取用户信息失败:', error);
+      message.error('获取用户信息失败: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -133,6 +143,32 @@ const UserProfile = () => {
     setSelectedMenuItem(key);
   };
 
+  const handleEditClick = () => {
+    setEditing(true);
+    setEditForm({
+      username: userInfo.username,
+      email: userInfo.email,
+      phone: userInfo.phone
+    });
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      await updateUserInfo(editForm);
+      setUserInfo({
+        ...userInfo,
+        ...editForm
+      });
+      setEditing(false);
+      message.success('信息更新成功');
+    } catch (error) {
+      message.error('更新失败: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 渲染个人信息
   const renderProfile = () => (
     <div className="profile-info">
@@ -177,10 +213,25 @@ const UserProfile = () => {
               <GiftOutlined /> {userInfo.pointsBalance} 积分
             </div>
           </div>
-          <Card title="基本信息" extra={<Button type="link" icon={<EditOutlined />}>编辑</Button>}>
+            <Card title="基本信息" extra={
+              <Button 
+                type="link" 
+                icon={<EditOutlined />}
+                onClick={handleEditClick}
+              >
+                编辑
+              </Button>
+            }>
             <div className="info-item">
               <span className="label">用户名：</span>
-              <span className="value">{userInfo.username}</span>
+              {editing ? (
+                <Input 
+                  value={editForm.username}
+                  onChange={(e) => setEditForm({...editForm, username: e.target.value})}
+                />
+              ) : (
+                <span className="value">{userInfo.username}</span>
+              )}
             </div>
             <div className="info-item">
               <span className="label">真实姓名：</span>
@@ -189,17 +240,42 @@ const UserProfile = () => {
             <div className="info-item">
               <span className="label">角色：</span>
               <span className="value">
-                <Tag color="blue">{userInfo.role === '学生' ? '学生' : '教师'}</Tag>
+                <Tag color="blue">
+                  {userInfo.role === 1 ? '学生' : 
+                   userInfo.role === 2 ? '专家' : 
+                   userInfo.role === 3 ? '机构' : 
+                   userInfo.role === 4 ? '管理员' : '未知角色'}
+                </Tag>
               </span>
             </div>
             <div className="info-item">
               <span className="label">邮箱：</span>
-              <span className="value">{userInfo.email}</span>
+              {editing ? (
+                <Input 
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                />
+              ) : (
+                <span className="value">{userInfo.email}</span>
+              )}
             </div>
             <div className="info-item">
               <span className="label">手机号：</span>
-              <span className="value">{userInfo.phone}</span>
+              {editing ? (
+                <Input 
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                />
+              ) : (
+                <span className="value">{userInfo.phone}</span>
+              )}
             </div>
+            {editing && (
+              <div className="edit-buttons">
+                <Button type="primary" onClick={handleSave}>保存</Button>
+                <Button onClick={() => setEditing(false)}>取消</Button>
+              </div>
+            )}
           </Card>
         </>
       ) : (
