@@ -71,14 +71,8 @@ api.interceptors.response.use(
 );
 
 // 登录API
-export const login = (username, password, identityType) => {
-  return api.post('/api/auth/login', {
-    username,
-    passwordHash: password
-  }, {
-    params: { identityType }
-  });
-
+export const login = (username, password, identity) => {
+  return api.post('/api/auth/authenticate', { username, password, identity });
 };
 
 // 登出API
@@ -96,9 +90,19 @@ export const updateUserInfo = (userData) => {
   return api.put('/api/users/me', userData);
 };
 
-// 注册API
-export const register = (userData) => {
-  return api.post('/api/auth/register', userData);
+// 个人和专家注册
+export const registerPersonal = (userData) => {
+  return api.post('/api/auth/register/personal', userData);
+};
+
+// 机构注册
+export const registerOrganization = (userData) => {
+  return api.post('/api/auth/register/organization', userData);
+};
+
+// 专家注册API
+export const registerExpert = (registrationData) => {
+  return api.post('/api/auth/register/expert', registrationData);
 };
 
 export default api;

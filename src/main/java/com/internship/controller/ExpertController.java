@@ -40,7 +40,7 @@ public class ExpertController {
     @Operation(summary = "更新专家", description = "更新指定ID的专家")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Expert>> updateExpert(
-            @Parameter(description = "专家ID") @PathVariable String id,
+            @Parameter(description = "专家ID") @PathVariable Long id,
             @Valid @RequestBody Expert expert) {
         expert.setId(id);
         boolean updated = expertService.updateById(expert);
@@ -54,7 +54,7 @@ public class ExpertController {
     @Operation(summary = "删除专家", description = "删除指定ID的专家")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteExpert(
-            @Parameter(description = "专家ID") @PathVariable String id) {
+            @Parameter(description = "专家ID") @PathVariable Long id) {
         expertService.removeById(id);
         return ResponseEntity.ok(ApiResponse.<Void>success("专家删除成功"));
     }
@@ -62,7 +62,7 @@ public class ExpertController {
     @Operation(summary = "获取专家详情", description = "根据ID获取专家详细信息")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Expert>> getExpertById(
-            @Parameter(description = "专家ID") @PathVariable String id) {
+            @Parameter(description = "专家ID") @PathVariable Long id) {
         Expert expert = expertService.getById(id);
         return ResponseEntity.ok(ApiResponse.success("获取专家成功", expert));
     }

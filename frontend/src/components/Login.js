@@ -4,8 +4,10 @@ import './Login.css';
 import { login } from '../api';
 import api from '../api';
 
-const Login = ({ onLoginSuccess }) => {
+const Login = ({ onLoginSuccess, onGoToRegister }) => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [currentIdentity, setCurrentIdentity] = useState(null);
   const [activeTab, setActiveTab] = useState('password');
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -47,9 +49,6 @@ const Login = ({ onLoginSuccess }) => {
             setIsLoggingIn(true);
             setLoginError(null);
             
-            const username = document.getElementById('username')?.value.trim();
-            const password = document.getElementById('password')?.value;
-
             if (!username || !password) {
                 throw new Error('请输入用户名和密码');
             }
@@ -58,18 +57,19 @@ const Login = ({ onLoginSuccess }) => {
             const response = await login(username, password, currentIdentity);
             console.log('Login response:', response);
             
-            // 检查响应状态
-            if (response && (response.code === 200 || response.status === 200)) {
+            // 检查响应状态 - 后端直接返回数据，我们检查关键字段是否存在
+            if (response && response.token && response.user) {
                 // 存储简单认证标记
                 localStorage.setItem('isAuthenticated', 'true');
-                localStorage.setItem('username', username);
-                localStorage.setItem('role', currentIdentity);
+                localStorage.setItem('username', response.user.username); // 使用返回的用户名
+                localStorage.setItem('role', response.user.role.toString()); // 使用返回的角色
                 localStorage.setItem('userInfo', JSON.stringify(response.user));
                 if (response.token) {
                   localStorage.setItem('token', response.token);
                 }
             } else {
-                throw new Error(response?.message || '登录失败');
+                // 如果后端返回的格式不符合预期，也视为登录失败
+                throw new Error(response?.message || '登录响应格式不正确');
             }
 
 
@@ -249,25 +249,49 @@ const Login = ({ onLoginSuccess }) => {
               {activeTab === 'password' && (
                 <div className="login-content active">
                   <div className="mb-6">
-                    <label htmlFor="username" className="block text-sm font-medium text-neutral-600 mb-2">用户名</label>
+                    <label className="block text-sm font-medium text-neutral-600 mb-2">用户名</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-user text-neutral-400"></i>
+                        <i className="fa fa-user-o text-neutral-400"></i>
                       </div>
-                      <input type="text" id="username" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入用户名" />
+                      <input 
+                        id="username"
+                        type="text" 
+                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                        placeholder="请输入用户名"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                      />
                     </div>
                   </div>
+                  
                   <div className="mb-6">
-                    <label htmlFor="password" className="block text-sm font-medium text-neutral-600 mb-2">密码</label>
+                    <label className="block text-sm font-medium text-neutral-600 mb-2">密码</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i className="fa fa-lock text-neutral-400"></i>
                       </div>
-                      <input type="password" id="password" className="form-input block w-full pl-10 pr-12 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入密码" />
-                      <button id="toggle-password" className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                      <input 
+                        id="password"
+                        type="password" 
+                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                        placeholder="请输入密码"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <button id="toggle-password" type="button" className="absolute right-3 top-1/2 transform -translate-y-1/2">
                         <i className="fa fa-eye text-neutral-400"></i>
                       </button>
                     </div>
+                  </div>
+                  <div className="text-center text-sm text-neutral-500">
+                    <span>还没有账号？</span>
+                    <button 
+                      onClick={() => navigate('/register')}
+                      className="text-primary hover:underline font-medium focus:outline-none"
+                    >
+                      立即注册
+                    </button>
                   </div>
                 </div>
               )}
@@ -319,20 +343,11 @@ const Login = ({ onLoginSuccess }) => {
               )}
               <div className="flex flex-col gap-4">
                 <button 
-                  onClick={handleLogin} 
+                  onClick={handleLogin}
                   disabled={isLoggingIn}
-                  className={`w-full py-3 rounded-lg transition-custom font-medium ${
-                    isLoggingIn 
-                      ? 'bg-primary/70 text-white cursor-not-allowed' 
-                      : 'bg-primary text-white hover:bg-primary-dark'
-                  }`}
+                  className="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary/90 transition-custom focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:bg-primary/50 disabled:cursor-not-allowed"
                 >
-                  {isLoggingIn ? (
-                    <>
-                      <i className="fa fa-spinner fa-spin mr-2"></i>
-                      登录中...
-                    </>
-                  ) : '登录'}
+                  {isLoggingIn ? '正在登录...' : '安全登录'}
                 </button>
                 <button onClick={handleBackClick} className="w-full bg-neutral-100 text-neutral-600 py-3 rounded-lg hover:bg-neutral-200 transition-custom font-medium">
                   返回

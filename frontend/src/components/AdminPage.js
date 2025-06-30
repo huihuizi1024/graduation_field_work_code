@@ -47,7 +47,7 @@ const AdminPage = ({ onLogout }) => {
     { key: '7', icon: <ScheduleOutlined />, label: '交易管理' },
     { key: '8', icon: <SettingOutlined />, label: '项目管理' },
     { key: '9', icon: <UserOutlined />, label: '专家管理' },
-    { key: '10', icon: <ScheduleOutlined />, label: '管理用户管理' },
+    { key: '10', icon: <ScheduleOutlined />, label: '用户管理' },
   ];
 
   return (

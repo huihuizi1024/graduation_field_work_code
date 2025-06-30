@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
+import { registerPersonal, registerOrganization, registerExpert } from '../api'; // 合并导入
 
-const Register = ({ onBackToLogin, onBackToMain }) => {
-  const [activeTab, setActiveTab] = useState('personal');
+const Register = () => {
+  const [userType, setUserType] = useState('personal'); // 'personal' or 'organization'
   const [formData, setFormData] = useState({
     personal: {
       name: '',
@@ -12,7 +14,10 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
       code: '',
       password: '',
       confirmPassword: '',
-      agree: false
+      agree: false,
+      role: 1, // 默认为学生, 1: student, 2: expert
+      expertise: '',
+      description: ''
     },
     organization: {
       name: '',
@@ -24,9 +29,17 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
       username: '',
       password: '',
       confirmPassword: '',
-      agree: false
+      agree: false,
+      legalRepresentative: '',
+      province: '',
+      city: '',
+      district: '',
+      address: '',
+      description: ''
     }
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (type, field, value) => {
     setFormData(prev => ({
@@ -39,7 +52,7 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
   };
 
   const handleTabClick = (tab) => {
-    setActiveTab(tab);
+    setUserType(tab);
   };
 
   const handleGetCode = () => {
@@ -75,174 +88,280 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
     console.log(`向手机号 ${phone} 发送验证码`);
   };
 
-  const handlePersonalRegister = () => {
+  const handlePersonalRegister = async (e) => {
+    e.preventDefault();
     const data = formData.personal;
-    let isValid = true;
     
-    // 验证姓名
-    if (!data.name.trim()) {
-      alert('请输入姓名');
-      isValid = false;
-    }
-    
-    // 验证邮箱
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!data.email.trim()) {
-      alert('请输入邮箱');
-      isValid = false;
-    } else if (!emailRegex.test(data.email)) {
-      alert('请输入有效的邮箱');
-      isValid = false;
-    }
-    
-    // 验证用户名
-    if (!data.username.trim()) {
-      alert('请输入用户名');
-      isValid = false;
-    } else if (data.username.length < 3) {
-      alert('用户名长度至少为3个字符');
-      isValid = false;
-    }
-    
-    // 验证手机号
-    const phoneRegex = /^1[3-9]\d{9}$/;
-    if (!data.phone.trim()) {
-      alert('请输入手机号');
-      isValid = false;
-    } else if (!phoneRegex.test(data.phone)) {
-      alert('请输入有效的手机号');
-      isValid = false;
-    }
-    
-    // 验证验证码
-    if (!data.code.trim()) {
-      alert('请输入验证码');
-      isValid = false;
-    } else if (data.code.length !== 6) {
-      alert('验证码长度为6位');
-      isValid = false;
-    }
-    
-    // 验证密码
-    if (!data.password) {
-      alert('请输入密码');
-      isValid = false;
-    } else if (data.password.length < 6) {
-      alert('密码长度至少为6位');
-      isValid = false;
-    }
-    
-    // 验证确认密码
-    if (!data.confirmPassword) {
-      alert('请确认密码');
-      isValid = false;
-    } else if (data.confirmPassword !== data.password) {
+    if (data.password !== data.confirmPassword) {
       alert('两次输入的密码不一致');
-      isValid = false;
+      return;
     }
-    
-    // 验证是否同意协议
     if (!data.agree) {
-      alert('请阅读并同意用户服务协议和隐私政策');
-      isValid = false;
+        alert('请阅读并同意协议');
+        return;
     }
-    
-    if (isValid) {
-      alert('注册信息提交成功！请等待审核');
-      onBackToLogin();
+
+    try {
+      if (data.role === 1) { // 1 for student
+        await registerPersonal(data);
+        alert('学生账号注册成功！');
+      } else if (data.role === 2) { // 2 for expert
+        if (!data.expertise.trim()) {
+          alert('请输入您的专业领域');
+          return;
+        }
+        await registerExpert(data);
+        alert('专家账号注册成功！');
+      }
+      navigate('/login');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || '注册失败，请检查您填写的信息';
+      alert(errorMessage);
+      console.error('个人注册失败:', error);
     }
   };
 
-  const handleOrganizationRegister = () => {
+  const handleOrganizationRegister = async (e) => {
+    e.preventDefault();
     const data = formData.organization;
-    let isValid = true;
-    
-    // 验证机构名称
-    if (!data.name.trim()) {
-      alert('请输入机构名称');
-      isValid = false;
-    }
-    
-    // 验证统一社会信用代码
-    const orgCodeRegex = /^[0-9A-HJ-NPQRTUWXY]{18}$/;
-    if (!data.code.trim()) {
-      alert('请输入统一社会信用代码');
-      isValid = false;
-    } else if (!orgCodeRegex.test(data.code)) {
-      alert('请输入有效的统一社会信用代码');
-      isValid = false;
-    }
-    
-    // 验证机构类型
-    if (!data.type) {
-      alert('请选择机构类型');
-      isValid = false;
-    }
-    
-    // 验证联系人姓名
-    if (!data.contact.trim()) {
-      alert('请输入联系人姓名');
-      isValid = false;
-    }
-    
-    // 验证联系电话
-    const phoneRegex = /^1[3-9]\d{9}$/;
-    if (!data.phone.trim()) {
-      alert('请输入联系电话');
-      isValid = false;
-    } else if (!phoneRegex.test(data.phone)) {
-      alert('请输入有效的联系电话');
-      isValid = false;
-    }
-    
-    // 验证电子邮箱
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!data.email.trim()) {
-      alert('请输入电子邮箱');
-      isValid = false;
-    } else if (!emailRegex.test(data.email)) {
-      alert('请输入有效的电子邮箱');
-      isValid = false;
-    }
-    
-    // 验证用户名
-    if (!data.username.trim()) {
-      alert('请输入用户名');
-      isValid = false;
-    } else if (data.username.length < 3) {
-      alert('用户名长度至少为3个字符');
-      isValid = false;
-    }
-    
-    // 验证密码
-    if (!data.password) {
-      alert('请输入密码');
-      isValid = false;
-    } else if (data.password.length < 6) {
-      alert('密码长度至少为6位');
-      isValid = false;
-    }
-    
-    // 验证确认密码
-    if (!data.confirmPassword) {
-      alert('请确认密码');
-      isValid = false;
-    } else if (data.confirmPassword !== data.password) {
+
+    // 前端验证
+    if (data.password !== data.confirmPassword) {
       alert('两次输入的密码不一致');
-      isValid = false;
+      return;
     }
-    
-    // 验证是否同意协议
     if (!data.agree) {
-      alert('请阅读并同意用户服务协议和隐私政策');
-      isValid = false;
+        alert('请阅读并同意协议');
+        return;
     }
+    // ... 可以添加更多前端验证 ...
     
-    if (isValid) {
-      alert('注册信息提交成功！请等待审核');
-      onBackToLogin();
+    try {
+      await registerOrganization(data);
+      alert('机构注册申请已提交！');
+      navigate('/login');
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || '注册失败，请检查您填写的信息';
+      alert(errorMessage);
+      console.error('机构注册失败:', error);
     }
   };
+
+  const renderPersonalForm = () => (
+    <form onSubmit={handlePersonalRegister} className="register-form">
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-600 mb-2">注册为</label>
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="role"
+                value={1}
+                checked={formData.personal.role === 1}
+                onChange={(e) => handleInputChange('personal', 'role', parseInt(e.target.value, 10))}
+                className="form-radio h-4 w-4 text-primary focus:ring-primary/30"
+              />
+              <span className="ml-2 text-neutral-700">学生</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="role"
+                value={2}
+                checked={formData.personal.role === 2}
+                onChange={(e) => handleInputChange('personal', 'role', parseInt(e.target.value, 10))}
+                className="form-radio h-4 w-4 text-primary focus:ring-primary/30"
+              />
+              <span className="ml-2 text-neutral-700">专家</span>
+            </label>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label className="block text-sm font-medium text-neutral-600 mb-2">姓名</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i className="fa fa-user text-neutral-400"></i>
+              </div>
+              <input 
+                type="text" 
+                className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                placeholder="请输入您的真实姓名"
+                value={formData.personal.name}
+                onChange={(e) => handleInputChange('personal', 'name', e.target.value)}
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-neutral-600 mb-2">邮箱</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i className="fa fa-envelope text-neutral-400"></i>
+              </div>
+              <input 
+                type="email" 
+                className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                placeholder="请输入邮箱"
+                value={formData.personal.email}
+                onChange={(e) => handleInputChange('personal', 'email', e.target.value)}
+                required
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-600 mb-2">用户名</label>
+           <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fa fa-user-circle-o text-neutral-400"></i>
+              </div>
+              <input type="text" value={formData.personal.username} onChange={(e) => handleInputChange('personal', 'username', e.target.value)} required 
+              className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+              placeholder="设置您的登录账号"/>
+            </div>
+        </div>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-600 mb-2">手机号</label>
+           <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fa fa-phone text-neutral-400"></i>
+              </div>
+          <input type="tel" value={formData.personal.phone} onChange={(e) => handleInputChange('personal', 'phone', e.target.value)} required
+              className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
+              placeholder="请输入您的手机号码" />
+            </div>
+        </div>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-600 mb-2">设置密码</label>
+          <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fa fa-lock text-neutral-400"></i>
+              </div>
+          <input type="password" value={formData.personal.password} onChange={(e) => handleInputChange('personal', 'password', e.target.value)} required
+            className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
+            placeholder="设置您的登录密码" />
+            </div>
+        </div>
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-600 mb-2">确认密码</label>
+          <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fa fa-lock text-neutral-400"></i>
+              </div>
+          <input type="password" value={formData.personal.confirmPassword} onChange={(e) => handleInputChange('personal', 'confirmPassword', e.target.value)} required
+            className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
+            placeholder="请再次输入密码" />
+            </div>
+        </div>
+        
+        {formData.personal.role === 2 && (
+          <>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-neutral-600 mb-2">专业领域</label>
+              <input type="text" value={formData.personal.expertise} onChange={(e) => handleInputChange('personal', 'expertise', e.target.value)} required 
+                className="form-input block w-full pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
+                placeholder="如: 人工智能、金融科技" />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-neutral-600 mb-2">个人简介</label>
+              <textarea value={formData.personal.description} onChange={(e) => handleInputChange('personal', 'description', e.target.value)}
+                className="form-textarea block w-full pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
+                placeholder="简单介绍您的专业背景、成就等"
+                rows="4"
+              ></textarea>
+            </div>
+          </>
+        )}
+        
+        <div className="mb-8 flex items-start">
+            <input id="personal-agree" type="checkbox" checked={formData.personal.agree} onChange={(e) => handleInputChange('personal', 'agree', e.target.checked)} />
+            <label htmlFor="personal-agree" className="ml-2 text-sm text-neutral-600">我已阅读并同意协议</label>
+        </div>
+        
+        <button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg">注册</button>
+    </form>
+  );
+
+  const renderOrganizationForm = () => (
+    <form onSubmit={handleOrganizationRegister} className="register-form">
+      <div className="mb-6">
+          <label>机构名称</label>
+          <input type="text" value={formData.organization.name} onChange={(e) => handleInputChange('organization', 'name', e.target.value)} required />
+      </div>
+      <div className="mb-6">
+          <label>统一社会信用代码</label>
+          <input type="text" value={formData.organization.code} onChange={(e) => handleInputChange('organization', 'code', e.target.value)} required />
+      </div>
+       <div className="mb-6">
+        <label>机构类型</label>
+        <select value={formData.organization.type} onChange={(e) => handleInputChange('organization', 'type', e.target.value)} required>
+            <option value="">请选择</option>
+            <option value="1">高等院校</option>
+            <option value="2">职业院校</option>
+            <option value="3">培训机构</option>
+            <option value="4">社会组织</option>
+        </select>
+      </div>
+      <div className="mb-6">
+          <label>联系人姓名</label>
+          <input type="text" value={formData.organization.contact} onChange={(e) => handleInputChange('organization', 'contact', e.target.value)} required />
+      </div>
+      <div className="mb-6">
+          <label>联系电话</label>
+          <input type="tel" value={formData.organization.phone} onChange={(e) => handleInputChange('organization', 'phone', e.target.value)} required />
+      </div>
+      <div className="mb-6">
+          <label>电子邮箱</label>
+          <input type="email" value={formData.organization.email} onChange={(e) => handleInputChange('organization', 'email', e.target.value)} required />
+      </div>
+      <div className="mb-6">
+          <label>管理员用户名</label>
+          <input type="text" value={formData.organization.username} onChange={(e) => handleInputChange('organization', 'username', e.target.value)} required />
+      </div>
+      <div className="mb-6">
+          <label>设置密码</label>
+          <input type="password" value={formData.organization.password} onChange={(e) => handleInputChange('organization', 'password', e.target.value)} required />
+      </div>
+      <div className="mb-6">
+          <label>确认密码</label>
+          <input type="password" value={formData.organization.confirmPassword} onChange={(e) => handleInputChange('organization', 'confirmPassword', e.target.value)} required />
+      </div>
+       <div className="mb-6">
+          <label>法定代表人</label>
+          <input type="text" value={formData.organization.legalRepresentative} onChange={(e) => handleInputChange('organization', 'legalRepresentative', e.target.value)} />
+      </div>
+       <div className="mb-6">
+          <label>省份</label>
+          <input type="text" value={formData.organization.province} onChange={(e) => handleInputChange('organization', 'province', e.target.value)} />
+      </div>
+       <div className="mb-6">
+          <label>城市</label>
+          <input type="text" value={formData.organization.city} onChange={(e) => handleInputChange('organization', 'city', e.target.value)} />
+      </div>
+       <div className="mb-6">
+          <label>区/县</label>
+          <input type="text" value={formData.organization.district} onChange={(e) => handleInputChange('organization', 'district', e.target.value)} />
+      </div>
+       <div className="mb-6">
+          <label>详细地址</label>
+          <input type="text" value={formData.organization.address} onChange={(e) => handleInputChange('organization', 'address', e.target.value)} />
+      </div>
+       <div className="mb-6">
+          <label>机构简介</label>
+          <textarea value={formData.organization.description} onChange={(e) => handleInputChange('organization', 'description', e.target.value)}></textarea>
+      </div>
+
+      <div className="mb-8 flex items-start">
+        <input id="org-agree" type="checkbox" checked={formData.organization.agree} onChange={(e) => handleInputChange('organization', 'agree', e.target.checked)} />
+        <label htmlFor="org-agree" className="ml-2 text-sm">我已阅读并同意协议</label>
+      </div>
+
+      <button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg">注册</button>
+    </form>
+  );
 
   return (
     <div className="min-h-screen font-inter bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -257,7 +376,7 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
               <span className="text-xl font-bold text-neutral-700">学分银行系统</span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <button onClick={onBackToMain} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
+              <button onClick={() => navigate('/')} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">关于我们</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">帮助中心</a>
               <a href="#" className="text-neutral-600 hover:text-primary transition-custom">联系我们</a>
@@ -285,353 +404,24 @@ const Register = ({ onBackToLogin, onBackToMain }) => {
             {/* 注册类型切换 */}
             <div className="register-tabs">
               <div 
-                className={`register-tab ${activeTab === 'personal' ? 'tab-active' : ''}`} 
+                className={`register-tab ${userType === 'personal' ? 'tab-active' : ''}`} 
                 onClick={() => handleTabClick('personal')}
               >
                 个人注册
               </div>
               <div 
-                className={`register-tab ${activeTab === 'organization' ? 'tab-active' : ''}`} 
+                className={`register-tab ${userType === 'organization' ? 'tab-active' : ''}`} 
                 onClick={() => handleTabClick('organization')}
               >
                 机构注册
               </div>
             </div>
             
-            {/* 个人注册表单 */}
-            {activeTab === 'personal' && (
-              <div className="register-content active">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">姓名</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-user text-neutral-400"></i>
-                      </div>
-                      <input 
-                        type="text" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请输入您的真实姓名"
-                        value={formData.personal.name}
-                        onChange={(e) => handleInputChange('personal', 'name', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">邮箱</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-envelope text-neutral-400"></i>
-                      </div>
-                      <input 
-                        type="email" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请输入邮箱"
-                        value={formData.personal.email}
-                        onChange={(e) => handleInputChange('personal', 'email', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">用户名</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-user-o text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="text" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请设置用户名"
-                      value={formData.personal.username}
-                      onChange={(e) => handleInputChange('personal', 'username', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">手机号</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-phone text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="tel" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入手机号"
-                      value={formData.personal.phone}
-                      onChange={(e) => handleInputChange('personal', 'phone', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">验证码</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-shield text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="text" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入验证码"
-                      value={formData.personal.code}
-                      onChange={(e) => handleInputChange('personal', 'code', e.target.value)}
-                    />
-                    <button 
-                      id="personal-get-code" 
-                      className="absolute right-2 top-2 bottom-2 bg-primary/10 text-primary px-3 py-1 rounded-lg text-sm font-medium transition-custom hover:bg-primary/20"
-                      onClick={handleGetCode}
-                    >
-                      获取验证码
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">设置密码</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-lock text-neutral-400"></i>
-                      </div>
-                      <input 
-                        type="password" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请设置密码"
-                        value={formData.personal.password}
-                        onChange={(e) => handleInputChange('personal', 'password', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">确认密码</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-lock text-neutral-400"></i>
-                      </div>
-                      <input 
-                        type="password" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请再次输入密码"
-                        value={formData.personal.confirmPassword}
-                        onChange={(e) => handleInputChange('personal', 'confirmPassword', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mb-8">
-                  <div className="flex items-start">
-                    <input 
-                      id="personal-agree" 
-                      type="checkbox" 
-                      className="h-4 w-4 mt-1 text-primary focus:ring-primary/30 border-neutral-300 rounded"
-                      checked={formData.personal.agree}
-                      onChange={(e) => handleInputChange('personal', 'agree', e.target.checked)}
-                    />
-                    <label htmlFor="personal-agree" className="ml-2 text-sm text-neutral-600">
-                      我已阅读并同意<a href="#" className="text-primary hover:underline">《用户服务协议》</a>和<a href="#" className="text-primary hover:underline">《隐私政策》</a>
-                    </label>
-                  </div>
-                </div>
-                
-                <button 
-                  type="button" 
-                  className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition-custom shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                  onClick={handlePersonalRegister}
-                >
-                  注册
-                </button>
-              </div>
-            )}
-            
-            {/* 机构注册表单 */}
-            {activeTab === 'organization' && (
-              <div className="register-content active">
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">机构名称</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-building text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="text" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入机构全称"
-                      value={formData.organization.name}
-                      onChange={(e) => handleInputChange('organization', 'name', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">统一社会信用代码</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-id-card-o text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="text" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入18位统一社会信用代码"
-                      value={formData.organization.code}
-                      onChange={(e) => handleInputChange('organization', 'code', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">机构类型</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-sitemap text-neutral-400"></i>
-                    </div>
-                    <select 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom appearance-none"
-                      value={formData.organization.type}
-                      onChange={(e) => handleInputChange('organization', 'type', e.target.value)}
-                    >
-                      <option value="">请选择机构类型</option>
-                      <option value="school">学校</option>
-                      <option value="training">培训机构</option>
-                      <option value="enterprise">企业</option>
-                      <option value="other">其他</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <i className="fa fa-chevron-down text-neutral-400"></i>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">联系人姓名</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-user-plus text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="text" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入联系人姓名"
-                      value={formData.organization.contact}
-                      onChange={(e) => handleInputChange('organization', 'contact', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">联系电话</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-phone text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="tel" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入联系电话"
-                      value={formData.organization.phone}
-                      onChange={(e) => handleInputChange('organization', 'phone', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">电子邮箱</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-envelope text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="email" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请输入电子邮箱"
-                      value={formData.organization.email}
-                      onChange={(e) => handleInputChange('organization', 'email', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-neutral-600 mb-2">管理员用户名</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <i className="fa fa-user-o text-neutral-400"></i>
-                    </div>
-                    <input 
-                      type="text" 
-                      className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                      placeholder="请设置管理员用户名"
-                      value={formData.organization.username}
-                      onChange={(e) => handleInputChange('organization', 'username', e.target.value)}
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">设置密码</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-lock text-neutral-400"></i>
-                      </div>
-                      <input 
-                        type="password" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请设置密码"
-                        value={formData.organization.password}
-                        onChange={(e) => handleInputChange('organization', 'password', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-600 mb-2">确认密码</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i className="fa fa-lock text-neutral-400"></i>
-                      </div>
-                      <input 
-                        type="password" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
-                        placeholder="请再次输入密码"
-                        value={formData.organization.confirmPassword}
-                        onChange={(e) => handleInputChange('organization', 'confirmPassword', e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mb-8">
-                  <div className="flex items-start">
-                    <input 
-                      id="org-agree" 
-                      type="checkbox" 
-                      className="h-4 w-4 mt-1 text-primary focus:ring-primary/30 border-neutral-300 rounded"
-                      checked={formData.organization.agree}
-                      onChange={(e) => handleInputChange('organization', 'agree', e.target.checked)}
-                    />
-                    <label htmlFor="org-agree" className="ml-2 text-sm text-neutral-600">
-                      我已阅读并同意<a href="#" className="text-primary hover:underline">《用户服务协议》</a>和<a href="#" className="text-primary hover:underline">《隐私政策》</a>
-                    </label>
-                  </div>
-                </div>
-                
-                <button 
-                  type="button" 
-                  className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition-custom shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                  onClick={handleOrganizationRegister}
-                >
-                  注册
-                </button>
-              </div>
-            )}
+            {userType === 'personal' ? renderPersonalForm() : renderOrganizationForm()}
             
             <div className="mt-6 text-center">
               <p className="text-neutral-500">
-                已有账号? <button onClick={onBackToLogin} className="text-primary hover:text-primary/80 transition-custom font-medium">立即登录</button>
+                已有账号? <button onClick={() => navigate('/login')} className="text-primary hover:text-primary/80 transition-custom font-medium">立即登录</button>
               </p>
             </div>
           </div>

@@ -3,22 +3,18 @@ import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Ta
 import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, TeamOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
 import './MainPage.css';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api, { logout } from '../api';
 
 const { Title, Paragraph } = Typography;
 
 const identityInfo = {
-  student: { label: '学生', icon: <UserOutlined />, color: '#1890ff' },
-  expert: { label: '专家', icon: <TeamOutlined />, color: '#52c41a' },
-  admin: { label: '管理员', icon: <UserOutlined />, color: '#faad14' },
-  organization: { label: '机构', icon: <UserOutlined />, color: '#722ed1' },
+  '1': { label: '学生', icon: <UserOutlined />, color: '#1890ff' },
+  '3': { label: '专家', icon: <TeamOutlined />, color: '#52c41a' },
+  '4': { label: '管理员', icon: <UserOutlined />, color: '#faad14' },
+  '2': { label: '机构', icon: <UserOutlined />, color: '#722ed1' },
 };
 
 const MainPage = ({ 
-  onLoginClick, 
-  onLogout, 
-  isLoggedIn, 
-  userRole,
   onGoToSkillCertification,
   onGoToInterestTraining,
   onGoToLifeSkills,
@@ -28,6 +24,9 @@ const MainPage = ({
 }) => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -37,18 +36,38 @@ const MainPage = ({
     total: 0
   });
 
+  useEffect(() => {
+    // ComponentDidMount: Check login status from localStorage
+    const authenticated = localStorage.getItem('isAuthenticated') === 'true';
+    setIsLoggedIn(authenticated);
+    if (authenticated) {
+      const storedUserInfo = localStorage.getItem('userInfo');
+      const storedRole = localStorage.getItem('role');
+      if (storedUserInfo) {
+        setUserInfo(JSON.parse(storedUserInfo));
+      }
+      if (storedRole) {
+        setUserRole(storedRole);
+      }
+    }
+    fetchCourses();
+  }, []);
+
   // 获取课程列表
   const fetchCourses = async () => {
     try {
       setLoading(true);
+      // Ensure you are using the correct endpoint and parameters
       const res = await api.get('/api/platform-activities', {
         params: { page: 0, size: 3 }
       });
-      if (res.code === 200 && res.data && res.data.records) {
-        const mapped = res.data.records.map(item => ({
+      // The response interceptor already handles response.data, so res is the data object.
+      // Adjust this based on your actual API response structure.
+      if (res && res.records) { 
+        const mapped = res.records.map(item => ({
           id: item.id,
-          title: item.activityName || item.title || '活动',
-          description: item.description || item.activityDesc || '',
+          title: item.activityName || '活动',
+          description: item.activityDescription || '',
           category: item.activityType,
           views: item.participantCount || 0
         }));
@@ -56,8 +75,32 @@ const MainPage = ({
       }
       setLoading(false);
     } catch (error) {
-      message.error('获取课程列表失败');
+      // The error object from axios interceptor might be nested.
+      const errorMsg = error.response?.data?.message || error.message || '获取课程列表失败';
+      message.error(errorMsg);
       setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // Call API to handle server-side logout if needed
+    } catch (error) {
+      console.error("Logout failed", error);
+    } finally {
+      // Clear all user-related data from localStorage
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('role');
+      localStorage.removeItem('username');
+      
+      // Update state and navigate
+      setIsLoggedIn(false);
+      setUserInfo(null);
+      setUserRole(null);
+      message.success('您已成功退出登录');
+      navigate('/login'); // Redirect to login page
     }
   };
 
@@ -67,49 +110,42 @@ const MainPage = ({
       message.warning('请输入搜索内容');
       return;
     }
-    fetchCourses();
+    // Modify fetchCourses to accept search term if API supports it
+    fetchCourses(); 
   };
 
   // 不同身份功能菜单
   const getMenuItems = () => {
     switch (userRole) {
-      case 'student':
+      case '1': // student
         return [
           { key: 'profile', label: '个人中心', icon: <UserOutlined />, onClick: () => navigate('/profile') },
           { key: 'my-courses', label: '我的课程', icon: <ScheduleOutlined /> },
-          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
-      case 'expert':
+      case '3': // expert
         return [
           { key: 'profile', label: '专家中心', icon: <UserOutlined /> },
           { key: 'review', label: '课程评审', icon: <ScheduleOutlined /> },
-          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
-      case 'admin':
+      case '4': // admin
         return [
           { key: 'admin', label: '管理后台', icon: <UserOutlined />, onClick: () => navigate('/admin') },
-          { key: 'user-manage', label: '用户管理', icon: <TeamOutlined /> },
-          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
-      case 'organization':
+      case '2': // organization
         return [
           { key: 'profile', label: '机构中心', icon: <UserOutlined /> },
           { key: 'org-courses', label: '课程管理', icon: <ScheduleOutlined /> },
-          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: onLogout },
+          { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
       default:
-        return [];
+        return [
+           { key: 'login', label: '登录', icon: <UserOutlined />, onClick: () => navigate('/login') },
+        ];
     }
   };
-
-  useEffect(() => {
-    fetchCourses();
-    // 从localStorage获取用户信息
-    const storedUserInfo = localStorage.getItem('userInfo');
-    if (storedUserInfo) {
-      setUserInfo(JSON.parse(storedUserInfo));
-    }
-  }, []);
 
   // 轮播图数据
   const carouselData = [
@@ -244,15 +280,16 @@ const MainPage = ({
                   <Avatar 
                     size={40} 
                     src={userInfo?.avatar}
-                    icon={<UserOutlined />}
-                    style={{ cursor: 'pointer' }}
+                    icon={identityInfo[userRole]?.icon || <UserOutlined />}
+                    style={{ 
+                      cursor: 'pointer',
+                      backgroundColor: identityInfo[userRole]?.color || '#ccc' 
+                    }}
                   />
                 </div>
               </Dropdown>
             ) : (
-              <Button type="primary" onClick={onLoginClick}>
-                登录
-              </Button>
+              <Button onClick={() => navigate('/login')}>登录 / 注册</Button>
             )}
           </div>
         </div>

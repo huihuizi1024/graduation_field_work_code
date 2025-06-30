@@ -248,18 +248,19 @@ CREATE TABLE project (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目表';
 
--- 14. 创建专家表 (expert) - 根据前端ExpertList.js定义
+-- 14. 创建专家表 (expert)
 DROP TABLE IF EXISTS expert;
 CREATE TABLE expert (
-    id VARCHAR(50) PRIMARY KEY COMMENT '专家ID',
+    id BIGINT PRIMARY KEY COMMENT '专家ID, 与用户表ID一致',
     name VARCHAR(100) NOT NULL COMMENT '姓名',
-    expertise VARCHAR(100) NOT NULL COMMENT '专业领域',
-    contact VARCHAR(100) NOT NULL COMMENT '联系方式',
-    status INT NOT NULL DEFAULT 1 COMMENT '状态：1-启用, 0-禁用',
-    description TEXT COMMENT '描述',
+    expertise VARCHAR(255) COMMENT '专业领域',
+    contact VARCHAR(255) COMMENT '联系方式',
+    status INT NOT NULL DEFAULT 1 COMMENT '状态: 1-启用, 0-禁用',
+    description TEXT COMMENT '个人简介',
     creator_id BIGINT COMMENT '创建人ID',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    FOREIGN KEY (id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='专家表';
 
 
@@ -315,25 +316,6 @@ CREATE INDEX idx_platform_activity_create_time ON platform_activity(create_time)
 -- 初始数据插入
 -- ========================================
 
--- 插入机构初始数据（确保UTF-8编码）
-DELETE FROM institution WHERE id > 0;
-INSERT INTO institution (
-    institution_name, institution_code, institution_type, institution_level,
-    social_credit_code, legal_representative, contact_person, contact_phone, contact_email,
-    province, city, district, institution_description, business_scope,
-    certification_level, validity_months, status, creator_name, review_status
-) VALUES 
-('北京大学', 'PKU', 1, 1, '12100000400000624X', '龚旗煌', '张老师', '010-62752114', 'contact@pku.edu.cn',
- '北京市', '北京市', '海淀区', '中国近现代第一所国立综合性大学', '高等教育、科学研究', 1, 12, 1, '系统管理员', 1),
-
-('清华大学', 'THU', 1, 1, '12100000400000086T', '王希勤', '李老师', '010-62793001', 'contact@tsinghua.edu.cn',
- '北京市', '北京市', '海淀区', '中国著名高等学府，人才培养和科学技术研究的重要基地', '高等教育、科学研究', 1, 12, 1, '系统管理员', 1),
-
-('中国人民大学', 'RUC', 1, 1, '12100000400000098K', '林尚立', '王老师', '010-62511340', 'contact@ruc.edu.cn',
- '北京市', '北京市', '海淀区', '中国共产党创办的第一所新型正规大学', '高等教育、人文社会科学研究', 1, 12, 1, '系统管理员', 1),
-
-('职业技能培训中心', 'VSTC', 3, 3, '91110108MA01ABCD12', '赵主任', '刘老师', '010-12345678', 'contact@vstc.edu.cn',
- '北京市', '北京市', '朝阳区', '专业的职业技能培训机构', '职业技能培训、技能鉴定', 3, 6, 1, '系统管理员', 1);
 
 -- 插入积分规则初始数据
 INSERT INTO point_rule (
@@ -391,34 +373,8 @@ INSERT INTO platform_activity (
 ('学分银行线下交流会', 'OFFLINE_EXCHANGE', '邀请专家学者和机构代表进行学分银行发展交流', 2, '2024-08-15 14:00:00', '2024-08-15 17:00:00',
  '北京市海淀区会议中心', '学分银行管理中心', '李主任', '010-87654321', 50.00, 1, '系统管理员');
 
--- 插入用户初始数据
-DELETE FROM user WHERE id > 0;
-INSERT INTO user (
-    username, password_hash, full_name, role, email, phone, institution_id, status, points_balance
-) VALUES
-('admin', '123', '系统管理员', 4, 'admin@example.com', '13800138000', 1, 1, 1000.00),
-('organization1', '123', '重庆大学', 2, 'organization1@example.com', '13800138001', 1, 1, 500.00),
-('student1', '123', '李同学', 1, 'student1@example.com', '13800138002', 2, 1, 200.00),
-('expert1', '123', '王专家', 3, 'expert1@example.com', '13800138003', 3, 1, 800.00);
 
--- 插入积分流水初始数据
-DELETE FROM point_transaction WHERE id > 0;
-INSERT INTO point_transaction (
-    user_id, point_rule_id, transaction_type, points_change, balance_after, description, related_id
-) VALUES
-(3, 1, 1, 50.00, 250.00, '完成在线课程学习', 'COURSE001'),
-(3, NULL, 2, -30.00, 220.00, '兑换学习资料', 'MATERIAL001'),
-(2, NULL, 1, 100.00, 600.00, '教学活动奖励', 'TEACH001'),
-(4, NULL, 1, 50.00, 850.00, '专家评审奖励', 'REVIEW001');
 
--- 插入转换历史初始数据
-DELETE FROM conversion_history WHERE id > 0;
-INSERT INTO conversion_history (
-    user_id, conversion_rule_id, source_amount, target_amount, status, remark
-) VALUES
-(3, 1, 100.00, 10.00, 1, '积分转换为学分'),
-(2, 1, 50.00, 5.00, 1, '积分转换为学分'),
-(4, 1, 80.00, 8.00, 3, '等待审核');
 
 -- 插入项目初始数据
 DELETE FROM project WHERE id > 0;
@@ -428,19 +384,10 @@ INSERT INTO project (
 ('PROJ001', '学分银行系统开发', 'XBANK_DEV', '张老师', '2024-01-01', '2024-12-31', 1, '学分银行平台系统开发项目'),
 ('PROJ002', '在线课程体系建设', 'COURSE_SYS', '李老师', '2024-03-01', '2024-09-30', 1, '构建在线课程体系');
 
--- 插入专家初始数据
-DELETE FROM expert WHERE id > 0;
-INSERT INTO expert (
-    id, name, expertise, contact, status, description
-) VALUES
-('EXP001', '王教授', '教育技术', 'wang@example.com', 1, '教育技术领域专家'),
-('EXP002', '李博士', '人工智能', 'li@example.com', 1, '人工智能领域专家'),
-('EXP003', '张研究员', '大数据', 'zhang@example.com', 1, '大数据分析专家');
 
 -- ========================================
 -- 验证数据插入
 -- ========================================
-
 -- 查看创建的表
 SHOW TABLES;
 
@@ -468,3 +415,4 @@ SELECT
     '用户名: internship_user' as user_info,
     '密码: internship_pass' as password_info,
     '字符集: utf8mb4' as charset_info;
+

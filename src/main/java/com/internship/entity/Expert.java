@@ -14,8 +14,8 @@ public class Expert implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId
+    private Long id;
 
     /**
      * 姓名
@@ -64,11 +64,11 @@ public class Expert implements Serializable {
     private LocalDateTime updateTime;
 
     // Getters and Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -51,3 +51,13 @@
 .ant-layout-footer {
   text-align: center;
 }
+
+/* Customizing Ant Design Menu Item */
+.ant-menu-dark.ant-menu-inline .ant-menu-item-selected {
+  background-color: #1677ff !important; /* A comfortable blue */
+  color: #ffffff !important; /* White text for contrast */
+}
+
+.ant-menu-dark.ant-menu-inline .ant-menu-item-selected::after {
+  border-right-color: #ffffff !important; /* Ensure the selection indicator is also visible */
+}
