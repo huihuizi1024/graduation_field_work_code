@@ -40,7 +40,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/**", "/api/platform-activities/**", "/uploads/**").permitAll()
+                .requestMatchers("/api/upload/**").authenticated()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

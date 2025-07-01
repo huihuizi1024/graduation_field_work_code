@@ -41,6 +41,7 @@ const Register = () => {
       name: '',
       code: '',
       type: '',
+      institutionLevel: '1', // 默认为国家级
       contact: '',
       phone: '',
       email: '',
@@ -91,11 +92,13 @@ const Register = () => {
     let validation = { isValid: true, message: '' };
     
     switch (field) {
+      /*
       case 'code': // 统一社会信用代码
         if (value) {
           validation = validateCreditCode(value);
         }
         break;
+      */
       case 'phone':
         if (value) {
           validation = validatePhone(value);
@@ -106,11 +109,13 @@ const Register = () => {
           validation = validateEmail(value);
         }
         break;
+      /*
       case 'password':
         if (value) {
           validation = validatePassword(value);
         }
         break;
+      */
       default:
         break;
     }
@@ -557,6 +562,28 @@ const Register = () => {
             <option value="2">职业院校</option>
             <option value="3">培训机构</option>
             <option value="4">社会组织</option>
+          </select>
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <i className="fa fa-chevron-down text-neutral-400 text-sm"></i>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-neutral-600 mb-2">机构级别</label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i className="fa fa-trophy text-neutral-400"></i>
+          </div>
+          <select 
+            className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom appearance-none bg-white"
+            value={formData.organization.institutionLevel} 
+            onChange={(e) => handleInputChange('organization', 'institutionLevel', e.target.value)} 
+          >
+            <option value="1">国家级</option>
+            <option value="2">省级</option>
+            <option value="3">市级</option>
+            <option value="4">区县级</option>
           </select>
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
             <i className="fa fa-chevron-down text-neutral-400 text-sm"></i>

@@ -8,6 +8,10 @@ export const getTransactionById = (id) => {
   return api.get(`/api/transactions/${id}`);
 };
 
+export const getMyTransactions = () => {
+  return api.get('/api/transactions/my-transactions');
+};
+
 export const createTransaction = (data) => {
   return api.post('/api/transactions', data);
 };

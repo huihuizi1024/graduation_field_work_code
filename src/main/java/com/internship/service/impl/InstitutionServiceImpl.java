@@ -4,11 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.internship.dto.InstitutionProfileDTO;
 import com.internship.dto.PageResponse;
 import com.internship.entity.Institution;
+import com.internship.entity.User;
 import com.internship.exception.BusinessException;
 import com.internship.repository.InstitutionRepository;
+import com.internship.repository.UserRepository;
 import com.internship.service.InstitutionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -17,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 机构管理服务实现
@@ -30,6 +37,9 @@ import java.util.Map;
 public class InstitutionServiceImpl implements InstitutionService {
     
     private final InstitutionRepository institutionRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
     
     public InstitutionServiceImpl(InstitutionRepository institutionRepository) {
         this.institutionRepository = institutionRepository;
@@ -221,5 +231,79 @@ public class InstitutionServiceImpl implements InstitutionService {
             queryWrapper.eq(Institution::getStatus, status);
         }
         return institutionRepository.selectList(queryWrapper);
+    }
+    
+    @Override
+    public Institution getInstitutionByUsername(String username) {
+        // 根据用户表中的username查询对应的机构信息
+        // 由于数据库设计中，机构名称与用户名可能相同，我们先尝试使用institutionName查询
+        LambdaQueryWrapper<Institution> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Institution::getInstitutionName, username);
+        Institution institution = institutionRepository.selectOne(queryWrapper);
+        
+        // 如果找不到，可能是因为机构名称与用户名不同
+        // 在实际项目中，可能需要通过user表和institution表的关联关系来查询
+        // 这里为了简化，我们假设用户名存储在了institutionCode字段中
+        if (institution == null) {
+            queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Institution::getInstitutionCode, username);
+            institution = institutionRepository.selectOne(queryWrapper);
+        }
+        
+        return institution;
+    }
+    
+    @Override
+    public InstitutionProfileDTO getCurrentInstitutionProfile(String username) {
+        // 从用户表获取信息
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (!userOptional.isPresent()) {
+            throw new BusinessException("未找到用户信息");
+        }
+        
+        User user = userOptional.get();
+        
+        // 检查用户是否是机构角色
+        if (user.getRole() != 2) {
+            throw new BusinessException("该用户不是机构角色");
+        }
+        
+        // 检查用户是否关联了机构ID
+        if (user.getInstitutionId() == null) {
+            throw new BusinessException("该用户未关联机构信息");
+        }
+        
+        // 通过institution_id查询机构信息
+        Institution institution = institutionRepository.selectById(user.getInstitutionId());
+        
+        if (institution == null) {
+            throw new BusinessException("未找到机构信息");
+        }
+        
+        // 组合信息到DTO
+        InstitutionProfileDTO dto = new InstitutionProfileDTO();
+        dto.setId(institution.getId());
+        dto.setUsername(user.getUsername());
+        dto.setInstitutionName(institution.getInstitutionName());
+        dto.setInstitutionCode(institution.getInstitutionCode());
+        dto.setInstitutionType(institution.getInstitutionType());
+        dto.setInstitutionLevel(institution.getInstitutionLevel());
+        dto.setSocialCreditCode(institution.getSocialCreditCode());
+        dto.setLegalRepresentative(institution.getLegalRepresentative());
+        dto.setContactPerson(institution.getContactPerson());
+        dto.setContactEmail(institution.getContactEmail());
+        dto.setContactPhone(institution.getContactPhone());
+        dto.setAddress(institution.getAddress());
+        dto.setProvince(institution.getProvince());
+        dto.setCity(institution.getCity());
+        dto.setDistrict(institution.getDistrict());
+        dto.setInstitutionDescription(institution.getInstitutionDescription());
+        dto.setStatus(institution.getStatus());
+        dto.setCertificationLevel(institution.getCertificationLevel() != null ? institution.getCertificationLevel() : 4); // 默认为B级
+        dto.setCreateTime(institution.getCreateTime());
+        dto.setUpdateTime(institution.getUpdateTime());
+        dto.setPointsBalance(user.getPointsBalance());
+        
+        return dto;
     }
 }

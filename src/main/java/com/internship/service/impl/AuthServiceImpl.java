@@ -13,6 +13,8 @@ import com.internship.repository.ExpertRepository;
 import com.internship.repository.InstitutionRepository;
 import com.internship.repository.UserRepository;
 import com.internship.service.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,8 @@ import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -90,6 +94,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public ResponseEntity<?> registerOrganization(OrganizationRegistrationRequest request) {
+        log.info(">>>> [DIAGNOSTIC] Received registration request for institution name: '{}'", request.getInstitutionName());
         if (userRepository.exists(new QueryWrapper<User>().eq("username", request.getUsername()))) {
             return ResponseEntity.badRequest().body(Map.of("message", "用户名已存在"));
         }
@@ -100,7 +105,8 @@ public class AuthServiceImpl implements AuthService {
         institution.setInstitutionCode(request.getInstitutionCode());
         institution.setSocialCreditCode(request.getInstitutionCode()); 
         institution.setInstitutionType(request.getInstitutionType());
-        institution.setContactPerson(request.getContactPerson());
+        institution.setInstitutionLevel(request.getInstitutionLevel());
+        institution.setContactPerson(request.getUsername());
         institution.setContactPhone(request.getPhone());
         institution.setContactEmail(request.getEmail());
         institution.setLegalRepresentative(request.getLegalRepresentative());
@@ -108,17 +114,22 @@ public class AuthServiceImpl implements AuthService {
         institution.setCity(request.getCity());
         institution.setDistrict(request.getDistrict());
         institution.setAddress(request.getAddress());
-        institution.setInstitutionDescription(request.getDescription());
+        institution.setInstitutionDescription(request.getInstitutionDescription());
+        institution.setStatus(1); // 设置状态为正常
+        institution.setReviewStatus(0); // 设置审核状态为待审核
+        institution.setCertificationLevel(4); // 默认认证等级为B级
         institutionRepository.insert(institution);
 
         // 2. 创建并保存用户实体
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setFullName(request.getInstitutionName()); // 设置fullName与institutionName一致
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setRole(2); // 机构角色
         user.setInstitutionId(institution.getId()); 
+        user.setStatus(1); // 设置状态为正常
         userRepository.insert(user);
 
         return ResponseEntity.ok(Map.of("message", "机构注册成功"));

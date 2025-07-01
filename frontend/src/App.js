@@ -14,6 +14,8 @@ import EducationPromotionPage from './components/EducationPromotionPage';
 import PointsMall from './components/PointsMall';
 import UserProfile from './components/UserProfile';
 import ExpertProfile from './components/ExpertProfile';
+import InstitutionProfile from './components/InstitutionProfile';
+import UserOrders from './components/UserOrders';
 
 // A simple component to check for authentication
 const PrivateRoute = ({ children }) => {
@@ -34,6 +36,15 @@ function AppContent() {
   // This can be simplified further if not used by many components
   const handlePageChange = (path) => {
     navigate(path);
+  };
+
+  // 添加退出登录函数
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('role');
+    navigate('/login');
   };
 
   return (
@@ -72,8 +83,16 @@ function AppContent() {
         element={<PrivateRoute><ExpertProfile /></PrivateRoute>} 
       />
       <Route 
+        path="/institution/profile" 
+        element={<PrivateRoute><InstitutionProfile /></PrivateRoute>} 
+      />
+      <Route 
+        path="/my-orders" 
+        element={<PrivateRoute><UserOrders /></PrivateRoute>} 
+      />
+      <Route 
         path="/admin" 
-        element={<AdminRoute><AdminPage /></AdminRoute>} 
+        element={<AdminRoute><AdminPage onLogout={handleLogout} /></AdminRoute>} 
       />
       <Route path="/skill-certification" element={<SkillCertificationPage />} />
       <Route path="/interest-training" element={<InterestTrainingPage />} />

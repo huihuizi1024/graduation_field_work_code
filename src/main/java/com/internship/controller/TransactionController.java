@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +32,15 @@ public class TransactionController {
             @Parameter(description = "交易类型") @RequestParam(required = false) Integer transactionType) {
         PageResponse<PointTransaction> pageResponse = transactionService.getTransactions(page, size, userId, transactionType);
         return ResponseEntity.ok(ApiResponse.success(pageResponse));
+    }
+    
+    @Operation(summary = "获取当前用户的交易记录", description = "获取当前登录用户的所有交易记录")
+    @GetMapping("/my-transactions")
+    public ResponseEntity<ApiResponse<List<PointTransaction>>> getMyTransactions() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<PointTransaction> transactions = transactionService.getTransactionsByUsername(username);
+        return ResponseEntity.ok(ApiResponse.success(transactions));
     }
 
     @Operation(summary = "获取交易详情", description = "根据ID获取交易详情")

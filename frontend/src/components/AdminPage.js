@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu, theme, Button } from 'antd';
-import { UserOutlined, SettingOutlined, ScheduleOutlined, HomeOutlined } from '@ant-design/icons';
+import { UserOutlined, SettingOutlined, ScheduleOutlined, HomeOutlined, ShoppingOutlined, GiftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PointRuleList from './PointRuleList';
 import ConversionRuleList from './ConversionRuleList';
@@ -12,6 +12,8 @@ import ProjectList from './ProjectList';
 import ExpertList from './ExpertList';
 import AdminUserList from './AdminUserList';
 import InstitutionList from './InstitutionList';
+import ProductList from './ProductList';
+import OrderList from './OrderList';
 import './AdminPage.css';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -33,6 +35,8 @@ const AdminPage = ({ onLogout }) => {
       case '8': return <ProjectList />;
       case '9': return <ExpertList />;
       case '10': return <AdminUserList />;
+      case '11': return <ProductList />;
+      case '12': return <OrderList />;
       default: return <PointRuleList />;
     }
   };
@@ -48,6 +52,8 @@ const AdminPage = ({ onLogout }) => {
     { key: '8', icon: <SettingOutlined />, label: '项目管理' },
     { key: '9', icon: <UserOutlined />, label: '专家管理' },
     { key: '10', icon: <ScheduleOutlined />, label: '用户管理' },
+    { key: '11', icon: <GiftOutlined />, label: '商品管理' },
+    { key: '12', icon: <ShoppingOutlined />, label: '订单管理' },
   ];
 
   return (

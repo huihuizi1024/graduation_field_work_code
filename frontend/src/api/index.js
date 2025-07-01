@@ -107,4 +107,7 @@ export const getCurrentExpert = () => api.get('/api/experts/me');
 // 更新当前专家信息
 export const updateCurrentExpert = (data) => api.put('/api/experts/me', data);
 
+// 获取当前机构信息
+export const getCurrentInstitution = () => api.get('/api/institutions/me');
+
 export default api;

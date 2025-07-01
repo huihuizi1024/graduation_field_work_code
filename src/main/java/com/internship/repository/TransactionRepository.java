@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 @Mapper
 public interface TransactionRepository extends BaseMapper<PointTransaction> {
@@ -24,4 +25,7 @@ public interface TransactionRepository extends BaseMapper<PointTransaction> {
             @Param("userId") Long userId,
             @Param("transactionType") Integer transactionType,
             com.baomidou.mybatisplus.extension.plugins.pagination.Page<PointTransaction> page);
+            
+    @Select("SELECT * FROM point_transaction WHERE user_id = #{userId} ORDER BY create_time DESC")
+    List<PointTransaction> findByUserIdOrderByCreateTimeDesc(@Param("userId") Long userId);
 }

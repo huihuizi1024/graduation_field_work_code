@@ -136,7 +136,7 @@ const MainPage = ({
         ];
       case '2': // organization
         return [
-          { key: 'profile', label: '机构中心', icon: <UserOutlined /> },
+          { key: 'profile', label: '机构中心', icon: <UserOutlined />, onClick: () => navigate('/institution/profile') },
           { key: 'org-courses', label: '课程管理', icon: <ScheduleOutlined /> },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];

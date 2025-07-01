@@ -416,3 +416,57 @@ SELECT
     '密码: internship_pass' as password_info,
     '字符集: utf8mb4' as charset_info;
 
+-- ========================================
+-- 积分商城相关表
+-- ========================================
+
+-- 商品表
+DROP TABLE IF EXISTS product;
+CREATE TABLE product (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+  name VARCHAR(100) NOT NULL COMMENT '商品名称',
+  description TEXT COMMENT '商品描述',
+  points DOUBLE NOT NULL COMMENT '所需积分',
+  image_url VARCHAR(255) DEFAULT NULL COMMENT '商品图片URL',
+  category VARCHAR(50) DEFAULT NULL COMMENT '商品分类',
+  stock INT NOT NULL DEFAULT 0 COMMENT '库存数量',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：1-上架，0-下架',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  INDEX idx_status (status),
+  INDEX idx_category (category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分商城商品表';
+
+-- 订单表
+DROP TABLE IF EXISTS product_order;
+CREATE TABLE product_order (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+  user_id BIGINT NOT NULL COMMENT '用户ID',
+  product_id BIGINT NOT NULL COMMENT '商品ID',
+  points_used DOUBLE NOT NULL COMMENT '消耗积分',
+  order_status TINYINT NOT NULL DEFAULT 1 COMMENT '订单状态：1-待发货，2-已发货，3-已完成，4-已取消',
+  shipping_address VARCHAR(255) NOT NULL COMMENT '收货地址',
+  contact_name VARCHAR(50) NOT NULL COMMENT '联系人姓名',
+  contact_phone VARCHAR(20) NOT NULL COMMENT '联系电话',
+  transaction_id BIGINT DEFAULT NULL COMMENT '交易记录ID',
+  remark VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  INDEX idx_user_id (user_id),
+  INDEX idx_product_id (product_id),
+  INDEX idx_order_status (order_status),
+  INDEX idx_transaction_id (transaction_id),
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (product_id) REFERENCES product(id),
+  FOREIGN KEY (transaction_id) REFERENCES point_transaction(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分商城订单表';
+
+-- 添加商品示例数据
+INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
+('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
+('Python编程入门课程', '零基础入门Python编程的在线课程', 2000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
+('便携式电子词典', '随时随地查询单词，提升学习效率', 1500, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
+('职业规划咨询课程', '一对一职业发展指导课程', 3000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
+('智能学习平板', '支持手写笔记的学习平板', 5000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
+('英语口语课程', '实用英语口语训练课程', 2500, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1);
+

@@ -1,6 +1,7 @@
 package com.internship.controller;
 
 import com.internship.dto.ApiResponse;
+import com.internship.dto.InstitutionProfileDTO;
 import com.internship.dto.PageResponse;
 import com.internship.entity.Institution;
 import com.internship.service.InstitutionService;
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -197,5 +200,25 @@ public class InstitutionController {
             @Parameter(description = "状态") @RequestParam(required = false) Integer status) {
         List<Institution> institutions = institutionService.exportInstitutions(institutionType, province, status);
         return ResponseEntity.ok().body(institutions);
+    }
+    
+    /**
+     * 获取当前登录机构的信息
+     */
+    @Operation(summary = "获取当前机构信息", description = "获取当前登录机构的详细信息")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<InstitutionProfileDTO>> getCurrentInstitution() {
+        // 从安全上下文中获取当前登录用户名
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(ApiResponse.error("用户未登录"));
+        }
+        
+        String username = authentication.getName();
+        
+        // 获取综合机构信息
+        InstitutionProfileDTO institutionProfile = institutionService.getCurrentInstitutionProfile(username);
+        
+        return ResponseEntity.ok(ApiResponse.success("获取当前机构信息成功", institutionProfile));
     }
 }

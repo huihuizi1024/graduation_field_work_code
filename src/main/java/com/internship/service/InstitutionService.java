@@ -1,5 +1,6 @@
 package com.internship.service;
 
+import com.internship.dto.InstitutionProfileDTO;
 import com.internship.dto.PageResponse;
 import com.internship.entity.Institution;
 import java.util.Map;
@@ -76,4 +77,14 @@ public interface InstitutionService {
      * 导出机构数据
      */
     List<Institution> exportInstitutions(Integer institutionType, String province, Integer status);
+    
+    /**
+     * 根据用户名获取机构信息
+     */
+    Institution getInstitutionByUsername(String username);
+    
+    /**
+     * 获取当前登录机构的综合信息（结合institution表和user表）
+     */
+    InstitutionProfileDTO getCurrentInstitutionProfile(String username);
 }

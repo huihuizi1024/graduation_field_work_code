@@ -3,6 +3,7 @@ package com.internship.service.impl;
 import com.internship.dto.PageResponse;
 import com.internship.entity.PointTransaction;
 import com.internship.entity.User;
+import com.internship.exception.BusinessException;
 import com.internship.repository.TransactionRepository;
 import com.internship.repository.UserRepository;
 import com.internship.service.TransactionService;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -91,5 +94,20 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deleteTransaction(Long id) {
         transactionRepository.deleteById(id);
+    }
+    
+    @Override
+    public List<PointTransaction> getTransactionsByUsername(String username) {
+        // 根据用户名查询用户
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (!userOptional.isPresent()) {
+            throw new BusinessException("用户不存在");
+        }
+        
+        User user = userOptional.get();
+        Long userId = user.getId();
+        
+        // 查询该用户的所有交易记录
+        return transactionRepository.findByUserIdOrderByCreateTimeDesc(userId);
     }
 }

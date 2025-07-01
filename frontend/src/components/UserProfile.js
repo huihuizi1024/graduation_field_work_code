@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input } from 'antd';
+import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input, Table, Empty } from 'antd';
 import { 
   UserOutlined, 
   UploadOutlined, 
@@ -11,10 +11,14 @@ import {
   EditOutlined,
   ClockCircleOutlined,
   RightOutlined,
-  ArrowLeftOutlined
+  ArrowLeftOutlined,
+  EyeOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, updateUserInfo } from '../api';
+import * as orderAPI from '../api/order';
+import * as transactionAPI from '../api/transaction';
+import dayjs from 'dayjs';
 import EditProfileModal from './EditProfileModal'; 
 import './UserProfile.css';
 
@@ -28,6 +32,10 @@ const UserProfile = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const [transactionLoading, setTransactionLoading] = useState(false);
 
   // 获取当前用户信息
   const fetchCurrentUser = async () => {
@@ -59,6 +67,46 @@ const UserProfile = () => {
     }
   };
 
+  // 获取用户订单
+  const fetchUserOrders = async () => {
+    if (selectedMenuItem === 'orders') {
+      setOrderLoading(true);
+      try {
+        const response = await orderAPI.getMyOrders();
+        if (response.code === 200) {
+          setOrders(response.data || []);
+        } else {
+          message.error('获取订单失败');
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        message.error('获取订单失败');
+      } finally {
+        setOrderLoading(false);
+      }
+    }
+  };
+
+  // 获取积分记录
+  const fetchPointTransactions = async () => {
+    if (selectedMenuItem === 'points') {
+      setTransactionLoading(true);
+      try {
+        const response = await transactionAPI.getMyTransactions();
+        if (response.code === 200) {
+          setTransactions(response.data || []);
+        } else {
+          message.error('获取积分记录失败');
+        }
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+        message.error('获取积分记录失败');
+      } finally {
+        setTransactionLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('userInfo');
     if (storedUserInfo) {
@@ -71,6 +119,14 @@ const UserProfile = () => {
     }
     fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    if (selectedMenuItem === 'orders') {
+      fetchUserOrders();
+    } else if (selectedMenuItem === 'points') {
+      fetchPointTransactions();
+    }
+  }, [selectedMenuItem]);
 
   const handleEdit = () => {
     setIsModalVisible(true);
@@ -268,6 +324,115 @@ const UserProfile = () => {
     </div>
   );
 
+  // 订单状态标签
+  const getOrderStatusTag = (status) => {
+    switch (status) {
+      case 1:
+        return <Tag color="gold">待发货</Tag>;
+      case 2:
+        return <Tag color="blue">已发货</Tag>;
+      case 3:
+        return <Tag color="green">已完成</Tag>;
+      case 4:
+        return <Tag color="red">已取消</Tag>;
+      default:
+        return <Tag color="default">未知状态</Tag>;
+    }
+  };
+
+  // 交易类型标签
+  const getTransactionTypeTag = (type) => {
+    switch (type) {
+      case 1:
+        return <Tag color="green">获得</Tag>;
+      case 2:
+        return <Tag color="red">消费</Tag>;
+      default:
+        return <Tag color="default">其他</Tag>;
+    }
+  };
+
+  // 订单列表列配置
+  const orderColumns = [
+    {
+      title: '订单ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: '商品名称',
+      dataIndex: 'productName',
+      key: 'productName',
+      render: (text, record) => text || `商品 #${record.productId}`
+    },
+    {
+      title: '消耗积分',
+      dataIndex: 'pointsUsed',
+      key: 'pointsUsed',
+    },
+    {
+      title: '订单状态',
+      dataIndex: 'orderStatus',
+      key: 'orderStatus',
+      render: (status) => getOrderStatusTag(status)
+    },
+    {
+      title: '下单时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (text) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : '-'
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (_, record) => (
+        <Button 
+          icon={<EyeOutlined />} 
+          size="small" 
+          onClick={() => navigate(`/user/orders`)}
+        >
+          查看详情
+        </Button>
+      ),
+    },
+  ];
+
+  // 交易记录列配置
+  const transactionColumns = [
+    {
+      title: '交易ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: '交易类型',
+      dataIndex: 'transactionType',
+      key: 'transactionType',
+      render: (type) => getTransactionTypeTag(type)
+    },
+    {
+      title: '积分变动',
+      dataIndex: 'pointsChange',
+      key: 'pointsChange',
+      render: (points, record) => {
+        const color = record.transactionType === 1 ? 'green' : 'red';
+        const prefix = record.transactionType === 1 ? '+' : '-';
+        return <span style={{ color }}>{prefix}{Math.abs(points)}</span>;
+      }
+    },
+    {
+      title: '描述',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: '交易时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (text) => text ? dayjs(text).format('YYYY-MM-DD HH:mm:ss') : '-'
+    },
+  ];
+
   return (
     <Layout className="user-profile-layout">
       <div className="profile-header">
@@ -307,12 +472,35 @@ const UserProfile = () => {
                 </div>
                 <div className="courses-list">
                   {/* 课程列表渲染逻辑 */}
+                  <Empty description="暂无课程数据" />
                 </div>
               </div>
             )}
             {selectedMenuItem === 'orders' && (
               <div className="orders-list">
-                {/* 订单列表渲染逻辑 */}
+                <Card 
+                  title={
+                    <span>
+                      <ShoppingOutlined style={{ marginRight: 8 }} />
+                      我的订单
+                    </span>
+                  }
+                  bordered={false}
+                  extra={
+                    <Button type="primary" onClick={() => navigate('/points-mall')}>
+                      去积分商城
+                    </Button>
+                  }
+                >
+                  <Table 
+                    columns={orderColumns} 
+                    dataSource={orders} 
+                    rowKey="id" 
+                    loading={orderLoading}
+                    pagination={false}
+                    locale={{ emptyText: '暂无订单数据' }}
+                  />
+                </Card>
               </div>
             )}
             {selectedMenuItem === 'points' && (
@@ -326,7 +514,14 @@ const UserProfile = () => {
                   }
                   bordered={false}
                 >
-                  <p style={{ color: '#666' }}>积分记录功能开发中...</p>
+                  <Table 
+                    columns={transactionColumns} 
+                    dataSource={transactions} 
+                    rowKey="id" 
+                    loading={transactionLoading}
+                    pagination={false}
+                    locale={{ emptyText: '暂无积分记录' }}
+                  />
                 </Card>
               </div>
             )}
