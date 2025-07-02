@@ -25,6 +25,48 @@ FLUSH PRIVILEGES;
 USE internship_db;
 
 -- ========================================
+-- 积分商城相关表
+-- ========================================
+
+-- 商品表
+DROP TABLE IF EXISTS product;
+CREATE TABLE product (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+  name VARCHAR(100) NOT NULL COMMENT '商品名称',
+  description TEXT COMMENT '商品描述',
+  points DOUBLE NOT NULL COMMENT '所需积分',
+  image_url VARCHAR(255) DEFAULT NULL COMMENT '商品图片URL',
+  category VARCHAR(50) DEFAULT NULL COMMENT '商品分类',
+  stock INT NOT NULL DEFAULT 0 COMMENT '库存数量',
+  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：1-上架，0-下架',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  INDEX idx_status (status),
+  INDEX idx_category (category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分商城商品表';
+
+-- 订单表
+DROP TABLE IF EXISTS product_order;
+CREATE TABLE product_order (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+  user_id BIGINT NOT NULL COMMENT '用户ID',
+  product_id BIGINT NOT NULL COMMENT '商品ID',
+  points_used DOUBLE NOT NULL COMMENT '消耗积分',
+  order_status TINYINT NOT NULL DEFAULT 1 COMMENT '订单状态：1-待发货，2-已发货，3-已完成，4-已取消',
+  shipping_address VARCHAR(255) NOT NULL COMMENT '收货地址',
+  contact_name VARCHAR(50) NOT NULL COMMENT '联系人姓名',
+  contact_phone VARCHAR(20) NOT NULL COMMENT '联系电话',
+  transaction_id BIGINT DEFAULT NULL COMMENT '交易记录ID',
+  remark VARCHAR(255) DEFAULT NULL COMMENT '备注',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  INDEX idx_user_id (user_id),
+  INDEX idx_product_id (product_id),
+  INDEX idx_order_status (order_status),
+  INDEX idx_transaction_id (transaction_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分商城订单表';
+
+-- ========================================
 -- 表结构创建
 -- ========================================
 
@@ -650,43 +692,17 @@ INSERT INTO project (
 INSERT INTO user (
     username, password_hash, full_name, role, email, phone, institution_id, status, points_balance
 ) VALUES 
-('student01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', 1, 1, 150.00),
-('teacher01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '王老师', 2, 'wanglaoshi@pku.edu.cn', '13800138002', 1, 1, 280.00),
-('expert01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', 3, 1, 500.00),
-('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '系统管理员', 4, 'admin@system.com', '13800138000', NULL, 1, 1000.00),
-('student02', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', 2, 1, 75.00),
-('teacher02', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '陈教授', 2, 'chenjiaoshou@tsinghua.edu.cn', '13800138005', 2, 1, 320.00);
+('student01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', 1, 1, 150.00),
+('teacher01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '王老师', 2, 'wanglaoshi@pku.edu.cn', '13800138002', 1, 1, 280.00),
+('expert01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', 3, 1, 500.00),
+('student02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', 2, 1, 75.00),
+('teacher02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '陈教授', 2, 'chenjiaoshou@tsinghua.edu.cn', '13800138005', 2, 1, 320.00);
 
 -- 插入专家数据
 INSERT INTO expert (id, name, expertise, contact, status, description) VALUES 
 (3, '张专家', '职业技能培训,数字化转型', '13800138003', 1, '具有10年职业技能培训经验，专注数字化人才培养');
 
--- 插入积分流水数据
-INSERT INTO point_transaction (
-    user_id, point_rule_id, transaction_type, points_change, balance_after, description, related_id
-) VALUES 
-(1, 1, 1, 50.00, 50.00, '完成Python基础课程学习', 'COURSE_001'),
-(1, 2, 1, 30.00, 80.00, '参与2024学习节活动', 'ACTIVITY_001'),
-(1, 3, 1, 20.00, 100.00, '分享学习心得《我的编程之路》', 'SHARE_001'),
-(1, 1, 1, 50.00, 150.00, '完成数据库基础课程', 'COURSE_002'),
 
-(2, 1, 1, 50.00, 50.00, '完成高等数学课程', 'COURSE_003'),
-(2, 4, 1, 200.00, 250.00, '通过计算机二级认证', 'CERT_001'),
-(2, 2, 1, 30.00, 280.00, '参与技能竞赛', 'ACTIVITY_002'),
-
-(3, 5, 1, 100.00, 100.00, '推荐新用户注册', 'REF_001'),
-(3, 1, 1, 50.00, 150.00, '完成专业技能课程', 'COURSE_004'),
-(3, 4, 1, 200.00, 350.00, '通过职业技能认证', 'CERT_002'),
-(3, 1, 1, 50.00, 400.00, '完成高级技能课程', 'COURSE_005'),
-(3, 5, 1, 100.00, 500.00, '推荐新用户注册', 'REF_002'),
-
-(5, 1, 1, 50.00, 50.00, '完成机器学习入门', 'COURSE_006'),
-(5, 2, 1, 25.00, 75.00, '参与学习分享会', 'ACTIVITY_003'),
-
-(6, 1, 1, 50.00, 50.00, '完成深度学习课程', 'COURSE_007'),
-(6, 4, 1, 200.00, 250.00, '通过人工智能认证', 'CERT_003'),
-(6, 3, 1, 20.00, 270.00, '发表学术论文分享', 'SHARE_002'),
-(6, 1, 1, 50.00, 320.00, '完成高级算法课程', 'COURSE_008');
 
 -- 插入商品数据
 INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
@@ -717,8 +733,26 @@ INSERT INTO conversion_history (
 (3, 3, 300.00, 60.00, 1, '积分转职业证书成功');
 
 -- ========================================
+-- 添加商品示例数据
+-- ========================================
+INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
+('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
+('Python编程入门课程', '零基础入门Python编程的在线课程', 2000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
+('便携式电子词典', '随时随地查询单词，提升学习效率', 1500, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
+('职业规划咨询课程', '一对一职业发展指导课程', 3000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
+('智能学习平板', '支持手写笔记的学习平板', 5000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
+('英语口语课程', '实用英语口语训练课程', 2500, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1);
+
+-- 添加product_order表的外键约束
+ALTER TABLE product_order 
+ADD CONSTRAINT fk_product_order_user_id FOREIGN KEY (user_id) REFERENCES user(id),
+ADD CONSTRAINT fk_product_order_product_id FOREIGN KEY (product_id) REFERENCES product(id),
+ADD CONSTRAINT fk_product_order_transaction_id FOREIGN KEY (transaction_id) REFERENCES point_transaction(id);
+
+-- ========================================
 -- 验证数据插入
 -- ========================================
+
 -- 查看创建的表
 SHOW TABLES;
 
@@ -746,58 +780,4 @@ SELECT
     '用户名: internship_user' as user_info,
     '密码: internship_pass' as password_info,
     '字符集: utf8mb4' as charset_info;
-
--- ========================================
--- 积分商城相关表
--- ========================================
-
--- 商品表
-DROP TABLE IF EXISTS product;
-CREATE TABLE product (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-  name VARCHAR(100) NOT NULL COMMENT '商品名称',
-  description TEXT COMMENT '商品描述',
-  points DOUBLE NOT NULL COMMENT '所需积分',
-  image_url VARCHAR(255) DEFAULT NULL COMMENT '商品图片URL',
-  category VARCHAR(50) DEFAULT NULL COMMENT '商品分类',
-  stock INT NOT NULL DEFAULT 0 COMMENT '库存数量',
-  status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：1-上架，0-下架',
-  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  INDEX idx_status (status),
-  INDEX idx_category (category)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分商城商品表';
-
--- 订单表
-DROP TABLE IF EXISTS product_order;
-CREATE TABLE product_order (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-  user_id BIGINT NOT NULL COMMENT '用户ID',
-  product_id BIGINT NOT NULL COMMENT '商品ID',
-  points_used DOUBLE NOT NULL COMMENT '消耗积分',
-  order_status TINYINT NOT NULL DEFAULT 1 COMMENT '订单状态：1-待发货，2-已发货，3-已完成，4-已取消',
-  shipping_address VARCHAR(255) NOT NULL COMMENT '收货地址',
-  contact_name VARCHAR(50) NOT NULL COMMENT '联系人姓名',
-  contact_phone VARCHAR(20) NOT NULL COMMENT '联系电话',
-  transaction_id BIGINT DEFAULT NULL COMMENT '交易记录ID',
-  remark VARCHAR(255) DEFAULT NULL COMMENT '备注',
-  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  INDEX idx_user_id (user_id),
-  INDEX idx_product_id (product_id),
-  INDEX idx_order_status (order_status),
-  INDEX idx_transaction_id (transaction_id),
-  FOREIGN KEY (user_id) REFERENCES user(id),
-  FOREIGN KEY (product_id) REFERENCES product(id),
-  FOREIGN KEY (transaction_id) REFERENCES point_transaction(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='积分商城订单表';
-
--- 添加商品示例数据
-INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
-('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
-('Python编程入门课程', '零基础入门Python编程的在线课程', 2000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
-('便携式电子词典', '随时随地查询单词，提升学习效率', 1500, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
-('职业规划咨询课程', '一对一职业发展指导课程', 3000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
-('智能学习平板', '支持手写笔记的学习平板', 5000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
-('英语口语课程', '实用英语口语训练课程', 2500, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1);
 

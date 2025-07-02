@@ -1,5 +1,72 @@
 # 终身学习学分银行积分管理系统 - 更新日志
 
+## 📅 2025年7月2日 - 课程发布系统与管理平台优化 (v1.3.1)
+
+### 🎯 本次更新核心目标
+本次更新重点实现了课程发布系统，完善了个人主页功能，修复了注册Bug，并对管理平台进行了全面优化。同时整合了远程代码库中的验证码登录和活动页面功能，进一步提升了系统的完整性。
+
+- **更新人员**: 韩英旭
+
+---
+
+### ✨ 课程发布与观看系统
+- **机构课程管理功能**:
+  - 实现机构用户发布视频课程功能
+  - 课程分类、标签和积分设置
+  - 课程封面和视频上传管理
+- **课程学习功能**:
+  - 分类视频浏览与筛选
+  - 视频在线播放与进度记录
+  - 完成学习后自动获取积分奖励
+  - 个人学习记录管理
+
+### 👤 个人主页功能完善
+- **个人中心升级**:
+  - 用户资料查看与编辑功能
+  - 我的课程与项目管理
+  - 学习进度与积分展示
+- **学习记录功能**:
+  - 已观看课程与项目列表
+  - 学习进度实时显示
+  - 获得积分记录查询
+
+### 🛠️ 管理平台完善
+- **项目管理优化**:
+  - 项目列表查询与筛选
+  - 项目详情展示与编辑
+  - 视频资源管理功能
+- **数据库结构优化**:
+  - 增加课程和项目观看记录表
+  - 完善外键约束和索引结构
+  - 优化数据查询性能
+
+### 🐛 问题修复
+- 解决注册流程中的Bug
+- 修复项目管理页面访问权限问题
+- 解决数据库表创建顺序和外键依赖问题
+
+### 🔄 技术实现
+- **新增核心文件**:
+  - `frontend/src/components/CategoryVideoPage.js` - 分类视频页面
+  - `frontend/src/components/CourseListPage.js` - 课程列表页面
+  - `frontend/src/components/CourseViewer.js` - 课程查看器
+  - `frontend/src/components/InstitutionCourseManagement.js` - 机构课程管理
+  - `frontend/src/components/MyCourses.js` - 我的课程组件
+  - `frontend/src/components/MyProjects.js` - 我的项目组件
+  - `frontend/src/components/ProjectListPage.js` - 项目列表页面
+  - `frontend/src/components/ProjectViewer.js` - 项目查看器
+  - `src/main/java/com/internship/controller/CourseController.java` - 课程控制器
+  - `src/main/java/com/internship/entity/CourseWatchRecord.java` - 课程观看记录实体
+  - `src/main/java/com/internship/entity/ProjectWatchRecord.java` - 项目观看记录实体
+
+### 🎯 核心成果
+- **课程发布系统**: 完整实现机构发布课程和用户观看学习的闭环
+- **个人中心升级**: 丰富的个人学习管理功能
+- **学习激励机制**: 完成视频学习自动获得积分奖励
+- **系统稳定性提升**: 修复多个影响用户体验的关键问题
+
+---
+
 ## 📅 2025年7月2日 - 积分商城与订单系统上线 (v1.3.0)
 
 ### 🎯 本次更新核心目标

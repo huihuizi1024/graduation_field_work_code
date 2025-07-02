@@ -56,7 +56,10 @@ const CategoryVideoPage = () => {
   const fetchCategoryVideos = async (page = 1, pageSize = 15) => {
     setLoading(true);
     try {
-      const response = await api.get(`/api/projects/by-category/${category}`, {
+      // 检查category参数是否存在，不存在则使用默认分类1
+      const categoryId = category || '1';
+      
+      const response = await api.get(`/api/projects/by-category/${categoryId}`, {
         params: {
           page,
           size: pageSize
@@ -101,8 +104,13 @@ const CategoryVideoPage = () => {
 
   // 初始加载
   useEffect(() => {
+    // 如果未指定分类，默认加载分类1
+    if (!category) {
+      navigate('/category/1', { replace: true });
+      return;
+    }
     fetchCategoryVideos(pagination.current, pagination.pageSize);
-  }, [category]);
+  }, [category, navigate, pagination.current, pagination.pageSize]);
 
   // 渲染视频卡片
   const renderVideoCard = (item) => (
