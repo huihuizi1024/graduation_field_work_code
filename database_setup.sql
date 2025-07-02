@@ -244,9 +244,178 @@ CREATE TABLE project (
     status INT NOT NULL DEFAULT 1 COMMENT '状态：1-进行中, 0-已完成',
     description TEXT COMMENT '项目描述',
     creator_id BIGINT COMMENT '创建人ID',
+    institution_id BIGINT COMMENT '机构ID',
+    category INT COMMENT '课程分类：1-专业技能, 2-学术教育, 3-职业发展, 4-创新创业, 5-人文艺术, 6-科学技术',
+    video_url VARCHAR(255) COMMENT '课程视频URL',
+    cover_image_url VARCHAR(255) COMMENT '课程封面图URL',
+    points_reward INT DEFAULT 5 COMMENT '观看完成可获得积分',
+    duration INT DEFAULT 30 COMMENT '项目时长(分钟)',
+    view_count INT DEFAULT 0 COMMENT '浏览量',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目/课程表';
+
+-- 创建课程观看记录表
+CREATE TABLE IF NOT EXISTS course_watch_record (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    course_id VARCHAR(64) NOT NULL COMMENT '课程ID',
+    watch_status INT DEFAULT 0 COMMENT '观看状态：0-未完成，1-已完成',
+    watch_progress INT DEFAULT 0 COMMENT '观看进度（百分比）',
+    is_rewarded INT DEFAULT 0 COMMENT '是否已获得积分：0-未获得，1-已获得',
+    last_watch_time DATETIME COMMENT '最后观看时间',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_user_id (user_id),
+    INDEX idx_course_id (course_id),
+    INDEX idx_user_course (user_id, course_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程观看记录表';
+
+-- 创建外键约束
+ALTER TABLE course_watch_record
+ADD CONSTRAINT fk_course_watch_user_id
+FOREIGN KEY (user_id) REFERENCES user(id)
+ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- 创建数据触发器，当course_watch_record表的watch_status从0变为1时，自动增加user表中的points_balance
+DELIMITER //
+CREATE TRIGGER IF NOT EXISTS trg_course_completed
+AFTER UPDATE ON course_watch_record
+FOR EACH ROW
+BEGIN
+    DECLARE reward INT;
+    
+    -- 如果观看状态从未完成变为已完成且未获得过积分
+    IF OLD.watch_status = 0 AND NEW.watch_status = 1 AND NEW.is_rewarded = 0 THEN
+        -- 获取课程的积分奖励
+        SELECT points_reward INTO reward FROM project WHERE id = NEW.course_id;
+        
+        IF reward > 0 THEN
+            -- 更新用户积分余额
+            UPDATE user SET points_balance = points_balance + reward WHERE id = NEW.user_id;
+            
+            -- 创建积分交易记录
+            INSERT INTO point_transaction (
+                user_id, 
+                transaction_type, 
+                points_change, 
+                balance_after, 
+                description, 
+                related_id
+            )
+            SELECT 
+                NEW.user_id, 
+                1, -- 获得积分
+                reward, 
+                (SELECT points_balance FROM user WHERE id = NEW.user_id), 
+                CONCAT('完成课程《', project_name, '》获得积分'), 
+                NEW.course_id
+            FROM project WHERE id = NEW.course_id;
+            
+            -- 更新为已获得积分
+            UPDATE course_watch_record SET is_rewarded = 1 WHERE id = NEW.id;
+        END IF;
+    END IF;
+END //
+DELIMITER ;
+
+-- 创建或更新课程相关的视图
+CREATE OR REPLACE VIEW v_courses AS
+SELECT 
+    p.id,
+    p.project_name AS course_name,
+    p.project_code AS course_code,
+    p.负责人 AS instructor,
+    p.start_date,
+    p.end_date,
+    p.status,
+    p.description,
+    p.creator_id,
+    p.institution_id,
+    p.category,
+    p.video_url,
+    p.cover_image_url,
+    p.points_reward,
+    p.duration,
+    p.view_count,
+    i.institution_name,
+    p.create_time,
+    p.update_time,
+    CASE 
+        WHEN p.category = 1 THEN '专业技能'
+        WHEN p.category = 2 THEN '学术教育'
+        WHEN p.category = 3 THEN '职业发展'
+        WHEN p.category = 4 THEN '创新创业'
+        WHEN p.category = 5 THEN '人文艺术'
+        WHEN p.category = 6 THEN '科学技术'
+        ELSE '未分类'
+    END AS category_name
+FROM 
+    project p
+LEFT JOIN 
+    institution i ON p.institution_id = i.id;
+
+-- 创建项目观看记录表
+CREATE TABLE IF NOT EXISTS project_watch_record (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '记录ID',
+  user_id BIGINT NOT NULL COMMENT '用户ID',
+  project_id VARCHAR(36) NOT NULL COMMENT '项目ID',
+  watch_status INT DEFAULT 0 COMMENT '观看状态：0-未完成，1-已完成',
+  watch_progress INT DEFAULT 0 COMMENT '观看进度（百分比）',
+  is_rewarded INT DEFAULT 0 COMMENT '是否已获得积分：0-未获得，1-已获得',
+  last_watch_time DATETIME COMMENT '最后观看时间',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  INDEX idx_user_project (user_id, project_id),
+  INDEX idx_user_id (user_id),
+  INDEX idx_project_id (project_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目观看记录表';
+
+-- 创建触发器，当用户完成项目观看且未获得过积分时，自动给予积分奖励
+DELIMITER //
+CREATE TRIGGER reward_points_after_project_complete
+AFTER UPDATE ON project_watch_record
+FOR EACH ROW
+BEGIN
+    DECLARE project_points INT;
+    
+    -- 只有当观看状态从未完成变为已完成，且未获得过积分时才执行
+    IF (OLD.watch_status = 0 AND NEW.watch_status = 1 AND NEW.is_rewarded = 0) THEN
+        -- 获取项目奖励积分
+        SELECT points_reward INTO project_points FROM project WHERE id = NEW.project_id;
+        
+        -- 如果有积分奖励，则更新用户积分并创建积分交易记录
+        IF project_points > 0 THEN
+            -- 更新用户积分
+            UPDATE user 
+            SET points_balance = points_balance + project_points
+            WHERE id = NEW.user_id;
+            
+            -- 插入积分交易记录
+            INSERT INTO point_transaction (user_id, transaction_type, points_change, description, related_id)
+            SELECT 
+                NEW.user_id, 
+                1, -- 获得积分类型
+                project_points, 
+                CONCAT('完成项目《', project_name, '》获得积分'), 
+                NEW.project_id
+            FROM project 
+            WHERE id = NEW.project_id;
+            
+            -- 标记为已获得积分
+            UPDATE project_watch_record 
+            SET is_rewarded = 1 
+            WHERE id = NEW.id;
+        END IF;
+    END IF;
+END //
+DELIMITER ;
+
+-- 添加索引优化查询性能
+CREATE INDEX idx_project_institution_id ON project(institution_id);
+CREATE INDEX idx_project_category ON project(category);
+CREATE INDEX idx_project_watch_status ON project_watch_record(watch_status);
+CREATE INDEX idx_project_user_watched ON project_watch_record(user_id, watch_status);
 
 -- 14. 创建专家表 (expert)
 DROP TABLE IF EXISTS expert;
@@ -262,7 +431,6 @@ CREATE TABLE expert (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     FOREIGN KEY (id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='专家表';
-
 
 -- 机构表索引
 CREATE INDEX idx_institution_code ON institution(institution_code);
@@ -379,10 +547,44 @@ INSERT INTO platform_activity (
 -- 插入项目初始数据
 DELETE FROM project WHERE id > 0;
 INSERT INTO project (
-    id, project_name, project_code, 负责人, start_date, end_date, status, description
+    id, project_name, project_code, 负责人, start_date, end_date, status, description, category, 
+    video_url, cover_image_url, points_reward, duration, view_count
 ) VALUES
-('PROJ001', '学分银行系统开发', 'XBANK_DEV', '张老师', '2024-01-01', '2024-12-31', 1, '学分银行平台系统开发项目'),
-('PROJ002', '在线课程体系建设', 'COURSE_SYS', '李老师', '2024-03-01', '2024-09-30', 1, '构建在线课程体系');
+('PROJ001', '专业技能实战教程', 'XBANK_DEV', '张老师', '2024-01-01', '2024-12-31', 1, 
+'专业技能实战教程，从入门到精通', 1, 
+'https://www.w3schools.com/html/mov_bbb.mp4', 
+'https://img.freepik.com/free-photo/close-up-hand-writing-notebook-top-view_23-2148888824.jpg', 
+10, 45, 120),
+
+('PROJ002', '学术研究方法指南', 'COURSE_SYS', '李老师', '2024-03-01', '2024-09-30', 1, 
+'学术研究方法全面指南，提升学术能力', 2, 
+'https://www.w3schools.com/html/mov_bbb.mp4', 
+'https://img.freepik.com/free-photo/education-day-arrangement-table-with-books_23-2149241046.jpg', 
+15, 60, 80),
+
+('PROJ003', '职业发展规划', 'CAREER_DEV', '王教授', '2024-02-15', '2024-08-15', 1, 
+'职业生涯规划与发展指导，助力职场进阶', 3, 
+'https://www.w3schools.com/html/mov_bbb.mp4', 
+'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', 
+12, 50, 95),
+
+('PROJ004', '创业指南与案例分析', 'STARTUP_GUIDE', '赵导师', '2024-04-01', '2024-10-31', 1, 
+'创业实践指南与成功案例解析，激发创新精神', 4, 
+'https://www.w3schools.com/html/mov_bbb.mp4', 
+'https://img.freepik.com/free-photo/business-people-shaking-hands-together_53876-30616.jpg', 
+20, 75, 65),
+
+('PROJ005', '当代艺术赏析', 'ART_APPREC', '陈老师', '2024-03-15', '2024-09-15', 1, 
+'当代艺术作品赏析与文化内涵解读', 5, 
+'https://www.w3schools.com/html/mov_bbb.mp4', 
+'https://img.freepik.com/free-photo/woman-watching-paintings-museum_23-2148851236.jpg', 
+8, 40, 110),
+
+('PROJ006', '前沿科技探索', 'TECH_EXPLORE', '刘教授', '2024-05-01', '2024-11-30', 1, 
+'前沿科技发展与未来趋势探索', 6, 
+'https://www.w3schools.com/html/mov_bbb.mp4', 
+'https://img.freepik.com/free-photo/future-technology-human-experience_53876-97295.jpg', 
+18, 65, 85);
 
 
 -- ========================================

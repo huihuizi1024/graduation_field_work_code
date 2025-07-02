@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu } from 'antd';
-import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, TeamOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
 import './MainPage.css';
 import { useNavigate } from 'react-router-dom';
 import api, { logout } from '../api';
@@ -9,32 +9,17 @@ const { Title, Paragraph } = Typography;
 
 const identityInfo = {
   '1': { label: '学生', icon: <UserOutlined />, color: '#1890ff' },
-  '3': { label: '专家', icon: <TeamOutlined />, color: '#52c41a' },
+  '3': { label: '专家', icon: <ScheduleOutlined />, color: '#52c41a' },
   '4': { label: '管理员', icon: <UserOutlined />, color: '#faad14' },
   '2': { label: '机构', icon: <UserOutlined />, color: '#722ed1' },
 };
 
-const MainPage = ({ 
-  onGoToSkillCertification,
-  onGoToInterestTraining,
-  onGoToLifeSkills,
-  onCareerAdvance,
-  onGoToSeniorEducation,
-  onGoToEducationPromotion
-}) => {
+const MainPage = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
-
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [pagination, setPagination] = useState({
-    page: 1,
-    size: 3,
-    total: 0
-  });
 
   useEffect(() => {
     // ComponentDidMount: Check login status from localStorage
@@ -50,37 +35,7 @@ const MainPage = ({
         setUserRole(storedRole);
       }
     }
-    fetchCourses();
   }, []);
-
-  // 获取课程列表
-  const fetchCourses = async () => {
-    try {
-      setLoading(true);
-      // Ensure you are using the correct endpoint and parameters
-      const res = await api.get('/api/platform-activities', {
-        params: { page: 0, size: 3 }
-      });
-      // The response interceptor already handles response.data, so res is the data object.
-      // Adjust this based on your actual API response structure.
-      if (res && res.records) { 
-        const mapped = res.records.map(item => ({
-          id: item.id,
-          title: item.activityName || '活动',
-          description: item.activityDescription || '',
-          category: item.activityType,
-          views: item.participantCount || 0
-        }));
-        setCourses(mapped);
-      }
-      setLoading(false);
-    } catch (error) {
-      // The error object from axios interceptor might be nested.
-      const errorMsg = error.response?.data?.message || error.message || '获取课程列表失败';
-      message.error(errorMsg);
-      setLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     try {
@@ -104,14 +59,14 @@ const MainPage = ({
     }
   };
 
-  // 搜索课程
+  // 搜索课程功能修改
   const handleSearch = () => {
     if (!searchValue.trim()) {
       message.warning('请输入搜索内容');
       return;
     }
-    // Modify fetchCourses to accept search term if API supports it
-    fetchCourses(); 
+    // 直接导航到项目列表页面
+    navigate('/projects');
   };
 
   // 不同身份功能菜单
@@ -120,13 +75,13 @@ const MainPage = ({
       case '1': // student
         return [
           { key: 'profile', label: '个人中心', icon: <UserOutlined />, onClick: () => navigate('/profile') },
-          { key: 'my-courses', label: '我的课程', icon: <ScheduleOutlined /> },
+          { key: 'my-courses', label: '我的课程', icon: <ScheduleOutlined />, onClick: () => navigate('/my-courses') },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
       case '3': // expert
         return [
           { key: 'profile', label: '专家中心', icon: <UserOutlined />, onClick: () => navigate('/expert/profile') },
-          { key: 'review', label: '课程评审', icon: <ScheduleOutlined /> },
+          { key: 'review', label: '课程评审', icon: <ScheduleOutlined />, onClick: () => navigate('/projects') },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
       case '4': // admin
@@ -137,7 +92,7 @@ const MainPage = ({
       case '2': // organization
         return [
           { key: 'profile', label: '机构中心', icon: <UserOutlined />, onClick: () => navigate('/institution/profile') },
-          { key: 'org-courses', label: '课程管理', icon: <ScheduleOutlined /> },
+          { key: 'org-courses', label: '课程管理', icon: <ScheduleOutlined />, onClick: () => navigate('/institution/courses') },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
       default:
@@ -169,52 +124,46 @@ const MainPage = ({
   // 功能板块数据
   const features = [
     { 
-      title: "生活技能", 
-      icon: "🏠", 
-      desc: "生活技能提升", 
-      count: "1000+",
-      onClick: onGoToLifeSkills,
-      path: '/life-skills'
-    },
-    { 
-      title: "职场进阶", 
+      title: "专业技能", 
       icon: "💼", 
-      desc: "职业发展课程", 
-      count: "800+",
-      onClick: onCareerAdvance,
-      path: '/career-advance'
+      desc: "专业技能学习", 
+      count: "1000+",
+      path: '/category/1'
     },
     { 
-      title: "老年教育", 
-      icon: "👴", 
-      desc: "银龄学习课程", 
-      count: "500+",
-      onClick: onGoToSeniorEducation,
-      path: '/senior-education'
-    },
-    { 
-      title: "学历提升", 
+      title: "学术教育", 
       icon: "🎓", 
-      desc: "学历教育项目", 
+      desc: "学术知识与教育", 
+      count: "800+",
+      path: '/category/2'
+    },
+    { 
+      title: "职业发展", 
+      icon: "📈", 
+      desc: "职场进阶课程", 
+      count: "500+",
+      path: '/category/3'
+    },
+    { 
+      title: "创新创业", 
+      icon: "💡", 
+      desc: "创新思维与创业", 
       count: "300+",
-      onClick: onGoToEducationPromotion,
-      path: '/education-promotion'
+      path: '/category/4'
     },
     { 
-      title: "兴趣培养", 
+      title: "人文艺术", 
       icon: "🎨", 
-      desc: "兴趣拓展课程", 
+      desc: "人文艺术与兴趣", 
       count: "1200+",
-      onClick: onGoToInterestTraining,
-      path: '/interest-training'
+      path: '/category/5'
     },
     { 
-      title: "技能认证", 
-      icon: "⚒️", 
-      desc: "职业技能认证", 
+      title: "科学技术", 
+      icon: "🔬", 
+      desc: "科技前沿探索", 
       count: "600+",
-      onClick: onGoToSkillCertification,
-      path: '/skill-certification'
+      path: '/category/6'
     }
   ];
 
@@ -228,11 +177,7 @@ const MainPage = ({
 
   // 处理功能板块点击
   const handleFeatureClick = (feature) => {
-    // 优先使用回调函数，这样可以保持状态管理的一致性
-    if (feature.onClick) {
-      feature.onClick();
-    }
-    // 即使有回调函数，也执行路由导航，这样可以保持URL的一致性
+    // 直接使用路由导航，保持URL的一致性
     navigate(feature.path);
   };
 
@@ -244,6 +189,21 @@ const MainPage = ({
       return;
     }
     navigate('/points-mall');
+  };
+
+  // 获取分类名称
+  const getCategoryName = (category) => {
+    if (!category) return '未分类';
+    
+    switch (parseInt(category)) {
+      case 1: return '生活技能';
+      case 2: return '职场进阶';
+      case 3: return '老年教育';
+      case 4: return '学历提升';
+      case 5: return '兴趣培养';
+      case 6: return '技能认证';
+      default: return '未分类';
+    }
   };
 
   return (
@@ -346,42 +306,6 @@ const MainPage = ({
                 <Title level={4}>{feature.title}</Title>
                 <Paragraph>{feature.desc}</Paragraph>
                 <div className="feature-count">{feature.count}</div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </div>
-
-      {/* 热门课程 */}
-      <div className="hot-courses-section">
-        <Title level={2} className="section-title">
-          热门课程
-        </Title>
-        <Row gutter={[24, 24]}>
-          {courses.map(course => (
-            <Col xs={24} sm={12} md={8} key={course.id}>
-              <Card
-                className="course-card"
-                hoverable
-                cover={
-                  <img
-                    alt={course.title}
-                    src={`https://source.unsplash.com/400x300/?education,${course.category}`}
-                  />
-                }
-              >
-                <Card.Meta
-                  title={course.title}
-                  description={course.description}
-                />
-                <div className="course-footer">
-                  <Tag color="blue" className="course-category">
-                    {course.category}
-                  </Tag>
-                  <span className="course-views">
-                    <TeamOutlined /> {course.views}
-                  </span>
-                </div>
               </Card>
             </Col>
           ))}

@@ -88,6 +88,28 @@ public class ProjectServiceImpl implements ProjectService {
         if (StringUtils.hasText(project.getDescription())) {
             existingProject.setDescription(project.getDescription());
         }
+        // 更新新增字段
+        if (project.getInstitutionId() != null) {
+            existingProject.setInstitutionId(project.getInstitutionId());
+        }
+        if (project.getCategory() != null) {
+            existingProject.setCategory(project.getCategory());
+        }
+        if (StringUtils.hasText(project.getVideoUrl())) {
+            existingProject.setVideoUrl(project.getVideoUrl());
+        }
+        if (StringUtils.hasText(project.getCoverImageUrl())) {
+            existingProject.setCoverImageUrl(project.getCoverImageUrl());
+        }
+        if (project.getPointsReward() != null) {
+            existingProject.setPointsReward(project.getPointsReward());
+        }
+        if (project.getDuration() != null) {
+            existingProject.setDuration(project.getDuration());
+        }
+        if (project.getViewCount() != null) {
+            existingProject.setViewCount(project.getViewCount());
+        }
 
         existingProject.setUpdateTime(LocalDateTime.now());
         projectRepository.updateById(existingProject);

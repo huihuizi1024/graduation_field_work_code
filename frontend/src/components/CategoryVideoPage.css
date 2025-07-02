@@ -1,0 +1,143 @@
+.category-video-page {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.video-card {
+  margin-bottom: 8px;
+  transition: all 0.3s;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.video-card-cover {
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  border-radius: 8px 8px 0 0;
+}
+
+.video-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.video-card:hover .video-card-cover img {
+  transform: scale(1.05);
+}
+
+.video-card-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 40px;
+  color: #d9d9d9;
+}
+
+.video-watched-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #52c41a;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.video-duration-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 2px 6px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1;
+}
+
+.video-card-author {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.video-card-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #999;
+  font-size: 12px;
+}
+
+.video-points-tag {
+  margin-left: auto;
+}
+
+.ant-card-meta-title {
+  font-size: 14px;
+  margin-bottom: 4px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pagination-container {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+  .category-video-page {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 20px 0;
+  }
+  
+  .video-card-cover {
+    height: 140px;
+  }
+}
+
+@media (max-width: 576px) {
+  .category-video-page {
+    padding: 10px;
+  }
+  
+  .page-header {
+    padding: 15px 0;
+  }
+  
+  .video-card-cover {
+    height: 120px;
+  }
+} 

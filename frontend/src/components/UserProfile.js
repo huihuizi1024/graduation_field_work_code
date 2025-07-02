@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input, Table, Empty } from 'antd';
+import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input, Table, Empty, Row, Col, Statistic, List, Typography, notification } from 'antd';
 import { 
   UserOutlined, 
   UploadOutlined, 
@@ -11,8 +11,10 @@ import {
   EditOutlined,
   ClockCircleOutlined,
   RightOutlined,
-  ArrowLeftOutlined,
-  EyeOutlined
+  HomeOutlined,
+  EyeOutlined,
+  PlayCircleOutlined,
+  ProfileOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, updateUserInfo } from '../api';
@@ -20,22 +22,28 @@ import * as orderAPI from '../api/order';
 import * as transactionAPI from '../api/transaction';
 import dayjs from 'dayjs';
 import EditProfileModal from './EditProfileModal'; 
+import MyCourses from './MyCourses'; // 导入MyCourses组件
+import MyProjects from './MyProjects';
 import './UserProfile.css';
+import axios from 'axios';
+import { getToken } from '../api/index';
 
 const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
+const { Title, Text } = Typography;
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const [selectedMenuItem, setSelectedMenuItem] = useState('profile');
   const [activeTab, setActiveTab] = useState('1');
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [orders, setOrders] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [transactionLoading, setTransactionLoading] = useState(false);
+  const [completedProjects, setCompletedProjects] = useState([]);
 
   // 获取当前用户信息
   const fetchCurrentUser = async () => {
@@ -127,6 +135,10 @@ const UserProfile = () => {
       fetchPointTransactions();
     }
   }, [selectedMenuItem]);
+
+  useEffect(() => {
+    fetchCompletedProjects();
+  }, []);
 
   const handleEdit = () => {
     setIsModalVisible(true);
@@ -433,16 +445,29 @@ const UserProfile = () => {
     },
   ];
 
+  const fetchCompletedProjects = async () => {
+    try {
+      const response = await axios.get('/api/projects/completed', {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      if (response.data.code === 200) {
+        setCompletedProjects(response.data.data || []);
+      }
+    } catch (error) {
+      console.error('获取已完成项目失败:', error);
+    }
+  };
+
   return (
     <Layout className="user-profile-layout">
       <div className="profile-header">
         <Button 
-          type="link" 
-          icon={<ArrowLeftOutlined />}
+          type="primary" 
+          icon={<HomeOutlined />}
           onClick={() => navigate('/')}
           className="back-button"
         >
-          返回主页
+          返回首页
         </Button>
       </div>
       <Layout style={{ background: '#f0f2f5', padding: '24px 50px' }}>
@@ -460,20 +485,7 @@ const UserProfile = () => {
             {selectedMenuItem === 'profile' && renderProfile()}
             {selectedMenuItem === 'courses' && (
               <div className="courses-container">
-                <div className="courses-header">
-                  <h2>我的课程</h2>
-                  <div className="courses-filter">
-                    <Radio.Group defaultValue="all" buttonStyle="solid">
-                      <Radio.Button value="all">全部课程</Radio.Button>
-                      <Radio.Button value="learning">学习中</Radio.Button>
-                      <Radio.Button value="completed">已完成</Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
-                <div className="courses-list">
-                  {/* 课程列表渲染逻辑 */}
-                  <Empty description="暂无课程数据" />
-                </div>
+                <MyCourses />
               </div>
             )}
             {selectedMenuItem === 'orders' && (

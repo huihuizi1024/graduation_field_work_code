@@ -70,6 +70,11 @@ api.interceptors.response.use(
   }
 );
 
+// 获取JWT令牌
+export const getToken = () => {
+  return localStorage.getItem('token');
+};
+
 // 登录API
 export const login = (username, password, identity) => {
   return api.post('/api/auth/authenticate', { username, password, identity });
@@ -88,7 +93,12 @@ export const updateUserInfo = (data) => api.put('/api/users/me', data);
 
 // 个人和专家注册
 export const registerPersonal = (userData) => {
-  return api.post('/api/auth/register/personal', userData);
+  // 确保将name字段映射到fullName字段
+  const formattedData = {
+    ...userData,
+    fullName: userData.name
+  };
+  return api.post('/api/auth/register/personal', formattedData);
 };
 
 // 机构注册
@@ -109,5 +119,8 @@ export const updateCurrentExpert = (data) => api.put('/api/experts/me', data);
 
 // 获取当前机构信息
 export const getCurrentInstitution = () => api.get('/api/institutions/me');
+
+// 更新当前机构信息
+export const updateCurrentInstitution = (data) => api.put('/api/institutions/me', data);
 
 export default api;

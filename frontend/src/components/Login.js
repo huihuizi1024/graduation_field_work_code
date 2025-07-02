@@ -348,10 +348,6 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
                   返回
                 </button>
               </div>
-
-              <div className="mt-6 text-center text-sm text-neutral-500">
-                还没有账号？ <button className="text-primary hover:text-primary-dark font-medium">立即注册</button>
-              </div>
             </div>
           )}
         </div>

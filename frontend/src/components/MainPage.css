@@ -394,4 +394,23 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.view-more-btn {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.view-more-btn .ant-btn {
+  padding: 0 32px;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+  transition: all 0.3s;
+}
+
+.view-more-btn .ant-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
 } 

@@ -1,0 +1,102 @@
+.project-list-page {
+  padding: 20px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.project-card {
+  margin-bottom: 16px;
+  transition: all 0.3s;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.project-card-cover {
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.project-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 40px;
+  color: #d9d9d9;
+}
+
+.project-watched-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #52c41a;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-points-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.project-progress {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background-color: #f0f0f0;
+  border-radius: 2px;
+  margin-right: 8px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background-color: #1890ff;
+}
+
+.view-more {
+  text-align: center;
+  margin: 24px 0;
+}
+
+@media (max-width: 576px) {
+  .project-list-page {
+    padding: 10px;
+  }
+  
+  .project-card-cover {
+    height: 120px;
+  }
+} 

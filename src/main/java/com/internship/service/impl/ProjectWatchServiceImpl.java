@@ -1,0 +1,222 @@
+package com.internship.service.impl;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.internship.dto.ProjectDTO;
+import com.internship.entity.ProjectWatchRecord;
+import com.internship.entity.PointTransaction;
+import com.internship.entity.Project;
+import com.internship.entity.User;
+import com.internship.repository.ProjectWatchRecordRepository;
+import com.internship.repository.ProjectRepository;
+import com.internship.repository.UserRepository;
+import com.internship.service.ProjectWatchService;
+import com.internship.service.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class ProjectWatchServiceImpl implements ProjectWatchService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProjectWatchServiceImpl.class);
+
+    @Autowired
+    private ProjectWatchRecordRepository projectWatchRecordRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @Override
+    public boolean recordWatching(Long userId, String projectId, Integer progress) {
+        try {
+            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
+            
+            if (record == null) {
+                // 创建新记录
+                record = new ProjectWatchRecord();
+                record.setUserId(userId);
+                record.setProjectId(projectId);
+                record.setWatchStatus(0); // 未完成
+                record.setWatchProgress(progress);
+                record.setIsRewarded(0); // 未获得积分
+                record.setLastWatchTime(LocalDateTime.now());
+                projectWatchRecordRepository.insert(record);
+            } else {
+                // 更新进度
+                if (progress > record.getWatchProgress()) {
+                    record.setWatchProgress(progress);
+                }
+                record.setLastWatchTime(LocalDateTime.now());
+                projectWatchRecordRepository.updateById(record);
+            }
+            
+            // 如果进度达到90%以上，自动标记为完成
+            if (progress >= 90 && record.getWatchStatus() == 0) {
+                return completeProject(userId, projectId);
+            }
+            
+            return true;
+        } catch (Exception e) {
+            log.error("记录项目观看失败", e);
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean completeProject(Long userId, String projectId) {
+        try {
+            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
+            
+            if (record == null) {
+                // 创建新记录并标记为完成
+                record = new ProjectWatchRecord();
+                record.setUserId(userId);
+                record.setProjectId(projectId);
+                record.setWatchStatus(1); // 已完成
+                record.setWatchProgress(100);
+                record.setLastWatchTime(LocalDateTime.now());
+                record.setIsRewarded(0); // 未获得积分
+                projectWatchRecordRepository.insert(record);
+            } else if (record.getWatchStatus() == 0) {
+                // 更新为已完成
+                record.setWatchStatus(1);
+                record.setWatchProgress(100);
+                record.setLastWatchTime(LocalDateTime.now());
+                projectWatchRecordRepository.updateById(record);
+            }
+            
+            // 如果已经获得过积分，则不再奖励
+            if (record.getIsRewarded() == 1) {
+                return true;
+            }
+            
+            // 获取项目积分奖励
+            Project project = projectRepository.selectById(projectId);
+            if (project != null && project.getPointsReward() != null && project.getPointsReward() > 0) {
+                // 给用户奖励积分
+                User user = userRepository.selectById(userId);
+                if (user != null) {
+                    
+                    // 更新用户积分
+                    double newBalance = user.getPointsBalance() + project.getPointsReward();
+                    user.setPointsBalance(newBalance);
+                    userRepository.updateById(user);
+                    
+                    // 创建积分交易记录
+                    PointTransaction transaction = new PointTransaction();
+                    transaction.setUserId(userId);
+                    transaction.setTransactionType(1); // 获得
+                    transaction.setPointsChange((double) project.getPointsReward());
+                    transaction.setBalanceAfter(newBalance);
+                    transaction.setDescription("完成项目《" + project.getProjectName() + "》获得积分");
+                    transaction.setRelatedId(projectId);
+                    transactionService.createTransaction(transaction);
+                    
+                    // 标记为已获得积分
+                    record.setIsRewarded(1);
+                    projectWatchRecordRepository.updateById(record);
+                }
+            }
+            
+            return true;
+        } catch (Exception e) {
+            log.error("完成项目观看失败", e);
+            return false;
+        }
+    }
+
+    @Override
+    public Page<ProjectDTO> getUserProjectRecords(Long userId, int page, int size) {
+        try {
+            Page<ProjectWatchRecord> recordPage = new Page<>(page, size);
+            Page<ProjectWatchRecord> result = projectWatchRecordRepository.findUserProjectRecords(recordPage, userId);
+            
+            Page<ProjectDTO> dtoPage = new Page<>(result.getCurrent(), result.getSize(), result.getTotal());
+            List<ProjectDTO> dtoList = new ArrayList<>();
+            
+            for (ProjectWatchRecord record : result.getRecords()) {
+                Project project = projectRepository.selectById(record.getProjectId());
+                if (project != null) {
+                    ProjectDTO dto = convertToDTO(project);
+                    dto.setIsWatched(record.getWatchStatus() == 1);
+                    dto.setWatchProgress(record.getWatchProgress());
+                    dtoList.add(dto);
+                }
+            }
+            
+            dtoPage.setRecords(dtoList);
+            return dtoPage;
+        } catch (Exception e) {
+            log.error("获取用户项目记录失败", e);
+            return new Page<>();
+        }
+    }
+
+    @Override
+    public List<ProjectDTO> getCompletedProjects(Long userId) {
+        try {
+            List<ProjectWatchRecord> records = projectWatchRecordRepository.findCompletedProjectsByUserId(userId);
+            return records.stream().map(record -> {
+                Project project = projectRepository.selectById(record.getProjectId());
+                if (project != null) {
+                    ProjectDTO dto = convertToDTO(project);
+                    dto.setIsWatched(true);
+                    dto.setWatchProgress(100);
+                    return dto;
+                }
+                return null;
+            }).filter(dto -> dto != null).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("获取用户已完成项目失败", e);
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public ProjectWatchRecord checkUserWatchRecord(Long userId, String projectId) {
+        return projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
+    }
+    
+    /**
+     * 将项目实体转换为DTO
+     * @param project 项目实体
+     * @return 项目DTO
+     */
+    private ProjectDTO convertToDTO(Project project) {
+        ProjectDTO dto = new ProjectDTO();
+        dto.setId(project.getId());
+        dto.setProjectName(project.getProjectName());
+        dto.setProjectCode(project.getProjectCode());
+        dto.setManager(project.getManager());
+        dto.setStartDate(project.getStartDate());
+        dto.setEndDate(project.getEndDate());
+        dto.setStatus(project.getStatus());
+        dto.setDescription(project.getDescription());
+        dto.setInstitutionId(project.getInstitutionId());
+        dto.setCategory(project.getCategory());
+        dto.setCategoryName(ProjectDTO.getCategoryName(project.getCategory()));
+        dto.setVideoUrl(project.getVideoUrl());
+        dto.setCoverImageUrl(project.getCoverImageUrl());
+        dto.setPointsReward(project.getPointsReward());
+        dto.setDuration(project.getDuration());
+        dto.setViewCount(project.getViewCount());
+        dto.setCreateTime(project.getCreateTime());
+        dto.setUpdateTime(project.getUpdateTime());
+        return dto;
+    }
+} 

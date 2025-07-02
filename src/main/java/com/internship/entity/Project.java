@@ -73,6 +73,48 @@ public class Project implements Serializable {
     private Long creatorId;
 
     /**
+     * 机构ID
+     */
+    @TableField("institution_id")
+    private Long institutionId;
+
+    /**
+     * 项目分类：1-专业技能, 2-学术教育, 3-职业发展, 4-创新创业, 5-人文艺术, 6-科学技术
+     */
+    @TableField("category")
+    private Integer category;
+
+    /**
+     * 项目视频URL
+     */
+    @TableField("video_url")
+    private String videoUrl;
+
+    /**
+     * 项目封面图URL
+     */
+    @TableField("cover_image_url")
+    private String coverImageUrl;
+
+    /**
+     * 观看完成可获得积分
+     */
+    @TableField("points_reward")
+    private Integer pointsReward;
+
+    /**
+     * 项目时长(分钟)
+     */
+    @TableField("duration")
+    private Integer duration;
+
+    /**
+     * 浏览量
+     */
+    @TableField("view_count")
+    private Integer viewCount;
+
+    /**
      * 创建时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
@@ -174,5 +216,61 @@ public class Project implements Serializable {
 
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
+    }
+    
+    public Long getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(Long institutionId) {
+        this.institutionId = institutionId;
+    }
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getCoverImageUrl() {
+        return coverImageUrl;
+    }
+
+    public void setCoverImageUrl(String coverImageUrl) {
+        this.coverImageUrl = coverImageUrl;
+    }
+
+    public Integer getPointsReward() {
+        return pointsReward;
+    }
+
+    public void setPointsReward(Integer pointsReward) {
+        this.pointsReward = pointsReward;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Integer viewCount) {
+        this.viewCount = viewCount;
     }
 }

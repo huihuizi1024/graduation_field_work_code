@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag } from 'antd';
-import { BankOutlined, MailOutlined, PhoneOutlined, UserOutlined, EditOutlined, ArrowLeftOutlined, IdcardOutlined, EnvironmentOutlined, InfoCircleOutlined, GiftOutlined } from '@ant-design/icons';
-import { getCurrentInstitution } from '../api';
+import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag, Row, Col } from 'antd';
+import { BankOutlined, MailOutlined, PhoneOutlined, UserOutlined, EditOutlined, ArrowLeftOutlined, IdcardOutlined, EnvironmentOutlined, InfoCircleOutlined, GiftOutlined, HomeOutlined } from '@ant-design/icons';
+import { getCurrentInstitution, updateCurrentInstitution } from '../api';
 import EditProfileModal from './EditProfileModal'; 
 import './UserProfile.css';
 
@@ -37,9 +37,33 @@ const InstitutionProfile = () => {
     }, []);
 
     const handleEdit = () => {
-        // For now, just a placeholder. We will implement this next.
-        message.info('编辑功能将在下一步实现！');
-        // setIsModalVisible(true); 
+        setIsModalVisible(true);
+    };
+
+    const handleCancelModal = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleUpdateProfile = async (values) => {
+        try {
+            setLoading(true);
+            // 调用API更新机构信息
+            const response = await updateCurrentInstitution(values);
+            
+            if (response && response.code === 200) {
+                // 重新获取机构信息以确保数据一致性
+                await fetchCurrentInstitution();
+                
+                setIsModalVisible(false);
+                message.success('机构信息更新成功！');
+            } else {
+                throw new Error(response?.message || '更新失败');
+            }
+        } catch (error) {
+            message.error('更新失败: ' + (error.response?.data?.message || error.message));
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (loading) {
@@ -110,10 +134,11 @@ const InstitutionProfile = () => {
                     <GiftOutlined /> {institutionData.pointsBalance || 0} 积分
                 </div>
             </div>
+            
             <Card
                 title={
-                    <Button type="link" onClick={() => navigate('/')} icon={<ArrowLeftOutlined />}>
-                        返回主页
+                    <Button type="link" icon={<HomeOutlined />} onClick={() => navigate('/')} style={{ padding: 0 }}>
+                        返回首页
                     </Button>
                 }
                 extra={<Button icon={<EditOutlined />} onClick={handleEdit}>编辑信息</Button>}
@@ -157,6 +182,16 @@ const InstitutionProfile = () => {
                     </Descriptions.Item>
                 </Descriptions>
             </Card>
+
+            {institutionData && (
+                <EditProfileModal
+                    visible={isModalVisible}
+                    onCancel={handleCancelModal}
+                    onOk={handleUpdateProfile}
+                    initialData={institutionData}
+                    role="institution"
+                />
+            )}
         </div>
     );
 };
