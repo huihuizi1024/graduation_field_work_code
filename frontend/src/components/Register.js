@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 import { registerPersonal, registerOrganization, registerExpert } from '../api'; // 合并导入
+import { sendSmsCode, registerWithSms } from '../api/sms'; // 添加SMS API导入
 import { validateCreditCode, validatePhone, validateEmail, validatePassword } from '../utils/validation';
 import { provinces, getCitiesByProvince, getDistrictsByCity } from '../data/regions';
 
 const Register = () => {
   const [userType, setUserType] = useState('personal'); // 'personal' or 'organization'
+  
+  // 验证码相关状态
+  const [smsState, setSmsState] = useState({
+    loading: false,
+    countdown: 0
+  });
   
   // 表单验证状态
   const [validationErrors, setValidationErrors] = useState({
@@ -62,6 +69,17 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+
+  // 倒计时效果
+  useEffect(() => {
+    let timer;
+    if (smsState.countdown > 0) {
+      timer = setTimeout(() => {
+        setSmsState(prev => ({ ...prev, countdown: prev.countdown - 1 }));
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [smsState.countdown]);
 
   const handleInputChange = (type, field, value) => {
     setFormData(prev => ({
@@ -205,37 +223,42 @@ const Register = () => {
     setUserType(tab);
   };
 
-  const handleGetCode = () => {
+  const handleGetCode = async () => {
     const phone = formData.personal.phone;
-    const phoneRegex = /^1[3-9]\d{9}$/;
     
     if (!phone) {
       alert('请输入手机号');
       return;
-    } else if (!phoneRegex.test(phone)) {
-      alert('请输入有效的手机号');
+    }
+
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      alert('请输入正确的手机号格式');
       return;
     }
-    
-    const getCodeBtn = document.getElementById('personal-get-code');
-    if (getCodeBtn) {
-      let countdown = 60;
-      getCodeBtn.disabled = true;
-      getCodeBtn.textContent = `${countdown}秒后重新获取`;
-      
-      const timer = setInterval(() => {
-        countdown--;
-        getCodeBtn.textContent = `${countdown}秒后重新获取`;
-        
-        if (countdown <= 0) {
-          clearInterval(timer);
-          getCodeBtn.disabled = false;
-          getCodeBtn.textContent = '获取验证码';
-        }
-      }, 1000);
+
+    if (smsState.countdown > 0) {
+      return;
     }
+
+    setSmsState(prev => ({ ...prev, loading: true }));
     
-    console.log(`向手机号 ${phone} 发送验证码`);
+    try {
+      const response = await sendSmsCode(phone, 'register');
+      
+      console.log('注册验证码发送响应:', response);
+      
+      if (response.code === 200) {
+        alert('验证码发送成功！请查看控制台获取验证码');
+        setSmsState(prev => ({ ...prev, loading: false, countdown: 60 }));
+      } else {
+        alert(response.message || '发送失败，请稍后重试');
+        setSmsState(prev => ({ ...prev, loading: false }));
+      }
+    } catch (error) {
+      console.error('发送验证码失败:', error);
+      alert('发送失败，请稍后重试');
+      setSmsState(prev => ({ ...prev, loading: false }));
+    }
   };
 
   const handlePersonalRegister = async (e) => {
@@ -252,29 +275,70 @@ const Register = () => {
     }
 
     try {
-      if (data.role === 1) { // 1 for student
-        await registerPersonal(data);
-        alert('学生账号注册成功！');
-      } else if (data.role === 2) { // 2 for expert
-        if (!data.expertise.trim()) {
-          alert('请输入您的专业领域');
+      // 如果用户输入了验证码，使用短信验证码注册
+      if (data.code && data.code.trim()) {
+        if (!/^\d{6}$/.test(data.code)) {
+          alert('请输入6位数字验证码');
           return;
         }
-        
-        // Prepare data for expert registration, ensuring 'fullName' is included
-        const expertData = {
-          ...data,
-          fullName: data.name 
+
+        const smsRegisterData = {
+          phone: data.phone,
+          code: data.code,
+          fullName: data.name,
+          role: data.role,
+          username: data.username || data.phone // 如果没有用户名，使用手机号
         };
+
+        const response = await registerWithSms(
+          smsRegisterData.phone,
+          smsRegisterData.code,
+          smsRegisterData.fullName,
+          smsRegisterData.role,
+          smsRegisterData.username
+        );
+
+        console.log('短信注册响应:', response);
+
+        if (response.code === 200) {
+          alert('注册成功！正在跳转到登录页面...');
+          // 延迟跳转确保用户看到成功提示
+          setTimeout(() => {
+            navigate('/login');
+          }, 1000);
+        } else {
+          alert(response.message || '注册失败');
+        }
+      } else {
+        // 原有的注册方式
+        if (data.role === 1) { // 1 for student
+          await registerPersonal(data);
+          alert('学生账号注册成功！正在跳转到登录页面...');
+        } else if (data.role === 2) { // 2 for expert
+          if (!data.expertise.trim()) {
+            alert('请输入您的专业领域');
+            return;
+          }
+          
+          // Prepare data for expert registration, ensuring 'fullName' is included
+          const expertData = {
+            ...data,
+            fullName: data.name 
+          };
+          
+          await registerExpert(expertData);
+          alert('专家账号注册成功！正在跳转到登录页面...');
+        }
         
-        await registerExpert(expertData);
-        alert('专家账号注册成功！');
+        // 延迟跳转确保用户看到成功提示
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
       }
-      navigate('/login');
     } catch (error) {
       const errorMessage = error.response?.data?.message || '注册失败，请检查您填写的信息';
       alert(errorMessage);
-      console.error('个人注册失败:', error);
+      console.error('注册失败:', error);
     }
   };
 
@@ -295,8 +359,12 @@ const Register = () => {
     
     try {
       await registerOrganization(data);
-      alert('机构注册申请已提交！');
-      navigate('/login');
+      alert('机构注册申请已提交！正在跳转到登录页面...');
+      
+      // 延迟跳转确保用户看到成功提示
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     } catch (error) {
       const errorMessage = error.response?.data?.message || '注册失败，请检查您填写的信息';
       alert(errorMessage);
@@ -414,6 +482,45 @@ const Register = () => {
               <p className="form-error mt-1">{validationErrors.personal.phone}</p>
             )}
         </div>
+        
+        {/* 验证码输入框 */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-neutral-600 mb-2">
+            手机验证码 
+            <span className="text-xs text-gray-500 ml-2">(可选，填写后将使用手机号注册)</span>
+          </label>
+          <div className="flex space-x-3">
+            <div className="flex-1 relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i className="fa fa-shield text-neutral-400"></i>
+              </div>
+              <input 
+                type="text" 
+                value={formData.personal.code}
+                onChange={(e) => handleInputChange('personal', 'code', e.target.value.replace(/\D/g, '').slice(0, 6))}
+                className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
+                placeholder="请输入6位验证码"
+                maxLength="6"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleGetCode}
+              disabled={smsState.loading || smsState.countdown > 0}
+              className={`px-4 py-3 rounded-lg font-medium transition-custom whitespace-nowrap ${
+                smsState.loading || smsState.countdown > 0 
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                  : 'bg-primary text-white hover:bg-primary/90'
+              }`}
+            >
+              {smsState.loading ? '发送中...' : smsState.countdown > 0 ? `${smsState.countdown}s` : '获取验证码'}
+            </button>
+          </div>
+          <div className="mt-2 text-xs text-gray-500">
+            💡 提示：点击"获取验证码"后，请查看浏览器控制台(F12)获取验证码
+          </div>
+        </div>
+
         <div className="mb-6">
           <label className="block text-sm font-medium text-neutral-600 mb-2">设置密码</label>
           <div class="relative">

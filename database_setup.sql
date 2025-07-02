@@ -313,19 +313,72 @@ CREATE INDEX idx_platform_activity_status ON platform_activity(status);
 CREATE INDEX idx_platform_activity_create_time ON platform_activity(create_time);
 
 -- ========================================
--- 初始数据插入
+-- 初始数据插入 (完善版)
 -- ========================================
 
+-- 首先清理现有数据
+DELETE FROM conversion_history WHERE id > 0;
+DELETE FROM point_transaction WHERE id > 0;
+DELETE FROM user WHERE id > 0;
+DELETE FROM expert WHERE id > 0;
+DELETE FROM product_order WHERE id > 0;
+DELETE FROM product WHERE id > 0;
+DELETE FROM platform_activity WHERE id > 0;
+DELETE FROM business_process WHERE id > 0;
+DELETE FROM certification_standard WHERE id > 0;
+DELETE FROM conversion_rule WHERE id > 0;
+DELETE FROM point_rule WHERE id > 0;
+DELETE FROM project WHERE id != '';
+DELETE FROM institution WHERE id > 0;
 
--- 插入积分规则初始数据
+-- 重置自增ID
+ALTER TABLE institution AUTO_INCREMENT = 1;
+ALTER TABLE point_rule AUTO_INCREMENT = 1;
+ALTER TABLE conversion_rule AUTO_INCREMENT = 1;
+ALTER TABLE certification_standard AUTO_INCREMENT = 1;
+ALTER TABLE business_process AUTO_INCREMENT = 1;
+ALTER TABLE platform_activity AUTO_INCREMENT = 1;
+ALTER TABLE user AUTO_INCREMENT = 1;
+ALTER TABLE point_transaction AUTO_INCREMENT = 1;
+ALTER TABLE conversion_history AUTO_INCREMENT = 1;
+ALTER TABLE product AUTO_INCREMENT = 1;
+ALTER TABLE product_order AUTO_INCREMENT = 1;
+
+-- 插入机构数据
+INSERT INTO institution (
+    institution_name, institution_code, institution_type, institution_level,
+    social_credit_code, legal_representative, contact_person, contact_phone, contact_email,
+    address, province, city, district, institution_description, business_scope,
+    certification_level, certification_expiry_date, validity_months, status, creator_name, review_status
+) VALUES 
+('北京大学', 'PKU001', 1, 1, '12100000400000123X', '龚旗煌', '张主任', '010-62751234', 'contact@pku.edu.cn',
+ '北京市海淀区颐和园路5号', '北京市', '北京市', '海淀区', '中国著名综合性大学', '高等教育、科学研究', 
+ 1, '2025-12-31 23:59:59', 24, 1, '系统管理员', 1),
+
+('清华大学', 'THU001', 1, 1, '12100000400000124X', '王希勤', '李主任', '010-62781234', 'contact@tsinghua.edu.cn',
+ '北京市海淀区清华园1号', '北京市', '北京市', '海淀区', '中国著名理工科大学', '高等教育、科学研究',
+ 1, '2025-12-31 23:59:59', 24, 1, '系统管理员', 1),
+
+('北京职业技术学院', 'BJVTC001', 2, 3, '91110000123456789X', '刘院长', '王老师', '010-87651234', 'info@bjvtc.edu.cn',
+ '北京市朝阳区定福庄东街1号', '北京市', '北京市', '朝阳区', '专业技能培训院校', '职业技能培训、继续教育',
+ 2, '2025-06-30 23:59:59', 12, 1, '系统管理员', 1),
+
+('在线教育科技有限公司', 'ONLINE001', 3, 4, '91110108123456789X', '陈总经理', '赵经理', '400-123-4567', 'service@online-edu.com',
+ '北京市海淀区中关村大街1号', '北京市', '北京市', '海淀区', '专业在线教育平台', '在线课程、技能培训',
+ 3, '2024-12-31 23:59:59', 6, 1, '系统管理员', 1);
+
+-- 插入积分规则数据
 INSERT INTO point_rule (
     rule_name, rule_code, rule_description, point_type, point_value,
     applicable_object, validity_type, validity_days, status, creator_name, review_status
 ) VALUES 
-('完成在线课程学习', 'ONLINE_COURSE_COMPLETE', '学员完成在线课程学习并通过考核可获得积分', 1, 50.00, 1, 1, NULL, 1, '系统管理员', 1);
+('完成在线课程学习', 'ONLINE_COURSE_COMPLETE', '学员完成在线课程学习并通过考核可获得积分', 1, 50.00, 1, 1, NULL, 1, '系统管理员', 1),
+('参与平台活动', 'ACTIVITY_PARTICIPATE', '用户参与平台组织的各类学习活动获得积分', 2, 30.00, 1, 2, 90, 1, '系统管理员', 1),
+('分享学习心得', 'SHARE_EXPERIENCE', '用户分享学习经验和心得体会获得积分', 3, 20.00, 1, 2, 180, 1, '系统管理员', 1),
+('完成职业认证', 'CERT_COMPLETE', '通过相关职业认证考试获得积分', 1, 200.00, 1, 1, NULL, 1, '系统管理员', 1),
+('推荐新用户注册', 'REFERRAL_BONUS', '成功推荐新用户注册平台获得积分', 3, 100.00, 1, 2, 365, 1, '系统管理员', 1);
 
--- 插入转换规则初始数据
-DELETE FROM conversion_rule WHERE id > 0;
+-- 插入转换规则数据
 INSERT INTO conversion_rule (
     rule_name, rule_code, source_type, target_type, conversion_ratio,
     min_conversion_amount, max_conversion_amount, conversion_conditions,
@@ -333,36 +386,44 @@ INSERT INTO conversion_rule (
     effective_start_time, effective_end_time, status, creator_name, review_status
 ) VALUES 
 ('积分转学分', 'POINT_TO_CREDIT', 1, 2, 10.0, 
-10.0, 1000.0, '需完成至少一门课程学习', 
-1, 1, '北京大学',
-'2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
-('学分转证书', 'CREDIT_TO_CERT', 2, 3, 1.0,
-1.0, 100.0, '需通过相关考试',
-1, 1, '北京大学',
-'2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1);
+ 10.0, 1000.0, '需完成至少一门课程学习', 
+ 1, 1, '北京大学',
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
 
--- 插入认证标准初始数据
-DELETE FROM certification_standard WHERE id > 0;
+('学分转证书', 'CREDIT_TO_CERT', 2, 3, 1.0,
+ 1.0, 100.0, '需通过相关考试',
+ 1, 1, '北京大学',
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
+
+('积分转职业证书', 'POINT_TO_VOC_CERT', 1, 3, 5.0,
+ 50.0, 500.0, '需完成对应技能培训课程',
+ 1, 3, '北京职业技术学院',
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1);
+
+-- 插入认证标准数据
 INSERT INTO certification_standard (
     standard_name, standard_code, standard_description, category, issuing_organization,
     effective_start_time, effective_end_time, status, creator_name, review_status
 ) VALUES 
 ('在线课程完成认证', 'ONLINE_COURSE_CERT', '完成在线课程学习并通过考核的认证标准', 1, '国家开放大学', 
-'2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
 
 ('职业技能等级证书', 'VOC_SKILL_CERT', '通过职业技能鉴定考试获得的等级证书标准', 4, '人力资源和社会保障部', 
-'2024-03-01 00:00:00', '2026-02-28 23:59:59', 1, '系统管理员', 1);
+ '2024-03-01 00:00:00', '2026-02-28 23:59:59', 1, '系统管理员', 1),
 
--- 插入业务流程初始数据
-DELETE FROM business_process WHERE id > 0;
+('数字化技能认证', 'DIGITAL_SKILL_CERT', '数字化时代必备技能认证标准', 2, '工业和信息化部', 
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1);
+
+-- 插入业务流程数据
 INSERT INTO business_process (
     process_name, process_code, process_description, category, responsible_department, status, creator_name
 ) VALUES 
 ('在线课程积分获取流程', 'ONLINE_COURSE_POINT', '学员完成在线课程学习并自动获取积分的流程', 1, '教务处', 1, '系统管理员'),
-('学分转换流程', 'CREDIT_CONVERSION', '学员申请学分转换并审核的流程', 2, '学分银行管理中心', 1, '系统管理员');
+('学分转换流程', 'CREDIT_CONVERSION', '学员申请学分转换并审核的流程', 2, '学分银行管理中心', 1, '系统管理员'),
+('用户注册认证流程', 'USER_REGISTRATION', '新用户注册平台并完成身份认证的流程', 1, '用户服务部', 1, '系统管理员'),
+('积分商城兑换流程', 'POINT_MALL_EXCHANGE', '用户使用积分在商城兑换商品的流程', 1, '积分管理部', 1, '系统管理员');
 
--- 插入平台活动初始数据
-DELETE FROM platform_activity WHERE id > 0;
+-- 插入平台活动数据
 INSERT INTO platform_activity (
     activity_name, activity_code, activity_description, activity_type, start_time, end_time,
     location, organizer, contact_person, contact_phone, reward_points, status, creator_name
@@ -371,19 +432,88 @@ INSERT INTO platform_activity (
  '线上', '学分银行运营部', '王运营', '13912345678', 100.00, 1, '系统管理员'),
 
 ('学分银行线下交流会', 'OFFLINE_EXCHANGE', '邀请专家学者和机构代表进行学分银行发展交流', 2, '2024-08-15 14:00:00', '2024-08-15 17:00:00',
- '北京市海淀区会议中心', '学分银行管理中心', '李主任', '010-87654321', 50.00, 1, '系统管理员');
+ '北京市海淀区会议中心', '学分银行管理中心', '李主任', '010-87654321', 50.00, 1, '系统管理员'),
 
+('职业技能大赛', 'SKILL_COMPETITION', '面向全平台用户的职业技能竞赛活动', 3, '2024-09-01 09:00:00', '2024-09-30 18:00:00',
+ '各参赛机构', '技能培训联盟', '张老师', '13987654321', 150.00, 1, '系统管理员');
 
-
-
--- 插入项目初始数据
-DELETE FROM project WHERE id > 0;
+-- 插入项目数据
 INSERT INTO project (
     id, project_name, project_code, 负责人, start_date, end_date, status, description
 ) VALUES
 ('PROJ001', '学分银行系统开发', 'XBANK_DEV', '张老师', '2024-01-01', '2024-12-31', 1, '学分银行平台系统开发项目'),
-('PROJ002', '在线课程体系建设', 'COURSE_SYS', '李老师', '2024-03-01', '2024-09-30', 1, '构建在线课程体系');
+('PROJ002', '在线课程体系建设', 'COURSE_SYS', '李老师', '2024-03-01', '2024-09-30', 1, '构建在线课程体系'),
+('PROJ003', '积分管理系统优化', 'POINT_SYS', '王老师', '2024-06-01', '2024-11-30', 1, '积分管理功能优化升级');
 
+-- 插入测试用户数据（支持短信验证码测试）
+INSERT INTO user (
+    username, password_hash, full_name, role, email, phone, institution_id, status, points_balance
+) VALUES 
+('student01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', 1, 1, 150.00),
+('teacher01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '王老师', 2, 'wanglaoshi@pku.edu.cn', '13800138002', 1, 1, 280.00),
+('expert01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', 3, 1, 500.00),
+('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '系统管理员', 4, 'admin@system.com', '13800138000', NULL, 1, 1000.00),
+('student02', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', 2, 1, 75.00),
+('teacher02', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXgwEKBUJYHg4nNEjD5GjdqCE.e', '陈教授', 2, 'chenjiaoshou@tsinghua.edu.cn', '13800138005', 2, 1, 320.00);
+
+-- 插入专家数据
+INSERT INTO expert (id, name, expertise, contact, status, description) VALUES 
+(3, '张专家', '职业技能培训,数字化转型', '13800138003', 1, '具有10年职业技能培训经验，专注数字化人才培养');
+
+-- 插入积分流水数据
+INSERT INTO point_transaction (
+    user_id, point_rule_id, transaction_type, points_change, balance_after, description, related_id
+) VALUES 
+(1, 1, 1, 50.00, 50.00, '完成Python基础课程学习', 'COURSE_001'),
+(1, 2, 1, 30.00, 80.00, '参与2024学习节活动', 'ACTIVITY_001'),
+(1, 3, 1, 20.00, 100.00, '分享学习心得《我的编程之路》', 'SHARE_001'),
+(1, 1, 1, 50.00, 150.00, '完成数据库基础课程', 'COURSE_002'),
+
+(2, 1, 1, 50.00, 50.00, '完成高等数学课程', 'COURSE_003'),
+(2, 4, 1, 200.00, 250.00, '通过计算机二级认证', 'CERT_001'),
+(2, 2, 1, 30.00, 280.00, '参与技能竞赛', 'ACTIVITY_002'),
+
+(3, 5, 1, 100.00, 100.00, '推荐新用户注册', 'REF_001'),
+(3, 1, 1, 50.00, 150.00, '完成专业技能课程', 'COURSE_004'),
+(3, 4, 1, 200.00, 350.00, '通过职业技能认证', 'CERT_002'),
+(3, 1, 1, 50.00, 400.00, '完成高级技能课程', 'COURSE_005'),
+(3, 5, 1, 100.00, 500.00, '推荐新用户注册', 'REF_002'),
+
+(5, 1, 1, 50.00, 50.00, '完成机器学习入门', 'COURSE_006'),
+(5, 2, 1, 25.00, 75.00, '参与学习分享会', 'ACTIVITY_003'),
+
+(6, 1, 1, 50.00, 50.00, '完成深度学习课程', 'COURSE_007'),
+(6, 4, 1, 200.00, 250.00, '通过人工智能认证', 'CERT_003'),
+(6, 3, 1, 20.00, 270.00, '发表学术论文分享', 'SHARE_002'),
+(6, 1, 1, 50.00, 320.00, '完成高级算法课程', 'COURSE_008');
+
+-- 插入商品数据
+INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
+('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
+('Python编程入门课程', '零基础入门Python编程的在线课程', 2000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
+('便携式电子词典', '随时随地查询单词，提升学习效率', 1500, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
+('职业规划咨询课程', '一对一职业发展指导课程', 3000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
+('智能学习平板', '支持手写笔记的学习平板', 5000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
+('英语口语课程', '实用英语口语训练课程', 2500, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1),
+('数据分析工具包', '包含Excel、Python数据分析教程', 1800, 'https://img.freepik.com/free-photo/data-analysis-concept_53876-124355.jpg', '技能培训', 25, 1),
+('编程键盘', '机械键盘，程序员专用', 3500, 'https://img.freepik.com/free-photo/keyboard-technology-computer-device_53876-124567.jpg', '电子设备', 15, 1);
+
+-- 插入订单数据
+INSERT INTO product_order (
+    user_id, product_id, points_used, order_status, shipping_address, contact_name, contact_phone, remark
+) VALUES 
+(1, 1, 500, 3, '北京市海淀区颐和园路5号北京大学', '李明同学', '13800138001', '学习用品订单'),
+(2, 3, 1500, 2, '北京市海淀区颐和园路5号北京大学教师宿舍', '王老师', '13800138002', '教学辅助工具'),
+(3, 2, 2000, 3, '北京市朝阳区定福庄东街1号', '张专家', '13800138003', '技能提升课程'),
+(5, 1, 500, 1, '北京市海淀区清华园1号', '刘小华', '13800138004', '笔记本订单');
+
+-- 插入转换历史数据
+INSERT INTO conversion_history (
+    user_id, conversion_rule_id, source_amount, target_amount, status, remark
+) VALUES 
+(1, 1, 100.00, 10.00, 1, '积分转学分成功'),
+(2, 1, 200.00, 20.00, 1, '积分转学分成功'),
+(3, 3, 300.00, 60.00, 1, '积分转职业证书成功');
 
 -- ========================================
 -- 验证数据插入

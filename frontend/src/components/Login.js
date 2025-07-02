@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import { login } from '../api';
+import { sendSmsCode, loginWithSms } from '../api/sms';
 import api from '../api';
 
 const Login = ({ onLoginSuccess, onGoToRegister }) => {
@@ -11,6 +12,12 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
   const [currentIdentity, setCurrentIdentity] = useState(null);
   const [activeTab, setActiveTab] = useState('password');
   const [showLoginForm, setShowLoginForm] = useState(false);
+  
+  // 短信登录相关状态
+  const [phone, setPhone] = useState('');
+  const [smsCode, setSmsCode] = useState('');
+  const [countdown, setCountdown] = useState(0);
+  const [sendingCode, setSendingCode] = useState(false);
 
   const identityData = {
     student: { title: "学生登录", subtitle: "请选择登录方式", icon: "fa-user-circle", color: "primary" },
@@ -109,6 +116,15 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
     }
   };
 
+  // 倒计时效果
+  React.useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
   // 添加点击事件监听器
   React.useEffect(() => {
     const toggleButton = document.getElementById('toggle-password');
@@ -119,6 +135,110 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
       };
     }
   }, []);
+
+  // 发送短信验证码
+  const handleSendSmsCode = async () => {
+    if (!phone) {
+      alert('请输入手机号');
+      return;
+    }
+
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      alert('请输入正确的手机号格式');
+      return;
+    }
+
+    if (countdown > 0) {
+      return;
+    }
+
+    setSendingCode(true);
+    try {
+      const response = await sendSmsCode(phone, 'login');
+      
+      console.log('发送验证码响应:', response);
+      
+      if (response.code === 200) {
+        alert('验证码发送成功！请查看控制台获取验证码');
+        setCountdown(60);
+      } else {
+        alert(response.message || '发送失败，请稍后重试');
+      }
+    } catch (error) {
+      console.error('发送验证码失败:', error);
+      alert('发送失败，请稍后重试');
+    } finally {
+      setSendingCode(false);
+    }
+  };
+
+  // 短信验证码登录
+  const handleSmsLogin = async () => {
+    if (!phone || !smsCode) {
+      alert('请输入手机号和验证码');
+      return;
+    }
+
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      alert('请输入正确的手机号格式');
+      return;
+    }
+
+    if (!/^\d{6}$/.test(smsCode)) {
+      alert('请输入6位数字验证码');
+      return;
+    }
+
+    setIsLoggingIn(true);
+    setLoginError(null);
+    
+    try {
+      const response = await loginWithSms(phone, smsCode, currentIdentity);
+      
+      // 调试日志
+      console.log('短信登录响应:', response);
+      console.log('响应码:', response.code);
+      
+      if (response.code === 200) {
+        console.log('短信登录成功，开始处理...');
+        
+        // 存储登录信息
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('username', response.data.user.username);
+        localStorage.setItem('role', response.data.user.role.toString());
+        localStorage.setItem('userInfo', JSON.stringify(response.data.user));
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+        }
+
+        console.log('用户角色:', response.data.user.role);
+        
+        // 根据用户角色跳转
+        if (response.data.user.role === 4) {
+          console.log('跳转到管理员页面');
+          navigate('/admin');
+        } else {
+          console.log('跳转到首页');
+          navigate('/');
+        }
+
+        if (onLoginSuccess) {
+          onLoginSuccess(currentIdentity);
+        }
+        
+        alert('登录成功！正在跳转...');
+      } else {
+        console.log('登录失败:', response.message);
+        setLoginError(response.message || '登录失败');
+      }
+    } catch (error) {
+      console.error('短信登录失败:', error);
+      const errorMessage = error.response?.data?.message || '登录失败，请稍后重试';
+      setLoginError(errorMessage);
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
 
   return (
     <div className="min-h-screen font-inter bg-gradient-to-br from-blue-50 to-indigo-50">
@@ -300,7 +420,14 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i className="fa fa-mobile text-neutral-400"></i>
                       </div>
-                      <input type="tel" id="phone" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入手机号" />
+                      <input 
+                        type="tel" 
+                        id="phone" 
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 11))}
+                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                        placeholder="请输入手机号" 
+                      />
                     </div>
                   </div>
 
@@ -311,12 +438,37 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                           <i className="fa fa-key text-neutral-400"></i>
                         </div>
-                        <input type="text" id="verify-code" className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" placeholder="请输入验证码" />
+                        <input 
+                          type="text" 
+                          id="verify-code" 
+                          value={smsCode}
+                          onChange={(e) => setSmsCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                          placeholder="请输入6位验证码" 
+                        />
                       </div>
-                      <button className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-custom">
-                        获取验证码
+                      <button 
+                        onClick={handleSendSmsCode}
+                        disabled={sendingCode || countdown > 0}
+                        className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-custom disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      >
+                        {sendingCode ? '发送中...' : countdown > 0 ? `${countdown}s` : '获取验证码'}
                       </button>
                     </div>
+                  </div>
+                  
+                  <div className="mb-4 p-3 bg-blue-50 text-blue-600 rounded-lg text-sm text-center">
+                    💡 提示：点击"获取验证码"后，请查看浏览器控制台(F12)获取验证码
+                  </div>
+                  
+                  <div className="text-center text-sm text-neutral-500">
+                    <span>还没有账号？</span>
+                    <button 
+                      onClick={() => navigate('/register')}
+                      className="text-primary hover:underline font-medium focus:outline-none"
+                    >
+                      立即注册
+                    </button>
                   </div>
                 </div>
               )}
@@ -338,11 +490,11 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
               )}
               <div className="flex flex-col gap-4">
                 <button 
-                  onClick={handleLogin}
+                  onClick={activeTab === 'password' ? handleLogin : handleSmsLogin}
                   disabled={isLoggingIn}
                   className="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary/90 transition-custom focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:bg-primary/50 disabled:cursor-not-allowed"
                 >
-                  {isLoggingIn ? '正在登录...' : '安全登录'}
+                  {isLoggingIn ? '正在登录...' : activeTab === 'password' ? '安全登录' : '短信登录'}
                 </button>
                 <button onClick={handleBackClick} className="w-full bg-neutral-100 text-neutral-600 py-3 rounded-lg hover:bg-neutral-200 transition-custom font-medium">
                   返回

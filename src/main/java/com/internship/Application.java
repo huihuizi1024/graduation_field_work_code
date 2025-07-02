@@ -2,7 +2,6 @@ package com.internship;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.mybatis.spring.annotation.MapperScan;
@@ -14,9 +13,7 @@ import org.mybatis.spring.annotation.MapperScan;
  * @date 2025.6.23
  * @version 1.3.1
  */
-@SpringBootApplication(exclude = {
-        RedisAutoConfiguration.class
-})
+@SpringBootApplication
 @EnableTransactionManagement
 @MapperScan("com.internship.repository")
 @ComponentScan(basePackages = "com.internship")
