@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
 import Login from './components/Login';
@@ -16,6 +16,11 @@ import UserProfile from './components/UserProfile';
 import ExpertProfile from './components/ExpertProfile';
 import InstitutionProfile from './components/InstitutionProfile';
 import UserOrders from './components/UserOrders';
+import ActivityDetail from './components/ActivityDetail';
+import About from './components/About';
+import Contact from './components/Contact';
+import Terms from './components/Terms';
+import Privacy from './components/Privacy';
 
 // A simple component to check for authentication
 const PrivateRoute = ({ children }) => {
@@ -33,7 +38,6 @@ const AdminRoute = ({ children }) => {
 function AppContent() {
   const navigate = useNavigate();
 
-  // This can be simplified further if not used by many components
   const handlePageChange = (path) => {
     navigate(path);
   };
@@ -49,8 +53,8 @@ function AppContent() {
 
   return (
     <Routes>
-      <Route 
-        path="/" 
+      <Route
+        path="/"
         element={
           <MainPage 
             onGoToSkillCertification={() => handlePageChange('/skill-certification')}
@@ -60,7 +64,7 @@ function AppContent() {
             onGoToSeniorEducation={() => handlePageChange('/senior-education')}
             onGoToEducationPromotion={() => handlePageChange('/education-promotion')}
           />
-        } 
+        }
       />
       <Route 
         path="/login" 
@@ -94,12 +98,17 @@ function AppContent() {
         path="/admin" 
         element={<AdminRoute><AdminPage onLogout={handleLogout} /></AdminRoute>} 
       />
+      <Route path="/activity/:id" element={<ActivityDetail />} />
       <Route path="/skill-certification" element={<SkillCertificationPage />} />
       <Route path="/interest-training" element={<InterestTrainingPage />} />
       <Route path="/life-skills" element={<LifeSkillsPage />} />
       <Route path="/career-advance" element={<CareerAdvancePage />} />
       <Route path="/senior-education" element={<SeniorEducationPage />} />
       <Route path="/education-promotion" element={<EducationPromotionPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
     </Routes>
   );
 }
