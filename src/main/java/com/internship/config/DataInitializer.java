@@ -30,6 +30,7 @@ public class DataInitializer implements CommandLineRunner {
             adminUser.setStatus(1); // 启用状态
             adminUser.setEmail("admin@system.com"); // 提供一个默认邮箱
             adminUser.setPhone("10000000000"); // 提供一个默认手机号
+            adminUser.setInstitutionId(null); // 管理员不属于任何机构
 
             userRepository.insert(adminUser);
             System.out.println(">>> Built-in administrator account created successfully!");

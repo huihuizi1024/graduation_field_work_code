@@ -259,6 +259,7 @@ CREATE TABLE platform_activity (
     activity_name VARCHAR(255) NOT NULL COMMENT '活动名称',
     activity_code VARCHAR(100) NOT NULL UNIQUE COMMENT '活动编码',
     activity_description TEXT COMMENT '活动描述',
+    image_url VARCHAR(255) COMMENT '活动图片URL',
     activity_type INT COMMENT '活动类型：1-线上活动，2-线下活动，3-混合活动',
     start_time DATETIME NOT NULL COMMENT '活动开始时间',
     end_time DATETIME NOT NULL COMMENT '活动结束时间',
@@ -635,16 +636,16 @@ INSERT INTO business_process (
 
 -- 插入平台活动数据
 INSERT INTO platform_activity (
-    activity_name, activity_code, activity_description, activity_type, start_time, end_time,
+    activity_name, activity_code, activity_description, image_url, activity_type, start_time, end_time,
     location, organizer, contact_person, contact_phone, reward_points, status, creator_name
 ) VALUES 
-('2024年度线上学习节', 'ONLINE_LEARNING_FEST', '平台用户参与线上课程学习的年度盛会', 1, '2024-07-01 09:00:00', '2024-07-31 23:59:59',
+('2024年度线上学习节', 'ONLINE_LEARNING_FEST', '平台用户参与线上课程学习的年度盛会', 'https://picsum.photos/1200/400?random=1', 1, '2024-07-01 09:00:00', '2024-07-31 23:59:59',
  '线上', '学分银行运营部', '王运营', '13912345678', 100.00, 1, '系统管理员'),
 
-('学分银行线下交流会', 'OFFLINE_EXCHANGE', '邀请专家学者和机构代表进行学分银行发展交流', 2, '2024-08-15 14:00:00', '2024-08-15 17:00:00',
+('学分银行线下交流会', 'OFFLINE_EXCHANGE', '邀请专家学者和机构代表进行学分银行发展交流', 'https://picsum.photos/1200/400?random=2', 2, '2024-08-15 14:00:00', '2024-08-15 17:00:00',
  '北京市海淀区会议中心', '学分银行管理中心', '李主任', '010-87654321', 50.00, 1, '系统管理员'),
 
-('职业技能大赛', 'SKILL_COMPETITION', '面向全平台用户的职业技能竞赛活动', 3, '2024-09-01 09:00:00', '2024-09-30 18:00:00',
+('职业技能大赛', 'SKILL_COMPETITION', '面向全平台用户的职业技能竞赛活动', 'https://picsum.photos/1200/400?random=3', 3, '2024-09-01 09:00:00', '2024-09-30 18:00:00',
  '各参赛机构', '技能培训联盟', '张老师', '13987654321', 150.00, 1, '系统管理员');
 
 -- 插入项目数据
@@ -692,11 +693,11 @@ INSERT INTO project (
 INSERT INTO user (
     username, password_hash, full_name, role, email, phone, institution_id, status, points_balance
 ) VALUES 
-('student01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', 1, 1, 150.00),
-('teacher01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '王老师', 2, 'wanglaoshi@pku.edu.cn', '13800138002', 1, 1, 280.00),
-('expert01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', 3, 1, 500.00),
-('student02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', 2, 1, 75.00),
-('teacher02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '陈教授', 2, 'chenjiaoshou@tsinghua.edu.cn', '13800138005', 2, 1, 320.00);
+('student01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', NULL, 1, 150.00),
+('org01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '北京大学管理员', 2, 'admin@pku.edu.cn', '13800138002', 1, 1, 280.00),
+('expert01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', NULL, 1, 500.00),
+('student02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', NULL, 1, 75.00),
+('org02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '清华大学管理员', 2, 'admin@tsinghua.edu.cn', '13800138005', 2, 1, 320.00);
 
 -- 插入专家数据
 INSERT INTO expert (id, name, expertise, contact, status, description) VALUES 
@@ -720,9 +721,9 @@ INSERT INTO product_order (
     user_id, product_id, points_used, order_status, shipping_address, contact_name, contact_phone, remark
 ) VALUES 
 (1, 1, 500, 3, '北京市海淀区颐和园路5号北京大学', '李明同学', '13800138001', '学习用品订单'),
-(2, 3, 1500, 2, '北京市海淀区颐和园路5号北京大学教师宿舍', '王老师', '13800138002', '教学辅助工具'),
+(2, 3, 1500, 2, '北京市海淀区颐和园路5号北京大学教师宿舍', '北京大学管理员', '13800138002', '教学辅助工具'),
 (3, 2, 2000, 3, '北京市朝阳区定福庄东街1号', '张专家', '13800138003', '技能提升课程'),
-(5, 1, 500, 1, '北京市海淀区清华园1号', '刘小华', '13800138004', '笔记本订单');
+(4, 1, 500, 1, '北京市海淀区清华园1号', '刘小华', '13800138004', '笔记本订单');
 
 -- 插入转换历史数据
 INSERT INTO conversion_history (

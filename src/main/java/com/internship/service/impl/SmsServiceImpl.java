@@ -348,6 +348,17 @@ public class SmsServiceImpl implements SmsService {
         user.setUpdateTime(LocalDateTime.now());
         user.setPointsBalance(0.0); // 初始积分为0
         
+        // 根据角色设置institution_id
+        // 只有机构用户(role=2)才设置institution_id，学生(role=1)和专家(role=3)的institution_id为null
+        if (request.getRole() != 2) {
+            user.setInstitutionId(null); // 学生和专家用户不设置机构ID
+        }
+        
+        // 设置邮箱（如果提供了）
+        if (request.getEmail() != null && !request.getEmail().isEmpty()) {
+            user.setEmail(request.getEmail());
+        }
+        
         // 设置默认密码（短信注册可以没有密码，设置默认值）
         user.setPasswordHash(passwordEncoder.encode("123456"));
         

@@ -84,6 +84,12 @@ const PlatformActivityList = () => {
       ...record,
       startTime: record.startTime ? dayjs(record.startTime) : null,
       endTime: record.endTime ? dayjs(record.endTime) : null,
+      activityName: record.activityName,
+      activityCode: record.activityCode,
+      activityDescription: record.activityDescription,
+      imageUrl: record.imageUrl,
+      activityType: record.activityType,
+      status: record.status,
     });
     setIsModalVisible(true);
   };
@@ -234,6 +240,13 @@ const PlatformActivityList = () => {
       onFilter: (value, record) => record.activityCode.toLowerCase().includes(value.toLowerCase()),
     },
     {
+      title: '活动图片URL',
+      dataIndex: 'imageUrl',
+      key: 'imageUrl',
+      ellipsis: true,
+      render: (text) => text ? <a href={text} target="_blank" rel="noopener noreferrer">{text.substring(0, 30)}...</a> : '-',
+    },
+    {
       title: '开始时间',
       dataIndex: 'startTime',
       key: 'startTime',
@@ -260,8 +273,8 @@ const PlatformActivityList = () => {
     },
     {
       title: '描述',
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'activityDescription',
+      key: 'activityDescription',
     },
     {
       title: '操作',
@@ -326,6 +339,12 @@ const PlatformActivityList = () => {
             <Input />
           </Form.Item>
           <Form.Item
+            name="imageUrl"
+            label="活动图片URL"
+          >
+            <Input placeholder="请输入活动图片URL，例如：https://picsum.photos/1200/400?random=1" />
+          </Form.Item>
+          <Form.Item
             name="startTime"
             label="开始时间"
             rules={[{ required: true, message: '请选择开始时间！' }]}
@@ -350,8 +369,8 @@ const PlatformActivityList = () => {
             </Select>
           </Form.Item>
           <Form.Item
-            name="description"
-            label="描述"
+            name="activityDescription"
+            label="活动描述"
           >
             <Input.TextArea rows={4} />
           </Form.Item>

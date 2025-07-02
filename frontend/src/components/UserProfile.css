@@ -95,20 +95,24 @@
   position: relative;
   max-width: 800px;
   margin: 40px auto 0;
-  padding-top: 60px;
+  padding-top: 160px;
 }
 
 .avatar-wrapper {
   position: absolute;
   left: 50%;
-  top: 0;
-  transform: translate(-50%, -30%);
+  top: 0px;
+  transform: translateX(-50%);
   text-align: center;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  background: #fff;
+  padding: 15px 25px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .avatar-wrapper .ant-avatar {
@@ -119,8 +123,9 @@
 
 .avatar-wrapper .user-name {
   color: #1890ff;
-  font-size: 20px;
+  font-size: 24px;
   margin: 8px 0 4px;
+  font-weight: 600;
 }
 
 .points-display-profile {
@@ -149,7 +154,7 @@
 .profile-info .ant-card {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding-top: 40px;
+  padding-top: 80px;
 }
 
 .profile-info .ant-card-head {

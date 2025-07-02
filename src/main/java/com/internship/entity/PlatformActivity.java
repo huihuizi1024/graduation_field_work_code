@@ -30,6 +30,9 @@ public class PlatformActivity {
 
     @Schema(description = "活动描述")
     private String activityDescription;
+    
+    @Schema(description = "活动图片URL")
+    private String imageUrl;
 
     @Schema(description = "活动类型：1-线上活动，2-线下活动，3-混合活动")
     private Integer activityType;

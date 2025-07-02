@@ -18,12 +18,13 @@ export const loginWithSms = (phone, code, identity) => {
 };
 
 // 短信验证码注册
-export const registerWithSms = (phone, code, fullName, role, username = null) => {
+export const registerWithSms = (phone, code, fullName, role, username = null, email = null) => {
   return api.post('/api/sms/register', { 
     phone, 
     code, 
     fullName, 
     role,
-    username: username || phone // 如果没有提供用户名，使用手机号
+    username: username || phone, // 如果没有提供用户名，使用手机号
+    email // 添加邮箱参数
   });
 }; 

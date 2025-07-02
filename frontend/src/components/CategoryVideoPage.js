@@ -57,39 +57,35 @@ const CategoryVideoPage = () => {
     setLoading(true);
     try {
       // 检查category参数是否存在，不存在则使用默认分类1
-      const categoryId = category || '1';
+      const categoryId = category ? parseInt(category, 10) : 1;
+      
+      console.log(`正在获取分类 ${categoryId} 的视频, 页码: ${page}, 每页数量: ${pageSize}`);
       
       const response = await api.get(`/api/projects/by-category/${categoryId}`, {
         params: {
-          page,
+          page: page,
           size: pageSize
         }
       });
 
+      console.log('API响应:', response);
+
       if (response && response.code === 200) {
-        const data = response.data || [];
-        // 处理数据是数组还是分页对象的情况
-        if (Array.isArray(data)) {
-          setVideos(data);
-          setPagination({
-            ...pagination,
-            current: page,
-            total: data.length
-          });
-        } else {
-          setVideos(data.records || []);
-          setPagination({
-            ...pagination,
-            current: page,
-            total: data.total || 0
-          });
-        }
+        const data = response.data || {};
+        setVideos(data.records || []);
+        setPagination({
+          current: page,
+          pageSize: pageSize,
+          total: data.total || 0
+        });
+        console.log(`成功获取${data.records?.length || 0}条视频数据，总数: ${data.total || 0}`);
       } else {
+        console.error('获取视频失败:', response?.message || '未知错误');
         message.error(`获取视频失败: ${response?.message || '未知错误'}`);
         setVideos([]);
       }
     } catch (error) {
-      console.error(`获取视频失败:`, error);
+      console.error('获取视频API异常:', error);
       message.error('获取视频失败，请稍后再试');
       setVideos([]);
     } finally {
@@ -99,18 +95,33 @@ const CategoryVideoPage = () => {
 
   // 分页变化
   const handlePageChange = (page, pageSize) => {
+    setPagination({
+      ...pagination,
+      current: page,
+      pageSize: pageSize
+    });
     fetchCategoryVideos(page, pageSize);
   };
 
-  // 初始加载
+  // 监听分类变化，重新加载数据
   useEffect(() => {
+    console.log('分类变化:', category);
     // 如果未指定分类，默认加载分类1
     if (!category) {
+      console.log('未指定分类，跳转到默认分类1');
       navigate('/category/1', { replace: true });
       return;
     }
-    fetchCategoryVideos(pagination.current, pagination.pageSize);
-  }, [category, navigate, pagination.current, pagination.pageSize]);
+    
+    // 重置分页到第一页
+    setPagination({
+      ...pagination,
+      current: 1
+    });
+    
+    // 获取指定分类的视频
+    fetchCategoryVideos(1, pagination.pageSize);
+  }, [category, navigate]);
 
   // 渲染视频卡片
   const renderVideoCard = (item) => (
@@ -145,7 +156,7 @@ const CategoryVideoPage = () => {
         description={
           <div>
             <div className="video-card-author">
-              <Text type="secondary">{item.manager}</Text>
+              <Text type="secondary">{item.manager || '未知讲师'}</Text>
             </div>
             <div className="video-card-stats">
               <span>

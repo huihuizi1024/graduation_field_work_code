@@ -1,6 +1,7 @@
 package com.internship.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.internship.dto.ApiResponse;
 import com.internship.dto.PageResponse;
@@ -389,14 +390,15 @@ public class ProjectController {
             @RequestParam(defaultValue = "15") int size,
             @AuthenticationPrincipal UserDetails userDetails) {
         
-        // 获取分页的项目列表
+        // 调用服务层获取分页数据
         PageResponse<Project> pageResponse = projectService.getProjects(page, size, null, null, null);
         List<Project> allProjects = pageResponse.getRecords();
         
         // 过滤符合分类的项目
         List<Project> filteredProjects = new ArrayList<>();
         for (Project project : allProjects) {
-            if (category.equals(project.getCategory())) {
+            // 安全地比较分类，处理null情况
+            if (project.getCategory() != null && category != null && project.getCategory().equals(category)) {
                 filteredProjects.add(project);
             }
         }

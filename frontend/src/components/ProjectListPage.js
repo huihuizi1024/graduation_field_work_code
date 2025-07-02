@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Tabs, List, Typography, Tag, Button, Empty, Spin } from 'antd';
 import { PlayCircleOutlined, ReadOutlined, CheckCircleOutlined, HomeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { getToken } from '../api/index';
+import api from '../api/index';
 import './ProjectListPage.css';
 
 const { Title, Text } = Typography;
@@ -44,14 +43,18 @@ const ProjectListPage = () => {
     try {
       setLoading(prev => ({ ...prev, [category]: true }));
       
-      const response = await axios.get(`/api/projects/by-category/${category}`, {
-        headers: { Authorization: `Bearer ${getToken()}` }
-      });
+      console.log(`正在获取分类${category}的项目...`);
+      const response = await api.get(`/api/projects/by-category/${category}`);
 
-      if (response.data.code === 200) {
-        setProjects(prev => ({ ...prev, [category]: response.data.data }));
+      if (response && response.code === 200) {
+        const data = response.data || {};
+        console.log(`成功获取分类${category}项目:`, data);
+        setProjects(prev => ({ 
+          ...prev, 
+          [category]: data.records || [] 
+        }));
       } else {
-        console.error(`获取分类${category}项目失败:`, response.data.message);
+        console.error(`获取分类${category}项目失败:`, response?.message || '未知错误');
       }
     } catch (error) {
       console.error(`获取分类${category}项目失败:`, error);
@@ -103,7 +106,7 @@ const ProjectListPage = () => {
         title={item.projectName}
         description={
           <div>
-            <Text type="secondary">{item.manager}</Text>
+            <Text type="secondary">{item.manager || '未知讲师'}</Text>
             {item.watchProgress > 0 && (
               <div className="project-progress">
                 <div className="progress-bar">
@@ -165,7 +168,7 @@ const ProjectListPage = () => {
               <Button 
                 type="primary" 
                 ghost
-                onClick={() => navigate(`/projects?category=${category.key}`)}
+                onClick={() => navigate(`/category/${category.key}`)}
               >
                 查看更多{category.name}项目
               </Button>

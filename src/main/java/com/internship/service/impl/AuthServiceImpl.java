@@ -86,6 +86,11 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setRole(request.getRole()); // 1 for student
+        
+        // 学生和专家用户不设置机构ID
+        if (request.getRole() != 2) { // 非机构用户
+            user.setInstitutionId(null);
+        }
 
         userRepository.insert(user);
         return ResponseEntity.ok(Map.of("message", "用户注册成功"));

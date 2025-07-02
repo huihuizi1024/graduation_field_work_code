@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu } from 'antd';
-import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu, Modal } from 'antd';
+import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined, CalendarOutlined, EnvironmentOutlined, TeamOutlined, LeftOutlined } from '@ant-design/icons';
 import './MainPage.css';
 import { useNavigate, Link } from 'react-router-dom';
 import api, { logout } from '../api';
+import dayjs from 'dayjs';
 
 const { Title, Paragraph } = Typography;
 
@@ -20,6 +21,11 @@ const MainPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [searchValue, setSearchValue] = useState('');
+  const [activities, setActivities] = useState([]);
+  const [loadingActivities, setLoadingActivities] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [activityModalVisible, setActivityModalVisible] = useState(false);
+  const carouselRef = React.createRef();
 
   useEffect(() => {
     // ComponentDidMount: Check login status from localStorage
@@ -35,7 +41,84 @@ const MainPage = () => {
         setUserRole(storedRole);
       }
     }
+    // 获取平台活动数据
+    fetchPlatformActivities();
   }, []);
+
+  // 获取平台活动数据
+  const fetchPlatformActivities = async () => {
+    setLoadingActivities(true);
+    try {
+      const response = await api.get('/api/platform-activities', {
+        params: {
+          status: 1, // 只获取状态为"进行中"的活动
+          page: 0,
+          size: 10
+        }
+      });
+      
+      if (response.code === 200 && response.data?.records) {
+        // 将API返回的数据转换为轮播图所需的格式
+        const formattedActivities = response.data.records.map(activity => ({
+          id: activity.id,
+          title: activity.activityName,
+          image: activity.imageUrl || 'https://picsum.photos/1200/400?random=' + Math.floor(Math.random() * 10),
+          desc: activity.activityDescription,
+          startTime: activity.startTime,
+          endTime: activity.endTime,
+          location: activity.location,
+          organizer: activity.organizer
+        }));
+        setActivities(formattedActivities);
+      } else {
+        console.error('获取平台活动数据失败:', response.message);
+        // 如果API调用失败，使用默认数据
+        setActivities(getDefaultActivities());
+      }
+    } catch (error) {
+      console.error('获取平台活动数据出错:', error);
+      // 如果发生错误，使用默认数据
+      setActivities(getDefaultActivities());
+    } finally {
+      setLoadingActivities(false);
+    }
+  };
+
+  // 默认活动数据，当API调用失败时使用
+  const getDefaultActivities = () => {
+    return [
+      {
+        id: 1,
+        title: '2024春季教育展',
+        image: 'https://picsum.photos/1200/400?random=1',
+        desc: '探索更多学习机会，开启你的学习之旅',
+        startTime: '2024-03-01 09:00:00',
+        endTime: '2024-03-15 18:00:00',
+        location: '线上',
+        organizer: '终身学习平台'
+      },
+      {
+        id: 2,
+        title: '终身学习节',
+        image: 'https://picsum.photos/1200/400?random=2',
+        desc: '永不停止学习的脚步，让知识伴随终身',
+        startTime: '2024-04-10 09:00:00',
+        endTime: '2024-04-20 18:00:00',
+        location: '北京市海淀区',
+        organizer: '学习中心'
+      },
+      {
+        id: 3,
+        title: '技能提升月',
+        image: 'https://picsum.photos/1200/400?random=3',
+        desc: '提升职场竞争力，助力职业发展',
+        startTime: '2024-05-01 09:00:00',
+        endTime: '2024-05-31 18:00:00',
+        location: '全国各地',
+        organizer: '职业发展协会'
+      }
+    ];
+  };
 
   const handleLogout = async () => {
     try {
@@ -101,46 +184,6 @@ const MainPage = () => {
         ];
     }
   };
-
-  // 活动数据
-  const activities = [
-    {
-      id: 1,
-      title: '2024春季教育展',
-      image: 'https://picsum.photos/1200/400?random=1',
-      desc: '探索更多学习机会，开启你的学习之旅'
-    },
-    {
-      id: 2,
-      title: '终身学习节',
-      image: 'https://picsum.photos/1200/400?random=2',
-      desc: '永不停止学习的脚步，让知识伴随终身'
-    },
-    {
-      id: 3,
-      title: '技能提升月',
-      image: 'https://picsum.photos/1200/400?random=3',
-      desc: '提升职场竞争力，助力职业发展'
-    },
-    {
-      id: 4,
-      title: '职业认证冲刺营',
-      image: 'https://picsum.photos/1200/400?random=4',
-      desc: '聚焦热门证书，60天高效备考冲刺'
-    },
-    {
-      id: 5,
-      title: '海外院校交流会',
-      image: 'https://picsum.photos/1200/400?random=5',
-      desc: '直通海外名校，1v1规划留学路径'
-    },
-    {
-      id: 6,
-      title: '企业内训开放周',
-      image: 'https://picsum.photos/1200/400?random=6',
-      desc: '开放名企内训课，偷师核心职场技能'
-    }
-  ];
 
   // 功能板块数据
   const features = [
@@ -227,6 +270,20 @@ const MainPage = () => {
     }
   };
 
+  // 轮播图箭头处理函数
+  const handlePrev = () => {
+    carouselRef.current.prev();
+  };
+
+  const handleNext = () => {
+    carouselRef.current.next();
+  };
+
+  // 查看活动详情 - 导航到单独页面而不是显示弹窗
+  const viewActivityDetail = (activity) => {
+    navigate(`/activity/${activity.id}`);
+  };
+
   return (
     <div className="main-page">
       {/* 顶部导航栏 */}
@@ -279,22 +336,34 @@ const MainPage = () => {
       {/* 轮播图部分 */}
       <div className="carousel-section">
         <Title level={2} className="section-title">热门活动</Title>
-        <Carousel autoplay dots={true}>
-          {activities.map((item, index) => (
-            <div key={index}>
-              <div
-                className="carousel-item"
-                style={{ backgroundImage: `url(${item.image})` }}
-                onClick={() => navigate(`/activity/${item.id}`)}
-              >
-                <div className="carousel-content">
-                  <h3>{item.title}</h3>
-                  <p>{item.desc}</p>
+        <div className="carousel-container">
+          <Button 
+            className="carousel-arrow carousel-arrow-left" 
+            icon={<LeftOutlined />} 
+            onClick={handlePrev}
+          />
+          <Carousel autoplay dots={true} ref={carouselRef}>
+            {activities.map((item, index) => (
+              <div key={index}>
+                <div
+                  className="carousel-item"
+                  style={{ backgroundImage: `url(${item.image})` }}
+                  onClick={() => viewActivityDetail(item)}
+                >
+                  <div className="carousel-content">
+                    <h3>{item.title}</h3>
+                    <p>{item.desc}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </Carousel>
+            ))}
+          </Carousel>
+          <Button 
+            className="carousel-arrow carousel-arrow-right" 
+            icon={<RightOutlined />} 
+            onClick={handleNext}
+          />
+        </div>
       </div>
 
       {/* 实时学习动态 */}

@@ -135,14 +135,6 @@ function AppContent() {
       <Route path="/career-advance" element={<CareerAdvancePage />} />
       <Route path="/senior-education" element={<SeniorEducationPage />} />
       <Route path="/education-promotion" element={<EducationPromotionPage />} />
-      
-      {/* 分类页面映射 */}
-      <Route path="/category/1" element={<CategoryVideoPage />} />
-      <Route path="/category/2" element={<CategoryVideoPage />} />
-      <Route path="/category/3" element={<CategoryVideoPage />} />
-      <Route path="/category/4" element={<CategoryVideoPage />} />
-      <Route path="/category/5" element={<CategoryVideoPage />} />
-      <Route path="/category/6" element={<CategoryVideoPage />} />
     </Routes>
   );
 }

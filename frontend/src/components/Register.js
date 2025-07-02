@@ -40,7 +40,7 @@ const Register = () => {
       password: '',
       confirmPassword: '',
       agree: false,
-      role: 1, // 默认为学生, 1: student, 2: expert
+      role: 1, // 默认为学生, 1: student, 3: expert
       expertise: '',
       description: ''
     },
@@ -127,13 +127,11 @@ const Register = () => {
           validation = validateEmail(value);
         }
         break;
-      /*
       case 'password':
         if (value) {
           validation = validatePassword(value);
         }
         break;
-      */
       default:
         break;
     }
@@ -287,7 +285,8 @@ const Register = () => {
           code: data.code,
           fullName: data.name,
           role: data.role,
-          username: data.username || data.phone // 如果没有用户名，使用手机号
+          username: data.username || data.phone, // 如果没有用户名，使用手机号
+          email: data.email // 添加邮箱
         };
 
         const response = await registerWithSms(
@@ -295,7 +294,8 @@ const Register = () => {
           smsRegisterData.code,
           smsRegisterData.fullName,
           smsRegisterData.role,
-          smsRegisterData.username
+          smsRegisterData.username,
+          smsRegisterData.email // 传递邮箱参数
         );
 
         console.log('短信注册响应:', response);
@@ -314,7 +314,7 @@ const Register = () => {
         if (data.role === 1) { // 1 for student
           await registerPersonal(data);
           alert('学生账号注册成功！正在跳转到登录页面...');
-        } else if (data.role === 2) { // 2 for expert
+        } else if (data.role === 3) { // 3 for expert
           if (!data.expertise.trim()) {
             alert('请输入您的专业领域');
             return;
@@ -392,8 +392,8 @@ const Register = () => {
               <input
                 type="radio"
                 name="role"
-                value={2}
-                checked={formData.personal.role === 2}
+                value={3}
+                checked={formData.personal.role === 3}
                 onChange={(e) => handleInputChange('personal', 'role', parseInt(e.target.value, 10))}
                 className="form-radio h-4 w-4 text-primary focus:ring-primary/30"
               />
@@ -517,7 +517,7 @@ const Register = () => {
             </button>
           </div>
           <div className="mt-2 text-xs text-gray-500">
-            💡 提示：点击"获取验证码"后，请查看浏览器控制台(F12)获取验证码
+            💡 提示：点击"获取验证码"后，请查看IDEA后端控制台获取验证码
           </div>
         </div>
 
@@ -544,7 +544,7 @@ const Register = () => {
             </div>
         </div>
         
-        {formData.personal.role === 2 && (
+        {formData.personal.role === 3 && (
           <>
             <div className="mb-6">
               <label className="block text-sm font-medium text-neutral-600 mb-2">专业领域</label>

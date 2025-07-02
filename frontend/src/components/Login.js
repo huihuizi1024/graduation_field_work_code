@@ -18,6 +18,7 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
   const [smsCode, setSmsCode] = useState('');
   const [countdown, setCountdown] = useState(0);
   const [sendingCode, setSendingCode] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const identityData = {
     student: { title: "学生登录", subtitle: "请选择登录方式", icon: "fa-user-circle", color: "primary" },
@@ -103,17 +104,7 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
     };
 
   const togglePasswordVisibility = () => {
-    const passwordInput = document.getElementById('password');
-    const toggleButton = document.getElementById('toggle-password');
-    if (passwordInput && toggleButton) {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      if (type === 'password') {
-        toggleButton.innerHTML = '<i class="fa fa-eye text-neutral-400"></i>';
-      } else {
-        toggleButton.innerHTML = '<i class="fa fa-eye-slash text-neutral-400"></i>';
-      }
-    }
+    setShowPassword(!showPassword);
   };
 
   // 倒计时效果
@@ -124,17 +115,6 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
     }
     return () => clearTimeout(timer);
   }, [countdown]);
-
-  // 添加点击事件监听器
-  React.useEffect(() => {
-    const toggleButton = document.getElementById('toggle-password');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', togglePasswordVisibility);
-      return () => {
-        toggleButton.removeEventListener('click', togglePasswordVisibility);
-      };
-    }
-  }, []);
 
   // 发送短信验证码
   const handleSendSmsCode = async () => {
@@ -240,6 +220,16 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
     }
   };
 
+  const navigateToMainAndScroll = (section) => {
+    navigate('/');
+    setTimeout(() => {
+      const element = document.getElementById(section);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 500);
+  };
+
   return (
     <div className="min-h-screen font-inter bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* 顶部导航 */}
@@ -254,9 +244,9 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
             </div>
             <nav className="hidden md:flex space-x-8">
               <button onClick={handleBackClick} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
-              <button className="text-neutral-600 hover:text-primary transition-custom">关于我们</button>
-              <button className="text-neutral-600 hover:text-primary transition-custom">帮助中心</button>
-              <button className="text-neutral-600 hover:text-primary transition-custom">联系我们</button>
+              <button onClick={() => navigate('/about')} className="text-neutral-600 hover:text-primary transition-custom">关于我们</button>
+              <button onClick={() => navigate('/privacy')} className="text-neutral-600 hover:text-primary transition-custom">隐私政策</button>
+              <button onClick={() => navigate('/contact')} className="text-neutral-600 hover:text-primary transition-custom">联系我们</button>
             </nav>
             <div className="md:hidden">
               <button className="text-neutral-600 focus:outline-none">
@@ -386,16 +376,16 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i className="fa fa-lock text-neutral-400"></i>
                       </div>
-                      <input 
+                      <input
                         id="password"
-                        type="password" 
-                        className="form-input block w-full pl-10 pr-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom" 
+                        type={showPassword ? 'text' : 'password'}
+                        className="form-input block w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-custom"
                         placeholder="请输入密码"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                       />
-                      <button id="toggle-password" type="button" className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <i className="fa fa-eye text-neutral-400"></i>
+                      <button id="toggle-password" type="button" className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-neutral-400 hover:text-primary transition-colors" onClick={togglePasswordVisibility}>
+                        <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                       </button>
                     </div>
                   </div>

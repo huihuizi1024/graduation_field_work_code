@@ -22,4 +22,6 @@ public class SmsRegisterRequest {
     
     @NotNull(message = "用户角色不能为空")
     private Integer role; // 1-学生, 2-机构, 3-专家, 4-管理员
+    
+    private String email; // 添加可选的邮箱字段
 } 
