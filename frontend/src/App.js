@@ -17,6 +17,17 @@ import ProjectListPage from './components/ProjectListPage';
 import MyCourses from './components/MyCourses';
 import MyProjects from './components/MyProjects';
 import InstitutionCourseManagement from './components/InstitutionCourseManagement';
+import ActivityDetail from './components/ActivityDetail';
+import About from './components/About';
+import Contact from './components/Contact';
+import Terms from './components/Terms';
+import Privacy from './components/Privacy';
+import SkillCertificationPage from './components/SkillCertificationPage';
+import InterestTrainingPage from './components/InterestTrainingPage';
+import LifeSkillsPage from './components/LifeSkillsPage';
+import CareerAdvancePage from './components/CareerAdvancePage';
+import SeniorEducationPage from './components/SeniorEducationPage';
+import EducationPromotionPage from './components/EducationPromotionPage';
 
 // A simple component to check for authentication
 const PrivateRoute = ({ children }) => {
@@ -41,7 +52,6 @@ const InstitutionRoute = ({ children }) => {
 function AppContent() {
   const navigate = useNavigate();
 
-  // This can be simplified further if not used by many components
   const handlePageChange = (path) => {
     navigate(path);
   };
@@ -57,9 +67,18 @@ function AppContent() {
 
   return (
     <Routes>
-      <Route 
-        path="/" 
-        element={<MainPage />} 
+      <Route
+        path="/"
+        element={
+          <MainPage 
+            onGoToSkillCertification={() => handlePageChange('/skill-certification')}
+            onGoToInterestTraining={() => handlePageChange('/interest-training')}
+            onGoToLifeSkills={() => handlePageChange('/life-skills')}
+            onCareerAdvance={() => handlePageChange('/career-advance')}
+            onGoToSeniorEducation={() => handlePageChange('/senior-education')}
+            onGoToEducationPromotion={() => handlePageChange('/education-promotion')}
+          />
+        }
       />
       <Route 
         path="/login" 
@@ -103,14 +122,27 @@ function AppContent() {
         path="/institution/courses" 
         element={<InstitutionRoute><InstitutionCourseManagement /></InstitutionRoute>} 
       />
+      <Route path="/activity/:id" element={<ActivityDetail />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
       
-      {/* 旧路径重定向到新路径 */}
-      <Route path="/life-skills" element={<Navigate to="/category/1" replace />} />
-      <Route path="/career-advance" element={<Navigate to="/category/3" replace />} />
-      <Route path="/senior-education" element={<Navigate to="/category/2" replace />} />
-      <Route path="/education-promotion" element={<Navigate to="/category/4" replace />} />
-      <Route path="/interest-training" element={<Navigate to="/category/5" replace />} />
-      <Route path="/skill-certification" element={<Navigate to="/category/6" replace />} />
+      {/* 保留旧的路径并导向新的分类页面 */}
+      <Route path="/skill-certification" element={<SkillCertificationPage />} />
+      <Route path="/interest-training" element={<InterestTrainingPage />} />
+      <Route path="/life-skills" element={<LifeSkillsPage />} />
+      <Route path="/career-advance" element={<CareerAdvancePage />} />
+      <Route path="/senior-education" element={<SeniorEducationPage />} />
+      <Route path="/education-promotion" element={<EducationPromotionPage />} />
+      
+      {/* 分类页面映射 */}
+      <Route path="/category/1" element={<CategoryVideoPage />} />
+      <Route path="/category/2" element={<CategoryVideoPage />} />
+      <Route path="/category/3" element={<CategoryVideoPage />} />
+      <Route path="/category/4" element={<CategoryVideoPage />} />
+      <Route path="/category/5" element={<CategoryVideoPage />} />
+      <Route path="/category/6" element={<CategoryVideoPage />} />
     </Routes>
   );
 }

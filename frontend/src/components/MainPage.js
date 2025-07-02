@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu } from 'antd';
 import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined } from '@ant-design/icons';
 import './MainPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api, { logout } from '../api';
 
 const { Title, Paragraph } = Typography;
@@ -102,22 +102,43 @@ const MainPage = () => {
     }
   };
 
-  // 轮播图数据
-  const carouselData = [
+  // 活动数据
+  const activities = [
     {
-      title: "2024春季教育展",
-      image: "https://img.freepik.com/free-photo/front-view-stacked-books-graduation-cap-diploma-education-day_23-2149241011.jpg",
-      description: "探索更多学习机会，开启你的学习之旅"
+      id: 1,
+      title: '2024春季教育展',
+      image: 'https://picsum.photos/1200/400?random=1',
+      desc: '探索更多学习机会，开启你的学习之旅'
     },
     {
-      title: "职业技能提升计划",
-      image: "https://img.freepik.com/free-photo/woman-working-laptop_23-2148505297.jpg",
-      description: "提升职场竞争力，助力职业发展"
+      id: 2,
+      title: '终身学习节',
+      image: 'https://picsum.photos/1200/400?random=2',
+      desc: '永不停止学习的脚步，让知识伴随终身'
     },
     {
-      title: "终身学习月活动",
-      image: "https://img.freepik.com/free-photo/elderly-people-learning-use-laptop_23-2148962895.jpg",
-      description: "永不停止学习的脚步，让知识伴随终身"
+      id: 3,
+      title: '技能提升月',
+      image: 'https://picsum.photos/1200/400?random=3',
+      desc: '提升职场竞争力，助力职业发展'
+    },
+    {
+      id: 4,
+      title: '职业认证冲刺营',
+      image: 'https://picsum.photos/1200/400?random=4',
+      desc: '聚焦热门证书，60天高效备考冲刺'
+    },
+    {
+      id: 5,
+      title: '海外院校交流会',
+      image: 'https://picsum.photos/1200/400?random=5',
+      desc: '直通海外名校，1v1规划留学路径'
+    },
+    {
+      id: 6,
+      title: '企业内训开放周',
+      image: 'https://picsum.photos/1200/400?random=6',
+      desc: '开放名企内训课，偷师核心职场技能'
     }
   ];
 
@@ -256,24 +277,25 @@ const MainPage = () => {
       </header>
 
       {/* 轮播图部分 */}
-      <Carousel autoplay className="carousel-section">
-        {carouselData.map((item, index) => (
-          <div key={index}>
-            <div
-              className="carousel-item"
-              style={{ backgroundImage: `url(${item.image})` }}
-            >
-              <div className="carousel-content">
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <Button type="primary" size="large" className="carousel-btn">
-                  了解更多
-                </Button>
+      <div className="carousel-section">
+        <Title level={2} className="section-title">热门活动</Title>
+        <Carousel autoplay dots={true}>
+          {activities.map((item, index) => (
+            <div key={index}>
+              <div
+                className="carousel-item"
+                style={{ backgroundImage: `url(${item.image})` }}
+                onClick={() => navigate(`/activity/${item.id}`)}
+              >
+                <div className="carousel-content">
+                  <h3>{item.title}</h3>
+                  <p>{item.desc}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </Carousel>
+          ))}
+        </Carousel>
+      </div>
 
       {/* 实时学习动态 */}
       <div className="updates-section">
@@ -315,10 +337,10 @@ const MainPage = () => {
       {/* 底部信息 */}
       <footer className="main-footer">
         <Space split={<Divider type="vertical" />}>
-          <a href="#">关于我们</a>
-          <a href="#">联系方式</a>
-          <a href="#">使用条款</a>
-          <a href="#">隐私政策</a>
+          <Link to="/about">关于我们</Link>
+          <Link to="/contact">联系方式</Link>
+          <Link to="/terms">使用条款</Link>
+          <Link to="/privacy">隐私政策</Link>
         </Space>
       </footer>
     </div>

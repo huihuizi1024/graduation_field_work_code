@@ -1,0 +1,144 @@
+.sms-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 20px;
+}
+
+.sms-login-form {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.sms-login-form h3 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.code-input-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.code-input {
+  flex: 1;
+}
+
+.send-code-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.send-code-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.send-code-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.demo-tip {
+  background: #f0f8ff;
+  border: 1px solid #91d5ff;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: #096dd9;
+  text-align: center;
+}
+
+.login-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.login-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(82, 196, 26, 0.4);
+}
+
+.login-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .sms-login-container {
+    padding: 10px;
+  }
+  
+  .sms-login-form {
+    padding: 20px;
+  }
+  
+  .code-input-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .send-code-btn {
+    width: 100%;
+  }
+} 
