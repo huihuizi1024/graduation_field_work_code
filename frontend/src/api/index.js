@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080',
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -10,8 +10,13 @@ const api = axios.create({
   withCredentials: true // 启用跨域请求时发送cookie
 });
 
-  // 请求拦截器
+// 请求拦截器
 api.interceptors.request.use(config => {
+  // 如果是FormData，不设置Content-Type，让浏览器自动设置
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
+
   // 清理不必要的headers
   const allowedHeaders = ['Content-Type', 'Accept', 'Authorization'];
   Object.keys(config.headers).forEach(key => {
@@ -29,8 +34,8 @@ api.interceptors.request.use(config => {
     );
   }
 
-  // 处理POST/PUT请求的data参数
-  if (config.data && typeof config.data === 'object') {
+  // 处理POST/PUT请求的data参数，但不处理FormData
+  if (config.data && typeof config.data === 'object' && !(config.data instanceof FormData)) {
     config.data = Object.fromEntries(
       Object.entries(config.data).filter(([_, v]) => 
         v !== undefined && v !== null && v !== ''
@@ -65,7 +70,11 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
   response => response.data,
   error => {
-    console.error('API Error:', error);
+    console.error('API Error:', {
+      config: error.config,
+      response: error.response,
+      message: error.message
+    });
     return Promise.reject(error);
   }
 );

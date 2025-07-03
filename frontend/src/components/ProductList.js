@@ -96,22 +96,40 @@ const ProductList = () => {
   const handleUpload = async (file) => {
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      console.log('Uploading file:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        lastModified: file.lastModified
+      });
       
-      const response = await uploadAPI.uploadImage(formData);
+      const response = await uploadAPI.uploadImage(file);
+      console.log('Upload response:', response);
+      
       if (response.code === 200 && response.data) {
         message.success('图片上传成功');
-        // 设置图片URL到表单字段
-        form.setFieldsValue({ imageUrl: response.data.url });
-        return response.data.url;
+        const imageUrl = response.data.url;
+        
+        // 更新表单字段和文件列表
+        form.setFieldsValue({ imageUrl });
+        setFileList([{
+          uid: '-1',
+          name: file.name,
+          status: 'done',
+          url: imageUrl,
+          response: response.data // 保存响应数据
+        }]);
+        
+        return imageUrl;
       } else {
         message.error('图片上传失败');
+        setFileList([]);
         return null;
       }
     } catch (error) {
       console.error('Error uploading image:', error);
       message.error('图片上传失败: ' + (error.message || '未知错误'));
+      setFileList([]);
       return null;
     } finally {
       setUploading(false);
@@ -121,31 +139,19 @@ const ProductList = () => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
+      console.log('Form values before save:', values);
       setLoading(true);
       
-      // 处理图片上传
-      let imageUrl = values.imageUrl;
-      
-      // 如果有新上传的文件，先上传图片
-      if (fileList.length > 0 && fileList[0].originFileObj) {
-        const uploadedUrl = await handleUpload(fileList[0].originFileObj);
-        if (uploadedUrl) {
-          imageUrl = uploadedUrl;
-        } else {
-          // 如果上传失败且没有提供URL，则返回错误
-          if (!values.imageUrl) {
-            message.error('图片上传失败，请重试或提供图片URL');
-            setLoading(false);
-            return;
-          }
-        }
-      }
-      
+      // 构建商品数据
       const productData = {
         ...values,
-        imageUrl,
-        status: values.status || 1
+        imageUrl: values.imageUrl,
+        status: values.status || 1,
+        points: Number(values.points),
+        stock: Number(values.stock)
       };
+      
+      console.log('Product data to save:', productData);
       
       if (editingProduct) {
         await productAPI.updateProduct(editingProduct.id, productData);
@@ -156,10 +162,23 @@ const ProductList = () => {
       }
       
       setIsModalVisible(false);
+      setFileList([]);
+      form.resetFields();
       fetchProducts();
     } catch (error) {
-      console.error('Error saving product:', error);
-      message.error('保存商品失败: ' + (error.message || '未知错误'));
+      console.error('Error saving product:', {
+        error,
+        formValues: form.getFieldsValue(),
+        fileList
+      });
+      if (error.errorFields) {
+        const errorMessages = error.errorFields
+          .map(field => `${field.name.join('.')}: ${field.errors.join(', ')}`)
+          .join('\n');
+        message.error('表单验证失败：\n' + errorMessages);
+      } else {
+        message.error('保存商品失败: ' + (error.message || '未知错误'));
+      }
     } finally {
       setLoading(false);
     }
@@ -253,11 +272,24 @@ const ProductList = () => {
   ];
 
   const uploadProps = {
+    name: 'file',
+    multiple: false,
+    showUploadList: true,
+    accept: 'image/*',
+    maxCount: 1,
     onRemove: (file) => {
       setFileList([]);
       form.setFieldsValue({ imageUrl: '' });
     },
-    beforeUpload: (file) => {
+    beforeUpload: async (file) => {
+      // 添加调试日志
+      console.log('Before upload file details:', {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        lastModified: file.lastModified
+      });
+      
       // 检查文件类型
       const isImage = file.type.startsWith('image/');
       if (!isImage) {
@@ -265,15 +297,30 @@ const ProductList = () => {
         return Upload.LIST_IGNORE;
       }
       
-      // 检查文件大小
+      // 检查文件大小（10MB = 10 * 1024 * 1024 bytes）
       const isLt10M = file.size / 1024 / 1024 < 10;
       if (!isLt10M) {
         message.error('图片大小不能超过10MB!');
         return Upload.LIST_IGNORE;
       }
       
-      setFileList([file]);
-      return false; // 阻止自动上传
+      try {
+        const imageUrl = await handleUpload(file);
+        if (imageUrl) {
+          // 更新表单字段
+          form.setFieldsValue({ imageUrl });
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+      }
+      return false;
+    },
+    onChange: async (info) => {
+      console.log('Upload onChange:', info);
+      if (info.file.status === 'removed') {
+        setFileList([]);
+        form.setFieldsValue({ imageUrl: '' });
+      }
     },
     fileList
   };
@@ -301,11 +348,23 @@ const ProductList = () => {
         title={editingProduct ? '编辑商品' : '添加商品'}
         open={isModalVisible}
         onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={() => {
+          setIsModalVisible(false);
+          setFileList([]);
+          form.resetFields();
+        }}
         confirmLoading={loading}
         width={600}
       >
-        <Form form={form} layout="vertical">
+        <Form 
+          form={form} 
+          layout="vertical" 
+          initialValues={{ 
+            status: 1,
+            points: 0,
+            stock: 0
+          }}
+        >
           <Form.Item
             name="name"
             label="商品名称"
@@ -313,6 +372,7 @@ const ProductList = () => {
           >
             <Input placeholder="请输入商品名称" />
           </Form.Item>
+          
           <Form.Item
             name="description"
             label="商品描述"
@@ -320,13 +380,37 @@ const ProductList = () => {
           >
             <TextArea rows={4} placeholder="请输入商品描述" />
           </Form.Item>
+          
           <Form.Item
             name="points"
             label="所需积分"
-            rules={[{ required: true, message: '请输入所需积分', type: 'number' }]}
+            rules={[
+              { required: true, message: '请输入所需积分' },
+              { type: 'number', min: 0, message: '积分必须大于等于0' }
+            ]}
           >
-            <InputNumber min={1} style={{ width: '100%' }} placeholder="请输入所需积分" />
+            <InputNumber
+              min={0}
+              style={{ width: '100%' }}
+              placeholder="请输入所需积分"
+            />
           </Form.Item>
+          
+          <Form.Item
+            name="stock"
+            label="库存数量"
+            rules={[
+              { required: true, message: '请输入库存数量' },
+              { type: 'number', min: 0, message: '库存必须大于等于0' }
+            ]}
+          >
+            <InputNumber
+              min={0}
+              style={{ width: '100%' }}
+              placeholder="请输入库存数量"
+            />
+          </Form.Item>
+          
           <Form.Item
             name="category"
             label="商品分类"
@@ -341,41 +425,36 @@ const ProductList = () => {
               <Option value="其他">其他</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="stock"
-            label="库存数量"
-            rules={[{ required: true, message: '请输入库存数量', type: 'number' }]}
-          >
-            <InputNumber min={0} style={{ width: '100%' }} placeholder="请输入库存数量" />
-          </Form.Item>
+          
           <Form.Item
             name="imageUrl"
-            label="商品图片URL"
+            label="商品图片"
             rules={[{ 
-              required: fileList.length === 0, 
+              required: true,
               message: '请上传商品图片或输入图片URL' 
             }]}
+            validateTrigger={['onChange', 'onBlur']}
           >
             <Input placeholder="请输入商品图片URL或使用下方上传图片" />
           </Form.Item>
+          
           <Form.Item label="上传图片">
-            <Upload
-              listType="picture"
-              maxCount={1}
-              {...uploadProps}
-            >
-              <Button icon={<UploadOutlined />} loading={uploading}>
-                选择图片
-              </Button>
+            <Upload {...uploadProps}>
+              {fileList.length < 1 && (
+                <Button icon={<UploadOutlined />} loading={uploading}>
+                  {uploading ? '上传中...' : '点击上传'}
+                </Button>
+              )}
             </Upload>
             <div style={{ marginTop: 8, color: '#888' }}>
               支持JPG、PNG格式，文件大小不超过10MB
             </div>
           </Form.Item>
+          
           <Form.Item
             name="status"
             label="商品状态"
-            initialValue={1}
+            rules={[{ required: true, message: '请选择商品状态' }]}
           >
             <Select>
               <Option value={1}>上架</Option>
