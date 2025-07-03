@@ -22,12 +22,14 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
-import SkillCertificationPage from './components/SkillCertificationPage';
 import InterestTrainingPage from './components/InterestTrainingPage';
 import LifeSkillsPage from './components/LifeSkillsPage';
 import CareerAdvancePage from './components/CareerAdvancePage';
 import SeniorEducationPage from './components/SeniorEducationPage';
 import EducationPromotionPage from './components/EducationPromotionPage';
+import ExpertCertificateReview from './components/ExpertCertificateReview';
+import StudentCertificatePage from './components/StudentCertificateApply';
+import CertificateApplicationView from './components/CertificateApplicationView';
 
 // A simple component to check for authentication
 const PrivateRoute = ({ children }) => {
@@ -47,6 +49,13 @@ const InstitutionRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   const role = localStorage.getItem('role');
   return isAuthenticated && role === '2' ? children : <Navigate to="/login" replace />;
+};
+
+// A simple component to check for expert role
+const ExpertRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const role = localStorage.getItem('role');
+  return isAuthenticated && role === '3' ? children : <Navigate to="/login" replace />;
 };
 
 function AppContent() {
@@ -129,12 +138,20 @@ function AppContent() {
       <Route path="/privacy" element={<Privacy />} />
       
       {/* 保留旧的路径并导向新的分类页面 */}
-      <Route path="/skill-certification" element={<SkillCertificationPage />} />
+      <Route path="/skill-certification" element={<PrivateRoute><StudentCertificatePage /></PrivateRoute>} />
       <Route path="/interest-training" element={<InterestTrainingPage />} />
       <Route path="/life-skills" element={<LifeSkillsPage />} />
       <Route path="/career-advance" element={<CareerAdvancePage />} />
       <Route path="/senior-education" element={<SeniorEducationPage />} />
       <Route path="/education-promotion" element={<EducationPromotionPage />} />
+      <Route
+        path="/expert/certificate-review"
+        element={<ExpertRoute><ExpertCertificateReview /></ExpertRoute>}
+      />
+      <Route
+        path="/expert/application/:id"
+        element={<ExpertRoute><CertificateApplicationView /></ExpertRoute>}
+      />
     </Routes>
   );
 }
