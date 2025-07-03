@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag } from 'antd';
-import { UserOutlined, MailOutlined, PhoneOutlined, StarOutlined, EditOutlined, ReadOutlined, IdcardOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { UserOutlined, MailOutlined, PhoneOutlined, StarOutlined, EditOutlined, ReadOutlined, IdcardOutlined, ArrowLeftOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { getCurrentExpert, updateCurrentExpert } from '../api';
 import EditProfileModal from './EditProfileModal';
 import './UserProfile.css'; // Reuse the UserProfile CSS

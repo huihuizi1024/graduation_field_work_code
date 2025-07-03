@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu, Modal } from 'antd';
-import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined, CalendarOutlined, EnvironmentOutlined, TeamOutlined, LeftOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined, CalendarOutlined, EnvironmentOutlined, TeamOutlined, LeftOutlined, CheckCircleOutlined, IdcardOutlined } from '@ant-design/icons';
 import './MainPage.css';
 import { useNavigate, Link } from 'react-router-dom';
 import api, { logout } from '../api';
@@ -159,12 +159,13 @@ const MainPage = () => {
         return [
           { key: 'profile', label: '个人中心', icon: <UserOutlined />, onClick: () => navigate('/profile') },
           { key: 'my-courses', label: '我的课程', icon: <ScheduleOutlined />, onClick: () => navigate('/my-courses') },
+          { key: 'certification', label: '证书认证', icon: <IdcardOutlined />, onClick: () => navigate('/skill-certification') },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
       case '3': // expert
         return [
           { key: 'profile', label: '专家中心', icon: <UserOutlined />, onClick: () => navigate('/expert/profile') },
-          { key: 'review', label: '课程评审', icon: <ScheduleOutlined />, onClick: () => navigate('/projects') },
+          { key: 'cert-review', label: '认证审核', icon: <CheckCircleOutlined />, onClick: () => navigate('/expert/certificate-review') },
           { key: 'logout', label: '退出登录', icon: <LogoutOutlined />, onClick: handleLogout },
         ];
       case '4': // admin

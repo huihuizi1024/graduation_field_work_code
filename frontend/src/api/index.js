@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { message as antMessage } from 'antd';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080',
@@ -66,6 +67,11 @@ api.interceptors.response.use(
   response => response.data,
   error => {
     console.error('API Error:', error);
+    // 统一弹出后端错误信息
+    const msg = error.response?.data?.message || '请求失败';
+    if (msg) {
+      antMessage.error(msg);
+    }
     return Promise.reject(error);
   }
 );

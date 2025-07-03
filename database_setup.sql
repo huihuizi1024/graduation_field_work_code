@@ -236,7 +236,66 @@ CREATE TABLE certification_standard (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='认证标准表';
 
--- 11. 创建业务流程表 (business_process)
+-- ========================================
+-- 新增证书相关核心表
+-- ========================================
+
+-- 11. 创建证书申请表 (certificate_application)
+DROP TABLE IF EXISTS certificate_application;
+CREATE TABLE certificate_application (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申请ID',
+    user_id BIGINT NOT NULL COMMENT '申请人用户ID',
+    standard_id BIGINT NOT NULL COMMENT '关联认证标准ID',
+    evidence_url VARCHAR(255) COMMENT '证明材料(URL 或说明)',
+    status INT NOT NULL DEFAULT 0 COMMENT '申请状态：0-待审核，1-已通过，2-已拒绝',
+    apply_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
+    review_time DATETIME COMMENT '审核时间',
+    reviewer_id BIGINT COMMENT '审核人ID',
+    review_comment TEXT COMMENT '审核意见',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (standard_id) REFERENCES certification_standard(id),
+    INDEX idx_certificate_application_user (user_id),
+    INDEX idx_certificate_application_standard (standard_id),
+    INDEX idx_certificate_application_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='证书申请表';
+
+-- 12. 创建用户证书表 (user_certificate)
+DROP TABLE IF EXISTS user_certificate;
+CREATE TABLE user_certificate (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    standard_id BIGINT NOT NULL COMMENT '关联认证标准ID',
+    issued_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '颁发时间',
+    expiry_time DATETIME COMMENT '过期时间',
+    reviewer_id BIGINT COMMENT '审核专家ID',
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (standard_id) REFERENCES certification_standard(id),
+    FOREIGN KEY (reviewer_id) REFERENCES user(id),
+    INDEX idx_user_certificate_user (user_id),
+    INDEX idx_user_certificate_standard (standard_id),
+    INDEX idx_user_certificate_reviewer (reviewer_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户证书表';
+
+-- 13. 创建证书审核记录表 (certificate_review_record)
+DROP TABLE IF EXISTS certificate_review_record;
+CREATE TABLE certificate_review_record (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',
+    application_id BIGINT NOT NULL COMMENT '申请ID',
+    standard_id BIGINT NOT NULL COMMENT '认证标准ID',
+    applicant_id BIGINT NOT NULL COMMENT '申请人ID',
+    reviewer_id BIGINT NOT NULL COMMENT '审核专家ID',
+    review_status INT NOT NULL COMMENT '审核结果：1-通过，2-拒绝',
+    review_comment TEXT COMMENT '审核意见',
+    review_time DATETIME COMMENT '审核时间',
+    FOREIGN KEY (application_id) REFERENCES certificate_application(id),
+    FOREIGN KEY (standard_id) REFERENCES certification_standard(id),
+    FOREIGN KEY (applicant_id) REFERENCES user(id),
+    FOREIGN KEY (reviewer_id) REFERENCES user(id),
+    INDEX idx_review_reviewer (reviewer_id),
+    INDEX idx_review_standard (standard_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='证书审核记录表';
+
+-- 14. 创建业务流程表 (business_process)
 DROP TABLE IF EXISTS business_process;
 CREATE TABLE business_process (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
@@ -252,7 +311,7 @@ CREATE TABLE business_process (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='业务流程表';
 
--- 12. 创建平台活动表 (platform_activity)
+-- 15. 创建平台活动表 (platform_activity)
 DROP TABLE IF EXISTS platform_activity;
 CREATE TABLE platform_activity (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
@@ -275,7 +334,7 @@ CREATE TABLE platform_activity (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='平台活动表';
 
--- 13. 创建项目表 (project) - 根据前端ProjectList.js定义
+-- 16. 创建项目表 (project) - 根据前端ProjectList.js定义
 DROP TABLE IF EXISTS project;
 CREATE TABLE project (
     id VARCHAR(50) PRIMARY KEY COMMENT '项目ID',
