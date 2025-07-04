@@ -43,6 +43,9 @@ public class CertificationStandard {
     @Schema(description = "有效期结束时间")
     private LocalDateTime effectiveEndTime;
 
+    @Schema(description = "获得此证书可奖励的积分值")
+    private Double pointValue;
+
     @NotNull(message = "状态不能为空")
     @Schema(description = "状态：1-有效，0-无效")
     private Integer status;

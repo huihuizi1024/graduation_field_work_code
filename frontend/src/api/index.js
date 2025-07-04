@@ -141,4 +141,14 @@ export const getCurrentInstitution = () => api.get('/api/institutions/me');
 // 更新当前机构信息
 export const updateCurrentInstitution = (data) => api.put('/api/institutions/me', data);
 
+// 获取积分规则列表
+export const getPointRules = (params = {}) => {
+  return api.get('/api/point-rules', { params });
+};
+
+// 获取转换规则列表
+export const getConversionRules = (params = {}) => {
+  return api.get('/api/conversion-rules', { params });
+};
+
 export default api;

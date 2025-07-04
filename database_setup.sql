@@ -227,6 +227,7 @@ CREATE TABLE certification_standard (
     issuing_organization VARCHAR(255) COMMENT '颁发机构',
     effective_start_time DATETIME COMMENT '有效期开始时间',
     effective_end_time DATETIME COMMENT '有效期结束时间',
+    point_value DECIMAL(10,2) DEFAULT 0 COMMENT '获得此证书可奖励的积分值',
     status INT NOT NULL DEFAULT 1 COMMENT '状态：1-有效，0-无效',
     creator_id BIGINT COMMENT '创建人ID',
     creator_name VARCHAR(100) COMMENT '创建人姓名',
@@ -574,16 +575,16 @@ INSERT INTO conversion_rule (
 -- 插入认证标准数据
 INSERT INTO certification_standard (
     standard_name, standard_code, standard_description, category, issuing_organization,
-    effective_start_time, effective_end_time, status, creator_name, review_status
+    effective_start_time, effective_end_time, point_value, status, creator_name, review_status
 ) VALUES 
 ('在线课程完成认证', 'ONLINE_COURSE_CERT', '完成在线课程学习并通过考核的认证标准', 1, '国家开放大学', 
- '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 50.00, 1, '系统管理员', 1),
 
 ('职业技能等级证书', 'VOC_SKILL_CERT', '通过职业技能鉴定考试获得的等级证书标准', 4, '人力资源和社会保障部', 
- '2024-03-01 00:00:00', '2026-02-28 23:59:59', 1, '系统管理员', 1),
+ '2024-03-01 00:00:00', '2026-02-28 23:59:59', 30.00, 1, '系统管理员', 1),
 
 ('数字化技能认证', 'DIGITAL_SKILL_CERT', '数字化时代必备技能认证标准', 2, '工业和信息化部', 
- '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1);
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 20.00, 1, '系统管理员', 1);
 
 -- 插入业务流程数据
 INSERT INTO business_process (

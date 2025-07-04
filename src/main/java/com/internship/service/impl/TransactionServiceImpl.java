@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,45 +63,60 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public PointTransaction createTransaction(PointTransaction transaction) {
-        log.info("开始创建积分交易记录 - 用户ID: {}, 交易类型: {}, 积分变化: {}", 
-                transaction.getUserId(), transaction.getTransactionType(), transaction.getPointsChange());
-                
-        // 获取用户当前积分，加锁读取确保一致性
-        User user = userRepository.selectById(transaction.getUserId());
-        double currentBalance = user.getPointsBalance();
-        double newBalance = currentBalance;
-        
-        log.info("用户当前积分余额: {}", currentBalance);
-        
-        // 根据交易类型计算新余额
-        switch(transaction.getTransactionType()) {
-            case 1: // 获得积分
-                newBalance = currentBalance + transaction.getPointsChange();
-                log.info("交易类型: 获得积分, 新余额将更新为: {}", newBalance);
-                break;
-            case 2: // 消费积分
-                newBalance = currentBalance - transaction.getPointsChange();
-                log.info("交易类型: 消费积分, 新余额将更新为: {}", newBalance);
-                break;
-            case 3: // 积分过期
-                newBalance = currentBalance - transaction.getPointsChange();
-                log.info("交易类型: 积分过期, 新余额将更新为: {}", newBalance);
-                break;
+        if (transaction.getPointsChange() == null || transaction.getPointsChange() == 0) {
+            throw new BusinessException("积分变动不能为0");
         }
         
-        // 设置交易后的余额
-        transaction.setBalanceAfter(newBalance);
+        if (transaction.getUserId() == null) {
+            throw new BusinessException("用户ID不能为空");
+        }
         
-        // 更新用户积分
-        user.setPointsBalance(newBalance);
-        userRepository.updateById(user);
-        log.info("已更新用户积分余额 - 用户ID: {}, 新余额: {}", transaction.getUserId(), newBalance);
+        User user = userRepository.selectById(transaction.getUserId());
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
         
+        // 如果是减少积分，检查用户积分余额是否足够
+        if (transaction.getPointsChange() < 0 && (user.getPointsBalance() == null || user.getPointsBalance() < Math.abs(transaction.getPointsChange()))) {
+            throw new BusinessException("用户积分余额不足");
+        }
+        
+        // 计算变动后余额
+        BigDecimal newBalance;
+        if (user.getPointsBalance() == null) {
+            newBalance = new BigDecimal(transaction.getPointsChange());
+        } else {
+            newBalance = new BigDecimal(user.getPointsBalance()).add(new BigDecimal(transaction.getPointsChange()));
+        }
+        transaction.setBalanceAfter(newBalance.doubleValue());
+        
+        // 设置交易类型 (如果没有设置)
+        if (transaction.getTransactionType() == null) {
+            transaction.setTransactionType(transaction.getPointsChange() > 0 ? 1 : 2); // 1-获得，2-消费
+        }
+        
+        // 设置交易时间
+        if (transaction.getTransactionTime() == null) {
+            transaction.setTransactionTime(LocalDateTime.now());
+        }
+        
+        // 对证书获得积分进行特殊处理
+        if (transaction.getRelatedId() != null && transaction.getRelatedId().startsWith("cert_")) {
+            transaction.setDescription(transaction.getDescription() != null ? 
+                transaction.getDescription() : "获得证书奖励积分");
+            
+            // 可以添加规则检查，例如每个证书只能获得一次积分
+            String certId = transaction.getRelatedId().substring(5); // 去掉"cert_"前缀
+            log.info("处理证书{}积分奖励，用户{}获得{}积分", certId, transaction.getUserId(), transaction.getPointsChange());
+        }
+        
+        // 保存交易记录
         transactionRepository.insert(transaction);
-        log.info("积分交易记录创建成功 - 交易ID: {}, 用户ID: {}, 积分变化: {}, 余额: {}, 描述: {}", 
-                transaction.getId(), transaction.getUserId(), transaction.getPointsChange(), 
-                transaction.getBalanceAfter(), transaction.getDescription());
-                
+        
+        // 更新用户积分余额
+        user.setPointsBalance(newBalance.doubleValue());
+        userRepository.updateById(user);
+        
         return transaction;
     }
 

@@ -15,7 +15,13 @@ const identityInfo = {
   '2': { label: '机构', icon: <UserOutlined />, color: '#722ed1' },
 };
 
-const MainPage = () => {
+const MainPage = ({ 
+  onGoToSkillCertification, 
+  onGoToInterestTraining, 
+  onGoToLifeSkills, 
+  onCareerAdvance, 
+  onGoToEducationPromotion 
+}) => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -72,52 +78,14 @@ const MainPage = () => {
         setActivities(formattedActivities);
       } else {
         console.error('获取平台活动数据失败:', response.message);
-        // 如果API调用失败，使用默认数据
-        setActivities(getDefaultActivities());
+        setActivities([]);
       }
     } catch (error) {
       console.error('获取平台活动数据出错:', error);
-      // 如果发生错误，使用默认数据
-      setActivities(getDefaultActivities());
+      setActivities([]);
     } finally {
       setLoadingActivities(false);
     }
-  };
-
-  // 默认活动数据，当API调用失败时使用
-  const getDefaultActivities = () => {
-    return [
-      {
-        id: 1,
-        title: '2024春季教育展',
-        image: 'https://picsum.photos/1200/400?random=1',
-        desc: '探索更多学习机会，开启你的学习之旅',
-        startTime: '2024-03-01 09:00:00',
-        endTime: '2024-03-15 18:00:00',
-        location: '线上',
-        organizer: '终身学习平台'
-      },
-      {
-        id: 2,
-        title: '终身学习节',
-        image: 'https://picsum.photos/1200/400?random=2',
-        desc: '永不停止学习的脚步，让知识伴随终身',
-        startTime: '2024-04-10 09:00:00',
-        endTime: '2024-04-20 18:00:00',
-        location: '北京市海淀区',
-        organizer: '学习中心'
-      },
-      {
-        id: 3,
-        title: '技能提升月',
-        image: 'https://picsum.photos/1200/400?random=3',
-        desc: '提升职场竞争力，助力职业发展',
-        startTime: '2024-05-01 09:00:00',
-        endTime: '2024-05-31 18:00:00',
-        location: '全国各地',
-        organizer: '职业发展协会'
-      }
-    ];
   };
 
   const handleLogout = async () => {

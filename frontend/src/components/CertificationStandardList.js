@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, Tag, Tooltip, DatePicker, InputNumber } from 'antd';
+import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, Tag, Tooltip, DatePicker, InputNumber, Radio } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, ReloadOutlined, AuditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
@@ -7,6 +7,7 @@ import api from '../api';
 
 const { Option } = Select;
 const { TextArea } = Input;
+const { RangePicker } = DatePicker;
 
 const CertificationStandardList = () => {
   const [form] = Form.useForm();
@@ -102,14 +103,13 @@ const CertificationStandardList = () => {
   };
 
   const handleEdit = (record) => {
-    console.log('编辑标准:', record);
     setEditingStandard(record);
-    const formValues = {
+    form.setFieldsValue({
       ...record,
-      effectiveStartTime: record.effectiveStartTime ? moment(record.effectiveStartTime) : null,
-      effectiveEndTime: record.effectiveEndTime ? moment(record.effectiveEndTime) : null,
-    };
-    form.setFieldsValue(formValues);
+      effectiveTime: record.effectiveStartTime && record.effectiveEndTime
+        ? [moment(record.effectiveStartTime), moment(record.effectiveEndTime)]
+        : undefined
+    });
     setIsModalVisible(true);
   };
 
@@ -131,41 +131,42 @@ const CertificationStandardList = () => {
     }
   };
 
-  const handleOk = async () => {
+  const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      console.log('表单提交值:', values);
+      
+      // 处理时间范围字段
+      if (values.effectiveTime && values.effectiveTime.length === 2) {
+        values.effectiveStartTime = values.effectiveTime[0].format('YYYY-MM-DD HH:mm:ss');
+        values.effectiveEndTime = values.effectiveTime[1].format('YYYY-MM-DD HH:mm:ss');
+      }
+      delete values.effectiveTime;
 
-      const submitData = {
-        ...values,
-        effectiveStartTime: values.effectiveStartTime ? values.effectiveStartTime.format('YYYY-MM-DD HH:mm:ss') : null,
-        effectiveEndTime: values.effectiveEndTime ? values.effectiveEndTime.format('YYYY-MM-DD HH:mm:ss') : null,
-      };
-      console.log('提交给后端的数据:', submitData);
+      const saveUrl = editingStandard 
+        ? `/api/certification-standards/${editingStandard.id}` 
+        : '/api/certification-standards';
+      const method = editingStandard ? 'PUT' : 'POST';
 
       setLoading(true);
-      let response;
-      let result;
-      if (editingStandard) {
-        result = await api.put(`/api/certification-standards/${editingStandard.id}`, submitData);
-        if (result.code === 200) {
-          message.success('认证标准更新成功！');
-        } else {
-          message.error(result.message || '认证标准更新失败！');
-        }
-      } else {
-        result = await api.post('/api/certification-standards', submitData);
-        if (result.code === 200) {
-          message.success('认证标准添加成功！');
-        } else {
-          message.error(result.message || '认证标准添加失败！');
-        }
+      const response = await api.fetch(saveUrl, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(values)
+      });
+      
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || '保存失败');
       }
+      
+      message.success(editingStandard ? '更新成功' : '添加成功');
       setIsModalVisible(false);
       fetchCertificationStandards();
     } catch (error) {
-      message.error('操作失败，请检查表单或网络！');
-      console.error('Operation failed:', error);
+      message.error(`保存失败: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -297,6 +298,11 @@ const CertificationStandardList = () => {
         </div>
       ),
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
+      render: (text, record) => (
+        <Tooltip title={record.standardDescription || '暂无描述'}>
+          <span style={{ cursor: 'pointer' }}>{text}</span>
+        </Tooltip>
+      ),
     },
     {
       title: '标准编码',
@@ -336,15 +342,15 @@ const CertificationStandardList = () => {
       title: '标准类别',
       dataIndex: 'category',
       key: 'category',
-      render: (text) => {
-        switch (text) {
-          case 1: return <Tag color="blue">课程</Tag>;
-          case 2: return <Tag color="green">项目</Tag>;
-          case 3: return <Tag color="purple">活动</Tag>;
-          case 4: return <Tag color="orange">考试</Tag>;
-          case 5: return <Tag color="cyan">证书</Tag>;
-          default: return <Tag>未知</Tag>;
-        }
+      render: category => {
+        const categoryMap = {
+          1: '课程',
+          2: '项目',
+          3: '活动',
+          4: '考试',
+          5: '证书'
+        };
+        return categoryMap[category] || '未知类别';
       },
       filters: [
         { text: '课程', value: 1 },
@@ -359,6 +365,12 @@ const CertificationStandardList = () => {
       title: '颁发机构',
       dataIndex: 'issuingOrganization',
       key: 'issuingOrganization',
+    },
+    {
+      title: '积分奖励',
+      dataIndex: 'pointValue',
+      key: 'pointValue',
+      render: (pointValue) => pointValue ? <Tag color="gold">{pointValue} 积分</Tag> : '-',
     },
     {
       title: '有效期开始时间',
@@ -378,13 +390,11 @@ const CertificationStandardList = () => {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: (text) => {
-        switch (text) {
-          case 1: return <Tag color="green">有效</Tag>;
-          case 0: return <Tag color="red">无效</Tag>;
-          default: return <Tag>未知</Tag>;
-        }
-      },
+      render: status => (
+        <Tag color={status === 1 ? 'green' : 'red'}>
+          {status === 1 ? '有效' : '无效'}
+        </Tag>
+      ),
       filters: [
         { text: '有效', value: 1 },
         { text: '无效', value: 0 },
@@ -472,6 +482,78 @@ const CertificationStandardList = () => {
     },
   ];
 
+  const renderFormItems = () => {
+    return (
+      <>
+        <Form.Item
+          name="standardName"
+          label="标准名称"
+          rules={[{ required: true, message: '请输入标准名称' }]}
+        >
+          <Input placeholder="请输入标准名称" />
+        </Form.Item>
+        <Form.Item
+          name="standardCode"
+          label="标准编码"
+          rules={[{ required: true, message: '请输入标准编码' }]}
+        >
+          <Input placeholder="请输入标准编码" />
+        </Form.Item>
+        <Form.Item
+          name="standardDescription"
+          label="标准描述"
+        >
+          <Input.TextArea rows={4} placeholder="请输入标准描述" />
+        </Form.Item>
+        <Form.Item
+          name="category"
+          label="标准类别"
+          rules={[{ required: true, message: '请选择标准类别' }]}
+        >
+          <Select placeholder="请选择标准类别">
+            <Select.Option value={1}>课程</Select.Option>
+            <Select.Option value={2}>项目</Select.Option>
+            <Select.Option value={3}>活动</Select.Option>
+            <Select.Option value={4}>考试</Select.Option>
+            <Select.Option value={5}>证书</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="issuingOrganization"
+          label="颁发机构"
+        >
+          <Input placeholder="请输入颁发机构" />
+        </Form.Item>
+        <Form.Item
+          name="pointValue"
+          label="积分奖励"
+        >
+          <InputNumber min={0} precision={2} placeholder="获得证书可奖励的积分值" />
+        </Form.Item>
+        <Form.Item
+          name="effectiveTime"
+          label="有效期"
+        >
+          <RangePicker 
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:mm"
+            placeholder={['开始时间', '结束时间']}
+          />
+        </Form.Item>
+        <Form.Item
+          name="status"
+          label="状态"
+          initialValue={1}
+        >
+          <Radio.Group>
+            <Radio value={1}>有效</Radio>
+            <Radio value={0}>无效</Radio>
+          </Radio.Group>
+        </Form.Item>
+      </>
+    );
+  };
+
   return (
     <div style={{ padding: 24 }}>
       <h2 style={{ marginBottom: 24 }}>认证标准管理</h2>
@@ -501,7 +583,7 @@ const CertificationStandardList = () => {
       <Modal
         title={editingStandard ? '编辑认证标准' : '添加认证标准'}
         visible={isModalVisible}
-        onOk={handleOk}
+        onOk={handleSave}
         onCancel={handleCancel}
         width={800}
         confirmLoading={loading}
@@ -516,68 +598,7 @@ const CertificationStandardList = () => {
             reviewStatus: 0,
           }}
         >
-          <Form.Item
-            name="standardName"
-            label="标准名称"
-            rules={[{ required: true, message: '请输入标准名称！' }]}
-          >
-            <Input placeholder="例如：计算机等级考试二级" />
-          </Form.Item>
-          <Form.Item
-            name="standardCode"
-            label="标准编码"
-            rules={[{ required: true, message: '请输入标准编码！' }]}
-            tooltip="标准编码是标准的唯一标识。建议使用大写字母和下划线，例如：COMPUTER_GRADE_II。"
-          >
-            <Input placeholder="例如：COMPUTER_GRADE_II" />
-          </Form.Item>
-          <Form.Item
-            name="standardDescription"
-            label="标准描述"
-          >
-            <TextArea rows={3} placeholder="请输入标准描述（可选）" />
-          </Form.Item>
-          <Form.Item
-            name="category"
-            label="标准类别"
-            rules={[{ required: true, message: '请选择标准类别！' }]}
-          >
-            <Select placeholder="请选择标准类别">
-              <Option value={1}>课程</Option>
-              <Option value={2}>项目</Option>
-              <Option value={3}>活动</Option>
-              <Option value={4}>考试</Option>
-              <Option value={5}>证书</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="issuingOrganization"
-            label="颁发机构"
-          >
-            <Input placeholder="请输入颁发机构（可选）" />
-          </Form.Item>
-          <Form.Item
-            name="effectiveStartTime"
-            label="有效期开始时间"
-          >
-            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} placeholder="请选择有效期开始时间（可选）" />
-          </Form.Item>
-          <Form.Item
-            name="effectiveEndTime"
-            label="有效期结束时间"
-          >
-            <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} placeholder="请选择有效期结束时间（可选）" />
-          </Form.Item>
-          <Form.Item
-            name="status"
-            label="状态"
-            rules={[{ required: true, message: '请选择状态！' }]}
-          >
-            <Select placeholder="请选择状态">
-              <Option value={1}>有效</Option>
-              <Option value={0}>无效</Option>
-            </Select>
-          </Form.Item>
+          {renderFormItems()}
           {editingStandard && (
             <>
               <Form.Item name="creatorName" label="创建人">
