@@ -25,7 +25,6 @@ import Privacy from './components/Privacy';
 import InterestTrainingPage from './components/InterestTrainingPage';
 import LifeSkillsPage from './components/LifeSkillsPage';
 import CareerAdvancePage from './components/CareerAdvancePage';
-import SeniorEducationPage from './components/SeniorEducationPage';
 import EducationPromotionPage from './components/EducationPromotionPage';
 import ExpertCertificateReview from './components/ExpertCertificateReview';
 import StudentCertificatePage from './components/StudentCertificateApply';
@@ -84,7 +83,6 @@ function AppContent() {
             onGoToInterestTraining={() => handlePageChange('/interest-training')}
             onGoToLifeSkills={() => handlePageChange('/life-skills')}
             onCareerAdvance={() => handlePageChange('/career-advance')}
-            onGoToSeniorEducation={() => handlePageChange('/senior-education')}
             onGoToEducationPromotion={() => handlePageChange('/education-promotion')}
           />
         }
@@ -142,7 +140,6 @@ function AppContent() {
       <Route path="/interest-training" element={<InterestTrainingPage />} />
       <Route path="/life-skills" element={<LifeSkillsPage />} />
       <Route path="/career-advance" element={<CareerAdvancePage />} />
-      <Route path="/senior-education" element={<SeniorEducationPage />} />
       <Route path="/education-promotion" element={<EducationPromotionPage />} />
       <Route
         path="/expert/certificate-review"

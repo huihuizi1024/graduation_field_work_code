@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Tag, Modal, Input, message, Spin, Upload, Tabs, Popconfirm } from 'antd';
-import { FileAddOutlined, UploadOutlined } from '@ant-design/icons';
+import { Table, Button, Tag, Modal, Input, message, Spin, Upload, Tabs, Popconfirm, Card, Tooltip, Typography } from 'antd';
+import { FileAddOutlined, UploadOutlined, InfoCircleOutlined, SwapOutlined } from '@ant-design/icons';
 import { getCertificationStandards } from '../api/standard';
 import { applyCertificate, getMyApplications, getMyCertificates, cancelApplication } from '../api/certificate';
+import { getConversionRules } from '../api';
+
+const { Text } = Typography;
+const { TabPane } = Tabs;
 
 const statusTag = (status) => {
   switch (status) {
@@ -25,9 +29,11 @@ const StudentCertificatePage = () => {
   const [standards, setStandards] = useState([]);
   const [applications, setApplications] = useState([]);
   const [certificates, setCertificates] = useState([]);
+  const [conversionRules, setConversionRules] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [applyLoading, setApplyLoading] = useState(false);
+  const [rulesLoading, setRulesLoading] = useState(false);
 
   const fetchStandards = async () => {
     setLoading(true);
@@ -78,10 +84,36 @@ const StudentCertificatePage = () => {
     }
   };
 
+  const fetchConversionRules = async () => {
+    setRulesLoading(true);
+    try {
+      const response = await getConversionRules({
+        page: 0,
+        size: 100,
+        status: 1, // 只获取有效的规则
+        reviewStatus: 1 // 只获取审核通过的规则
+      });
+      
+      if (response && response.code === 200 && response.data && response.data.records) {
+        setConversionRules(response.data.records);
+      } else {
+        console.log('没有找到转换规则数据');
+        setConversionRules([]);
+      }
+    } catch (error) {
+      console.error('获取转换规则失败:', error);
+      message.error('获取转换规则失败');
+      setConversionRules([]);
+    } finally {
+      setRulesLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (activeKey === 'available') fetchStandards();
     if (activeKey === 'applications') fetchApplications();
     if (activeKey === 'certificates') fetchCertificates();
+    if (activeKey === 'conversionRules') fetchConversionRules();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeKey]);
 
@@ -124,6 +156,12 @@ const StudentCertificatePage = () => {
     { title: '标准名称', dataIndex: 'standardName', key: 'standardName' },
     { title: '颁发机构', dataIndex: 'issuingOrganization', key: 'issuingOrganization' },
     { title: '有效期', key: 'term', render: (_, r) => `${r.effectiveStartTime || ''} ~ ${r.effectiveEndTime || ''}` },
+    { 
+      title: '积分奖励', 
+      dataIndex: 'pointValue', 
+      key: 'pointValue',
+      render: (value) => value ? <Tag color="gold">{value} 积分</Tag> : '-' 
+    },
     { title: '状态', dataIndex: 'status', key: 'status', render: statusTag },
     {
       title: '操作',
@@ -169,6 +207,71 @@ const StudentCertificatePage = () => {
     { title: '过期时间', dataIndex: 'expiryTime', key: 'expiryTime' }
   ];
 
+  // 转换规则表格列定义
+  const conversionRuleColumns = [
+    {
+      title: '规则名称',
+      dataIndex: 'ruleName',
+      key: 'ruleName',
+      render: (text) => <strong>{text}</strong>
+    },
+    {
+      title: '转换类型',
+      key: 'conversionType',
+      render: (_, record) => {
+        const getTypeName = (type) => {
+          switch (type) {
+            case 1: return '积分';
+            case 2: return '学分';
+            case 3: return '证书';
+            default: return '其他';
+          }
+        };
+        
+        return (
+          <span>
+            <Tag color="blue">{getTypeName(record.sourceType)}</Tag>
+            <SwapOutlined style={{ margin: '0 8px' }} />
+            <Tag color="green">{getTypeName(record.targetType)}</Tag>
+          </span>
+        );
+      }
+    },
+    {
+      title: '转换比例',
+      dataIndex: 'conversionRatio',
+      key: 'conversionRatio',
+      render: (ratio) => <Tag color="gold">{ratio}</Tag>
+    },
+    {
+      title: '转换限制',
+      key: 'limits',
+      render: (_, record) => (
+        <>
+          {record.minConversionAmount && (
+            <div>最小: {record.minConversionAmount}</div>
+          )}
+          {record.maxConversionAmount && (
+            <div>最大: {record.maxConversionAmount}</div>
+          )}
+        </>
+      )
+    },
+    {
+      title: '说明',
+      dataIndex: 'conversionConditions',
+      key: 'conversionConditions',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (conditions) => (
+        <Tooltip placement="topLeft" title={conditions || '暂无说明'}>
+          <Text ellipsis style={{ maxWidth: 200 }}>{conditions || '暂无说明'}</Text>
+        </Tooltip>
+      )
+    },
+  ];
+
   return (
     <div style={{ padding: 24 }}>
       <Tabs activeKey={activeKey} onChange={setActiveKey} items={[
@@ -197,6 +300,43 @@ const StudentCertificatePage = () => {
             <Spin spinning={loading}>
               <Table rowKey="id" dataSource={certificates} columns={certificateCols} pagination={{ pageSize: 8 }} />
             </Spin>
+          )
+        },
+        {
+          key: 'conversionRules',
+          label: '转换规则',
+          children: (
+            <div>
+              <Card title={<div><InfoCircleOutlined /> 证书与学分转换规则</div>} style={{ marginBottom: '24px' }}>
+                {rulesLoading ? (
+                  <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                    <Spin size="large" />
+                  </div>
+                ) : conversionRules.length > 0 ? (
+                  <Table 
+                    dataSource={conversionRules} 
+                    columns={conversionRuleColumns} 
+                    rowKey="id"
+                    pagination={{ pageSize: 5 }}
+                  />
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                    暂无转换规则数据
+                  </div>
+                )}
+              </Card>
+              
+              <Card title="转换规则说明" style={{ marginBottom: '24px' }}>
+                <ul style={{ paddingLeft: '20px' }}>
+                  <li>通过认证考试可获得相应证书</li>
+                  <li>证书可根据规则转换为学分或积分</li>
+                  <li>不同级别证书的转换比例不同</li>
+                  <li>转换后的学分可用于学历提升或课程抵扣</li>
+                  <li>转换规则可能会根据教育政策调整</li>
+                  <li>部分转换需要提交申请并经过审核</li>
+                </ul>
+              </Card>
+            </div>
           )
         }
       ]} />

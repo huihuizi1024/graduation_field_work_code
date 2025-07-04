@@ -9,8 +9,11 @@ import com.internship.repository.CertificationStandardRepository;
 import com.internship.repository.UserRepository;
 import com.internship.repository.CertificateReviewRecordRepository;
 import com.internship.service.CertificateApplicationService;
+import com.internship.service.TransactionService;
 import com.internship.dto.CertificateApplicationDTO;
 import com.internship.dto.UserCertificateDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,8 @@ import java.util.List;
 
 @Service
 public class CertificateApplicationServiceImpl implements CertificateApplicationService {
+
+    private static final Logger log = LoggerFactory.getLogger(CertificateApplicationServiceImpl.class);
 
     @Autowired
     private CertificateApplicationRepository applicationRepository;
@@ -35,6 +40,9 @@ public class CertificateApplicationServiceImpl implements CertificateApplication
 
     @Autowired
     private CertificateReviewRecordRepository reviewRecordRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Override
     @Transactional
@@ -108,12 +116,35 @@ public class CertificateApplicationServiceImpl implements CertificateApplication
         reviewRecordRepository.insert(rec);
 
         if (reviewStatus == 1) { // approved -> create certificate
+            // 创建证书记录
             UserCertificate cert = new UserCertificate();
             cert.setUserId(app.getUserId());
             cert.setStandardId(app.getStandardId());
             cert.setReviewerId(reviewerId);
             cert.setIssuedTime(LocalDateTime.now());
             userCertificateRepository.insert(cert);
+            
+            // 获取证书标准信息，检查是否有积分奖励
+            CertificationStandard standard = certificationStandardRepository.selectById(app.getStandardId());
+            if (standard != null && standard.getPointValue() != null && standard.getPointValue() > 0) {
+                try {
+                    // 创建积分交易记录
+                    PointTransaction pointTransaction = new PointTransaction();
+                    pointTransaction.setUserId(app.getUserId());
+                    pointTransaction.setTransactionType(1); // 1-获得积分
+                    pointTransaction.setPointsChange(standard.getPointValue());
+                    pointTransaction.setDescription("获得证书[" + standard.getStandardName() + "]奖励");
+                    pointTransaction.setRelatedId("cert_" + cert.getId()); // 记录关联的证书ID
+                    
+                    // 通过TransactionService创建积分交易（该服务会自动更新用户积分）
+                    transactionService.createTransaction(pointTransaction);
+                    
+                    log.info("用户ID {} 获得证书 {} 积分奖励 {} 成功", app.getUserId(), standard.getStandardName(), standard.getPointValue());
+                } catch (Exception e) {
+                    log.error("为用户 {} 添加证书积分奖励失败", app.getUserId(), e);
+                    // 不抛出异常，确保证书创建成功，积分失败不影响主流程
+                }
+            }
         }
     }
 
