@@ -29,6 +29,7 @@ import EducationPromotionPage from './components/EducationPromotionPage';
 import ExpertCertificateReview from './components/ExpertCertificateReview';
 import StudentCertificatePage from './components/StudentCertificateApply';
 import CertificateApplicationView from './components/CertificateApplicationView';
+import CourseViewer from './components/CourseViewer';
 
 // A simple component to check for authentication
 const PrivateRoute = ({ children }) => {
@@ -149,6 +150,7 @@ function AppContent() {
         path="/expert/application/:id"
         element={<ExpertRoute><CertificateApplicationView /></ExpertRoute>}
       />
+      <Route path="/course/:id" element={<CourseViewer />} />
     </Routes>
   );
 }

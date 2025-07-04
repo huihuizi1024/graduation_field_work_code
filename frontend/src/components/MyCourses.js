@@ -10,7 +10,7 @@ const { Meta } = Card;
 const { Title } = Typography;
 const { Content } = Layout;
 
-const MyCourses = () => {
+const MyCourses = ({ isEmbedded = false }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [completedCourses, setCompletedCourses] = useState([]);
@@ -79,7 +79,7 @@ const MyCourses = () => {
 
   // 渲染课程卡片
   const renderCourseCard = (course) => (
-    <Col xs={24} sm={12} md={8} lg={6} xl={6} xxl={4} key={course.id} className="course-card-container">
+    <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={6} key={course.id} className="course-card-container">
       <Card
         hoverable
         className="course-card"
@@ -122,6 +122,7 @@ const MyCourses = () => {
                   icon={<HistoryOutlined />}
                   onClick={() => handleCourseClick(course.id)}
                   className="review-button"
+                  size="small"
                 >
                   重新学习
                 </Button>
@@ -138,15 +139,17 @@ const MyCourses = () => {
       <Content className="my-courses-content">
         <div className="page-header">
           <div className="header-row">
-            <Title level={3} className="page-title">已完成课程</Title>
-            <Button 
-              type="primary" 
-              icon={<HomeOutlined />} 
-              onClick={() => navigate('/')}
-              className="header-button"
-            >
-              返回首页
-            </Button>
+            <Title level={4} className="page-title">已完成课程</Title>
+            {!isEmbedded && (
+              <Button 
+                type="primary" 
+                icon={<HomeOutlined />} 
+                onClick={() => navigate('/')}
+                className="header-button"
+              >
+                返回首页
+              </Button>
+            )}
           </div>
         </div>
         
@@ -155,9 +158,11 @@ const MyCourses = () => {
             <Spin size="large" tip="加载中..." />
           </div>
         ) : completedCourses.length > 0 ? (
-          <Row gutter={[16, 24]} className="course-grid">
-            {completedCourses.map(course => renderCourseCard(course))}
-          </Row>
+          <div className="courses-wrapper">
+            <Row gutter={[16, 16]} className="course-grid">
+              {completedCourses.map(course => renderCourseCard(course))}
+            </Row>
+          </div>
         ) : (
           <div className="empty-container">
             <Empty 

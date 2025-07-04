@@ -93,8 +93,9 @@
 
 .profile-info {
   position: relative;
-  max-width: 800px;
-  margin: 40px auto 0;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0 !important;
   padding-top: 160px;
 }
 
@@ -626,4 +627,38 @@
   padding: 50px 0;
   background: #fff;
   border-radius: 4px;
+}
+
+/* 自适应调整头像在小屏幕下的布局 */
+@media (max-width: 992px) {
+  .avatar-wrapper {
+    position: static !important;
+    transform: none !important;
+    margin: 0 auto 24px !important;
+    flex-direction: column;
+    border-radius: 16px;
+  }
+
+  .profile-info {
+    padding-top: 24px !important;
+  }
+}
+
+.profile-info,
+.courses-container,
+.orders-list,
+.points-history {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: none;
+}
+
+/* 统一四个模块左边距（桌面端） */
+@media (min-width: 769px) {
+  .profile-content > .profile-info,
+  .profile-content > .courses-container,
+  .profile-content > .orders-list,
+  .profile-content > .points-history {
+    margin-left: 32px !important;
+  }
 } 

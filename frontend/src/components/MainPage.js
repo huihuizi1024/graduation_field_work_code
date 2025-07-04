@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu, Modal, Spin } from 'antd';
 import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined, CalendarOutlined, EnvironmentOutlined, TeamOutlined, LeftOutlined, CheckCircleOutlined, IdcardOutlined } from '@ant-design/icons';
 import './MainPage.css';
@@ -32,6 +32,12 @@ const MainPage = ({
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [activityModalVisible, setActivityModalVisible] = useState(false);
   const carouselRef = React.createRef();
+  
+  // 拖动相关状态
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const carouselContainerRef = useRef(null);
 
   useEffect(() => {
     // ComponentDidMount: Check login status from localStorage
@@ -200,14 +206,6 @@ const MainPage = ({
     }
   ];
 
-  // 学习动态数据
-  const learningUpdates = [
-    "张先生 刚刚完成了《Excel数据分析》课程",
-    "李女士 获得了《摄影技巧》课程证书",
-    "王同学 报名参加了《人工智能基础》课程",
-    "刘女士 完成了本周学习任务"
-  ];
-
   // 处理功能板块点击
   const handleFeatureClick = (feature) => {
     // 直接使用路由导航，保持URL的一致性
@@ -251,6 +249,59 @@ const MainPage = ({
   // 查看活动详情 - 导航到单独页面而不是显示弹窗
   const viewActivityDetail = (activity) => {
     navigate(`/activity/${activity.id}`);
+  };
+
+  // 触摸事件处理
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX - touchEndX > 100) {
+      // 向左滑动
+      carouselRef.current.next();
+    }
+    
+    if (touchEndX - touchStartX > 100) {
+      // 向右滑动
+      carouselRef.current.prev();
+    }
+  };
+
+  // 鼠标事件处理
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setTouchStartX(e.clientX);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setTouchEndX(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    
+    if (touchStartX - touchEndX > 100) {
+      // 向左滑动
+      carouselRef.current.next();
+    }
+    
+    if (touchEndX - touchStartX > 100) {
+      // 向右滑动
+      carouselRef.current.prev();
+    }
+    
+    setIsDragging(false);
+  };
+
+  // 处理鼠标离开容器
+  const handleMouseLeave = () => {
+    setIsDragging(false);
   };
 
   return (
@@ -298,37 +349,51 @@ const MainPage = ({
       <div style={{ paddingTop: 70 }}> {/* 根据顶部栏高度调整此值 */}
         {/* 轮播图 */}
         <Spin spinning={loadingActivities} tip="活动加载中...">
-          <Carousel autoplay effect="fade" ref={carouselRef} dots={false} style={{ width: '100%', height: 400, overflow: 'hidden' }}>
-            {activities.map((item, index) => (
-              <div key={index}>
-                <div
-                  className="carousel-item"
-                  style={{ backgroundImage: `url(${item.image})` }}
-                  onClick={() => viewActivityDetail(item)}
-                >
-                  <div className="carousel-content">
-                    <h3>{item.title}</h3>
-                    <p>{item.desc}</p>
+          <div 
+            className="carousel-container" 
+            ref={carouselContainerRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button className="carousel-arrow carousel-arrow-left" onClick={handlePrev}>
+              <LeftOutlined />
+            </button>
+            <Carousel 
+              autoplay 
+              effect="fade" 
+              ref={carouselRef} 
+              dots={true} 
+              style={{ width: '100%', height: 400, overflow: 'hidden' }}
+              draggable={true}
+              swipeToSlide={true}
+              touchMove={true}
+              swipe={true}
+            >
+              {activities.map((item, index) => (
+                <div key={index}>
+                  <div
+                    className="carousel-item"
+                    style={{ backgroundImage: `url(${item.image})` }}
+                    onClick={() => viewActivityDetail(item)}
+                  >
+                    <div className="carousel-content">
+                      <h3>{item.title}</h3>
+                      <p>{item.desc}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </Carousel>
-        </Spin>
-
-        {/* 实时学习动态 */}
-        <div className="updates-section">
-          <div className="updates-content">
-            <FireOutlined className="updates-icon" />
-            <div className="updates-scroll">
-              {learningUpdates.map((update, index) => (
-                <div key={index} className="update-item">
-                  {update}
-                </div>
               ))}
-            </div>
+            </Carousel>
+            <button className="carousel-arrow carousel-arrow-right" onClick={handleNext}>
+              <RightOutlined />
+            </button>
           </div>
-        </div>
+        </Spin>
 
         {/* 功能板块 */}
         <div className="features-section">

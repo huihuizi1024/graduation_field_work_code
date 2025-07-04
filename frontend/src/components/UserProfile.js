@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input, Table, Empty, Row, Col, Statistic, List, Typography, notification } from 'antd';
+import { Layout, Menu, Avatar, Upload, Card, Tabs, Badge, Tag, Button, message, Radio, Spin, Input, Table, Empty, Row, Col, Statistic, List, Typography, notification, Modal, Descriptions, Divider } from 'antd';
 import { 
   UserOutlined, 
   UploadOutlined, 
@@ -19,6 +19,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, updateUserInfo } from '../api';
 import * as orderAPI from '../api/order';
+import * as productAPI from '../api/product';
 import * as transactionAPI from '../api/transaction';
 import dayjs from 'dayjs';
 import EditProfileModal from './EditProfileModal'; 
@@ -44,6 +45,9 @@ const UserProfile = () => {
   const [transactions, setTransactions] = useState([]);
   const [transactionLoading, setTransactionLoading] = useState(false);
   const [completedProjects, setCompletedProjects] = useState([]);
+  const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+  const [viewingOrder, setViewingOrder] = useState(null);
+  const [productInfo, setProductInfo] = useState(null);
 
   // 获取当前用户信息
   const fetchCurrentUser = async () => {
@@ -148,6 +152,28 @@ const UserProfile = () => {
     setIsModalVisible(false);
   };
 
+  const handleViewOrder = async (record) => {
+    setViewingOrder(record);
+    setIsViewModalVisible(true);
+    
+    // 获取商品详情
+    try {
+      const response = await productAPI.getProductById(record.productId);
+      if (response.code === 200) {
+        setProductInfo(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching product info:', error);
+      message.error('获取商品详情失败');
+    }
+  };
+
+  const handleViewCancel = () => {
+    setIsViewModalVisible(false);
+    setViewingOrder(null);
+    setProductInfo(null);
+  };
+
   const handleUpdateProfile = async (values) => {
     try {
       setLoading(true);
@@ -172,8 +198,12 @@ const UserProfile = () => {
 
   // 头像上传配置
   const uploadProps = {
-    name: 'avatar',
+    name: 'file',
     showUploadList: false,
+    action: '/api/upload/file',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token') || ''}`
+    },
     beforeUpload: (file) => {
       const isImage = file.type.startsWith('image/');
       if (!isImage) {
@@ -185,19 +215,24 @@ const UserProfile = () => {
         message.error('图片大小不能超过2MB！');
         return false;
       }
-      
-      // 在实际项目中，这里应该调用API上传图片
-      // 这里使用FileReader模拟预览
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUserInfo(prev => ({
-          ...prev,
-          avatar: e.target.result
-        }));
-        message.success('头像更新成功！');
-      };
-      reader.readAsDataURL(file);
-      return false;
+      return true; // 继续上传
+    },
+    onSuccess: async (res) => {
+      if (res.code === 200 && res.data?.url) {
+        try {
+          await updateUserInfo({ avatarUrl: res.data.url });
+          setUserInfo((prev) => ({ ...prev, avatar: res.data.url }));
+          localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, avatar: res.data.url }));
+          message.success('头像更新成功！');
+        } catch (e) {
+          message.error('保存头像失败');
+        }
+      } else {
+        message.error(res.message || '上传失败');
+      }
+    },
+    onError: () => {
+      message.error('上传失败');
     }
   };
 
@@ -222,11 +257,6 @@ const UserProfile = () => {
       key: 'points',
       icon: <GiftOutlined />,
       label: '积分记录'
-    },
-    {
-      key: 'settings',
-      icon: <SettingOutlined />,
-      label: '账户设置'
     }
   ];
 
@@ -401,7 +431,7 @@ const UserProfile = () => {
         <Button 
           icon={<EyeOutlined />} 
           size="small" 
-          onClick={() => navigate(`/user/orders`)}
+          onClick={() => handleViewOrder(record)}
         >
           查看详情
         </Button>
@@ -485,7 +515,7 @@ const UserProfile = () => {
             {selectedMenuItem === 'profile' && renderProfile()}
             {selectedMenuItem === 'courses' && (
               <div className="courses-container">
-                <MyCourses />
+                <MyCourses isEmbedded={true} />
               </div>
             )}
             {selectedMenuItem === 'orders' && (
@@ -537,24 +567,60 @@ const UserProfile = () => {
                 </Card>
               </div>
             )}
-            {selectedMenuItem === 'settings' && (
-              <div className="account-settings">
-                <Card 
-                  title={
-                    <span>
-                      <SettingOutlined style={{ marginRight: 8 }} />
-                      账户设置
-                    </span>
-                  }
-                  bordered={false}
-                >
-                  <p style={{ color: '#666' }}>账户设置功能开发中...</p>
-                </Card>
-              </div>
-            )}
           </Content>
         </Layout>
       </Layout>
+      {isViewModalVisible && (
+        <Modal
+          open={isViewModalVisible}
+          onCancel={handleViewCancel}
+          title="订单详情"
+          width={700}
+          footer={[
+            <Button key="back" onClick={handleViewCancel}>
+              关闭
+            </Button>
+          ]}
+        >
+          {viewingOrder && (
+            <>
+              <Descriptions title="订单信息" bordered column={1}>
+                <Descriptions.Item label="订单ID">{viewingOrder.id}</Descriptions.Item>
+                <Descriptions.Item label="订单状态">{getOrderStatusTag(viewingOrder.orderStatus)}</Descriptions.Item>
+                <Descriptions.Item label="消耗积分">{viewingOrder.pointsUsed}</Descriptions.Item>
+                <Descriptions.Item label="下单时间">
+                  {viewingOrder.createTime ? dayjs(viewingOrder.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'}
+                </Descriptions.Item>
+              </Descriptions>
+              
+              <Divider />
+              
+              <Descriptions title="收货信息" bordered column={1}>
+                <Descriptions.Item label="收货人">{viewingOrder.contactName}</Descriptions.Item>
+                <Descriptions.Item label="联系电话">{viewingOrder.contactPhone}</Descriptions.Item>
+                <Descriptions.Item label="收货地址">{viewingOrder.shippingAddress}</Descriptions.Item>
+                <Descriptions.Item label="备注">{viewingOrder.remark || '-'}</Descriptions.Item>
+              </Descriptions>
+              
+              <Divider />
+              
+              {productInfo && (
+                <Descriptions title="商品信息" bordered column={1}>
+                  <Descriptions.Item label="商品名称">{productInfo.name}</Descriptions.Item>
+                  <Descriptions.Item label="商品描述">{productInfo.description}</Descriptions.Item>
+                  <Descriptions.Item label="所需积分">{productInfo.points}</Descriptions.Item>
+                  <Descriptions.Item label="商品分类">{productInfo.category}</Descriptions.Item>
+                  {productInfo.imageUrl && (
+                    <Descriptions.Item label="商品图片">
+                      <img src={productInfo.imageUrl} alt="商品图片" style={{ maxWidth: '200px' }} />
+                    </Descriptions.Item>
+                  )}
+                </Descriptions>
+              )}
+            </>
+          )}
+        </Modal>
+      )}
     </Layout>
   );
 };

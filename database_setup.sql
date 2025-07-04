@@ -178,6 +178,7 @@ CREATE TABLE user (
     institution_id BIGINT COMMENT '所属机构ID',
     status INT NOT NULL DEFAULT 1 COMMENT '状态：1-正常, 0-禁用',
     points_balance DECIMAL(10,2) DEFAULT 0.0 COMMENT '用户积分余额',
+    avatar_url VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '头像URL',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     FOREIGN KEY (institution_id) REFERENCES institution(id)
@@ -653,13 +654,13 @@ INSERT INTO project (
 
 -- 插入测试用户数据（支持短信验证码测试）
 INSERT INTO user (
-    username, password_hash, full_name, role, email, phone, institution_id, status, points_balance
+    username, password_hash, full_name, role, email, phone, institution_id, status, points_balance, avatar_url
 ) VALUES 
-('student01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', NULL, 1, 150.00),
-('org01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '北京大学管理员', 2, 'admin@pku.edu.cn', '13800138002', 1, 1, 280.00),
-('expert01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', NULL, 1, 500.00),
-('student02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', NULL, 1, 75.00),
-('org02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '清华大学管理员', 2, 'admin@tsinghua.edu.cn', '13800138005', 2, 1, 320.00);
+('student01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '李明同学', 1, 'liming@pku.edu.cn', '13800138001', NULL, 1, 150.00, 'https://example.com/avatar1.jpg'),
+('org01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '北京大学管理员', 2, 'admin@pku.edu.cn', '13800138002', 1, 1, 280.00, 'https://example.com/avatar2.jpg'),
+('expert01', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '张专家', 3, 'zhangzhuanjia@bjvtc.edu.cn', '13800138003', NULL, 1, 500.00, 'https://example.com/avatar3.jpg'),
+('student02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '刘小华', 1, 'liuxiaohua@tsinghua.edu.cn', '13800138004', NULL, 1, 75.00, 'https://example.com/avatar4.jpg'),
+('org02', '$2a$10$.tZa4q6StlCwFUr9jvwOPedxzLRKjxk888vS4RZfBDXZsp2FuPmL6', '清华大学管理员', 2, 'admin@tsinghua.edu.cn', '13800138005', 2, 1, 320.00, 'https://example.com/avatar5.jpg');
 
 -- 插入专家数据
 INSERT INTO expert (id, name, expertise, contact, status, description) VALUES 
