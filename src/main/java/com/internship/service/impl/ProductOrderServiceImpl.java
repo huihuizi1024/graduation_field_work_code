@@ -153,7 +153,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
         PointTransaction transaction = new PointTransaction();
         transaction.setUserId(userId);
         transaction.setTransactionType(2); // 消费
-        transaction.setPointsChange(product.getPoints());
+        transaction.setPointsChange(-product.getPoints());
         transaction.setDescription("购买商品：" + product.getName());
         transaction = transactionService.createTransaction(transaction);
         
