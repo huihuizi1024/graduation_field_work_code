@@ -9,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
+
 /**
  * Web配置类，用于配置CORS
  *
@@ -24,9 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // 允许所有API路径的跨域请求
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000")
+        registry.addMapping("/**")  // 允许所有路径
+                .allowedOrigins("http://localhost:3000", "http://localhost:8080")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
@@ -35,9 +36,21 @@ public class WebConfig implements WebMvcConfigurer {
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 添加上传文件的资源处理
+        // 确保上传目录存在
+        File uploadDirectory = new File(uploadDir);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
+        }
+        
+        // 配置静态资源映射
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:" + uploadDir + "/");
+                .addResourceLocations("file:" + uploadDirectory.getAbsolutePath() + File.separator)
+                .setCachePeriod(3600)
+                .resourceChain(true);
+                
+        // 添加其他静态资源路径
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
     }
     
     /**
@@ -50,6 +63,7 @@ public class WebConfig implements WebMvcConfigurer {
             factory.addConnectorCustomizers(connector -> {
                 // 设置最大请求体大小为10MB
                 connector.setMaxPostSize(10 * 1024 * 1024); // 10MB
+                connector.setMaxParameterCount(1000);
                 
                 // 使用反射方式尝试设置请求头大小 (兼容性更好)
                 try {
