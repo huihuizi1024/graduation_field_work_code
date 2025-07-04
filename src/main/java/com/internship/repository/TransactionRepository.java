@@ -28,4 +28,9 @@ public interface TransactionRepository extends BaseMapper<PointTransaction> {
             
     @Select("SELECT * FROM point_transaction WHERE user_id = #{userId} ORDER BY create_time DESC")
     List<PointTransaction> findByUserIdOrderByCreateTimeDesc(@Param("userId") Long userId);
+
+    /**
+     * 根据用户ID和相关项目ID查询交易记录
+     */
+    List<PointTransaction> findByUserIdAndRelatedId(Long userId, String relatedId);
 }

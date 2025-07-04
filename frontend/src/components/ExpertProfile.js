@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag } from 'antd';
-import { UserOutlined, MailOutlined, PhoneOutlined, StarOutlined, EditOutlined, ReadOutlined, IdcardOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag, Layout, Breadcrumb } from 'antd';
+import { UserOutlined, MailOutlined, PhoneOutlined, StarOutlined, EditOutlined, ReadOutlined, IdcardOutlined, ArrowLeftOutlined, HomeOutlined } from '@ant-design/icons';
 import { getCurrentExpert, updateCurrentExpert } from '../api';
 import EditProfileModal from './EditProfileModal';
 import './UserProfile.css'; // Reuse the UserProfile CSS
+
+const { Content } = Layout;
 
 const ExpertProfile = () => {
     const navigate = useNavigate();
@@ -87,50 +89,71 @@ const ExpertProfile = () => {
     }
 
     return (
-        <div className="profile-info">
-             <div className="avatar-wrapper">
-                <Avatar size={100} icon={<UserOutlined />} src={expertData.avatarUrl} />
-                <h2 className="user-name">{expertData.fullName}</h2>
-                <Tag color="blue">@{expertData.username}</Tag>
-            </div>
-            <Card
-                title={
-                    <Button type="link" onClick={() => navigate('/')} icon={<ArrowLeftOutlined />}>
-                        返回主页
-                    </Button>
-                }
-                extra={<Button icon={<EditOutlined />} onClick={handleEdit}>编辑信息</Button>}
-                className="profile-details-card"
-            >
-                <Descriptions bordered column={1} layout="horizontal" contentStyle={{ textAlign: 'right' }}>
-                    <Descriptions.Item label={<><IdcardOutlined /> 真实姓名</>}>
-                        {expertData.fullName || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><MailOutlined /> 联系邮箱</>}>
-                        {expertData.email || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><PhoneOutlined /> 手机号码</>}>
-                        {expertData.phone || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><StarOutlined /> 专业领域</>}>
-                        {expertData.expertise || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><ReadOutlined /> 个人简介</>}>
-                        {expertData.description || '这位专家很低调，什么都没留下。'}
-                    </Descriptions.Item>
-                </Descriptions>
-            </Card>
+        <Layout className="my-courses-layout">
+            <Content className="content-container">
+                <div className="page-header">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            <a href="/">
+                                <HomeOutlined />
+                            </a>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>专家中心</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div className="header-row">
+                        <h2 className="page-title">专家信息</h2>
+                        <Button 
+                            type="primary" 
+                            icon={<HomeOutlined />} 
+                            onClick={() => navigate('/')}
+                            className="home-button"
+                        >
+                            返回首页
+                        </Button>
+                    </div>
+                </div>
 
-            {expertData && (
-                <EditProfileModal
-                    visible={isModalVisible}
-                    onCancel={handleCancelModal}
-                    onOk={handleUpdateProfile}
-                    initialData={expertData}
-                    role="expert"
-                />
-            )}
-        </div>
+                <div className="profile-info">
+                    <div className="avatar-wrapper">
+                        <Avatar size={100} icon={<UserOutlined />} src={expertData.avatarUrl} />
+                        <h2 className="user-name">{expertData.fullName}</h2>
+                        <Tag color="blue">@{expertData.username}</Tag>
+                    </div>
+                    <Card
+                        extra={<Button icon={<EditOutlined />} onClick={handleEdit}>编辑信息</Button>}
+                        className="profile-details-card"
+                    >
+                        <Descriptions bordered column={1} layout="horizontal" contentStyle={{ textAlign: 'right' }}>
+                            <Descriptions.Item label={<><IdcardOutlined /> 真实姓名</>}>
+                                {expertData.fullName || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label={<><MailOutlined /> 联系邮箱</>}>
+                                {expertData.email || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label={<><PhoneOutlined /> 手机号码</>}>
+                                {expertData.phone || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label={<><StarOutlined /> 专业领域</>}>
+                                {expertData.expertise || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label={<><ReadOutlined /> 个人简介</>}>
+                                {expertData.description || '这位专家很低调，什么都没留下。'}
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </Card>
+
+                    {expertData && (
+                        <EditProfileModal
+                            visible={isModalVisible}
+                            onCancel={handleCancelModal}
+                            onOk={handleUpdateProfile}
+                            initialData={expertData}
+                            role="expert"
+                        />
+                    )}
+                </div>
+            </Content>
+        </Layout>
     );
 };
 

@@ -15,6 +15,8 @@ import com.internship.service.UserService;
 import com.internship.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,6 +36,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
+
+    private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
 
     @Autowired
     private ProjectService projectService;
@@ -228,6 +233,7 @@ public class ProjectController {
     @Operation(summary = "完成项目观看")
     public ApiResponse<Boolean> completeProject(
             @PathVariable String id,
+            @RequestBody(required = false) Map<String, Object> requestBody,
             @AuthenticationPrincipal UserDetails userDetails) {
         
         if (userDetails == null) {
@@ -239,6 +245,12 @@ public class ProjectController {
             return ApiResponse.error(401, "用户不存在");
         }
         User currentUser = userOpt.get();
+        
+        // 记录前端传入的时间戳，可用于检测并发请求
+        if (requestBody != null && requestBody.containsKey("clientTimestamp")) {
+            log.info("接收到完成项目请求 - 用户ID: {}, 项目ID: {}, 客户端时间戳: {}", 
+                    currentUser.getId(), id, requestBody.get("clientTimestamp"));
+        }
         
         boolean result = projectWatchService.completeProject(currentUser.getId(), id);
         if (result) {

@@ -4,6 +4,7 @@ import { PlayCircleOutlined, CheckCircleOutlined, RightOutlined, HomeOutlined } 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getToken } from '../api/index';
+import './MyProjects.css';
 
 const { Title, Text } = Typography;
 
@@ -70,7 +71,7 @@ const MyProjects = () => {
 
   return (
     <div className="my-projects-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="project-header">
         <Title level={4}>我的项目</Title>
         <Button 
           type="primary" 
@@ -81,7 +82,7 @@ const MyProjects = () => {
         </Button>
       </div>
       <List
-        grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }}
+        grid={{ gutter: 32, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 5 }}
         dataSource={projects}
         renderItem={item => (
           <List.Item>

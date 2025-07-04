@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -77,13 +78,41 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
     }
 
     @Override
-    @Transactional
-    public boolean completeProject(Long userId, String projectId) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public synchronized boolean completeProject(Long userId, String projectId) {
         try {
-            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
+            log.info("开始处理项目完成请求 - 用户ID: {}, 项目ID: {}", userId, projectId);
+            
+            // 使用悲观锁查询，确保处理过程中记录不被其他事务修改
+            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectIdForUpdate(userId, projectId);
+            
+            // 如果记录已经存在且已经获得过积分，则不再奖励
+            if (record != null && record.getIsRewarded() == 1) {
+                log.info("用户已获得过该项目积分，不再重复奖励 - 用户ID: {}, 项目ID: {}", userId, projectId);
+                return true;
+            }
+            
+            // 记录完成前查询是否已有重复交易
+            boolean hasExistingTransaction = transactionService.hasRewardTransaction(userId, projectId);
+            if (hasExistingTransaction) {
+                log.info("检测到已存在积分奖励交易，避免重复奖励 - 用户ID: {}, 项目ID: {}", userId, projectId);
+                
+                // 如果有交易但记录状态未更新，则更新记录状态
+                if (record != null && record.getIsRewarded() == 0) {
+                    record.setIsRewarded(1);
+                    record.setWatchStatus(1);
+                    record.setWatchProgress(100);
+                    record.setLastWatchTime(LocalDateTime.now());
+                    projectWatchRecordRepository.updateById(record);
+                    log.info("更新记录状态为已奖励 - 用户ID: {}, 项目ID: {}", userId, projectId);
+                }
+                
+                return true;
+            }
             
             if (record == null) {
                 // 创建新记录并标记为完成
+                log.info("创建新的项目观看记录 - 用户ID: {}, 项目ID: {}", userId, projectId);
                 record = new ProjectWatchRecord();
                 record.setUserId(userId);
                 record.setProjectId(projectId);
@@ -94,15 +123,11 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
                 projectWatchRecordRepository.insert(record);
             } else if (record.getWatchStatus() == 0) {
                 // 更新为已完成
+                log.info("更新项目观看记录为已完成 - 用户ID: {}, 项目ID: {}", userId, projectId);
                 record.setWatchStatus(1);
                 record.setWatchProgress(100);
                 record.setLastWatchTime(LocalDateTime.now());
                 projectWatchRecordRepository.updateById(record);
-            }
-            
-            // 如果已经获得过积分，则不再奖励
-            if (record.getIsRewarded() == 1) {
-                return true;
             }
             
             // 获取项目积分奖励
@@ -111,31 +136,34 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
                 // 给用户奖励积分
                 User user = userRepository.selectById(userId);
                 if (user != null) {
+                    log.info("准备奖励积分 - 用户ID: {}, 项目ID: {}, 积分数: {}", 
+                            userId, projectId, project.getPointsReward());
                     
-                    // 更新用户积分
-                    double newBalance = user.getPointsBalance() + project.getPointsReward();
-                    user.setPointsBalance(newBalance);
-                    userRepository.updateById(user);
+                    // 为避免重复积分，先标记为已获得积分
+                    record.setIsRewarded(1);
+                    projectWatchRecordRepository.updateById(record);
+                    log.info("已标记用户项目记录为已获得积分 - 用户ID: {}, 项目ID: {}", userId, projectId);
+                    
+                    // 不在这里更新用户积分，交由TransactionService处理
+                    // 避免重复加积分
                     
                     // 创建积分交易记录
                     PointTransaction transaction = new PointTransaction();
                     transaction.setUserId(userId);
                     transaction.setTransactionType(1); // 获得
                     transaction.setPointsChange((double) project.getPointsReward());
-                    transaction.setBalanceAfter(newBalance);
+                    // 不设置balanceAfter，由TransactionService计算
                     transaction.setDescription("完成项目《" + project.getProjectName() + "》获得积分");
                     transaction.setRelatedId(projectId);
                     transactionService.createTransaction(transaction);
-                    
-                    // 标记为已获得积分
-                    record.setIsRewarded(1);
-                    projectWatchRecordRepository.updateById(record);
+                    log.info("已创建积分交易记录 - 用户ID: {}, 项目ID: {}, 交易ID: {}", 
+                            userId, projectId, transaction.getId());
                 }
             }
             
             return true;
         } catch (Exception e) {
-            log.error("完成项目观看失败", e);
+            log.error("完成项目观看失败 - 用户ID: {}, 项目ID: {}", userId, projectId, e);
             return false;
         }
     }

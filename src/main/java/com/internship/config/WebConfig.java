@@ -46,10 +46,18 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
         return factory -> {
+            // 使用通用配置方法设置最大请求头大小
             factory.addConnectorCustomizers(connector -> {
-                // 设置最大请求头大小为16KB (16 * 1024)
+                // 设置最大请求体大小为10MB
                 connector.setMaxPostSize(10 * 1024 * 1024); // 10MB
-                // 其他Tomcat配置，根据Spring Boot版本可能已通过application.properties设置
+                
+                // 使用反射方式尝试设置请求头大小 (兼容性更好)
+                try {
+                    java.lang.reflect.Method method = connector.getClass().getMethod("setMaxHeaderCount", Integer.TYPE);
+                    method.invoke(connector, 100);
+                } catch (Exception e) {
+                    System.out.println("注意: 无法设置最大头部数量，将依赖application.properties配置");
+                }
             });
         };
     }

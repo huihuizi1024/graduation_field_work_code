@@ -56,7 +56,7 @@ const MainPage = () => {
           size: 10
         }
       });
-      
+
       if (response.code === 200 && response.data?.records) {
         // 将API返回的数据转换为轮播图所需的格式
         const formattedActivities = response.data.records.map(activity => ({
@@ -132,7 +132,7 @@ const MainPage = () => {
       localStorage.removeItem('userInfo');
       localStorage.removeItem('role');
       localStorage.removeItem('username');
-      
+
       // Update state and navigate
       setIsLoggedIn(false);
       setUserInfo(null);
@@ -180,52 +180,52 @@ const MainPage = () => {
         ];
       default:
         return [
-           { key: 'login', label: '登录', icon: <UserOutlined />, onClick: () => navigate('/login') },
+          { key: 'login', label: '登录', icon: <UserOutlined />, onClick: () => navigate('/login') },
         ];
     }
   };
 
   // 功能板块数据
   const features = [
-    { 
-      title: "专业技能", 
-      icon: "💼", 
-      desc: "专业技能学习", 
+    {
+      title: "专业技能",
+      icon: "💼",
+      desc: "专业技能学习",
       count: "1000+",
       path: '/category/1'
     },
-    { 
-      title: "学术教育", 
-      icon: "🎓", 
-      desc: "学术知识与教育", 
+    {
+      title: "学术教育",
+      icon: "🎓",
+      desc: "学术知识与教育",
       count: "800+",
       path: '/category/2'
     },
-    { 
-      title: "职业发展", 
-      icon: "📈", 
-      desc: "职场进阶课程", 
+    {
+      title: "职业发展",
+      icon: "📈",
+      desc: "职场进阶课程",
       count: "500+",
       path: '/category/3'
     },
-    { 
-      title: "创新创业", 
-      icon: "💡", 
-      desc: "创新思维与创业", 
+    {
+      title: "创新创业",
+      icon: "💡",
+      desc: "创新思维与创业",
       count: "300+",
       path: '/category/4'
     },
-    { 
-      title: "人文艺术", 
-      icon: "🎨", 
-      desc: "人文艺术与兴趣", 
+    {
+      title: "人文艺术",
+      icon: "🎨",
+      desc: "人文艺术与兴趣",
       count: "1200+",
       path: '/category/5'
     },
-    { 
-      title: "科学技术", 
-      icon: "🔬", 
-      desc: "科技前沿探索", 
+    {
+      title: "科学技术",
+      icon: "🔬",
+      desc: "科技前沿探索",
       count: "600+",
       path: '/category/6'
     }
@@ -258,7 +258,7 @@ const MainPage = () => {
   // 获取分类名称
   const getCategoryName = (category) => {
     if (!category) return '未分类';
-    
+
     switch (parseInt(category)) {
       case 1: return '生活技能';
       case 2: return '职场进阶';
@@ -285,134 +285,132 @@ const MainPage = () => {
   };
 
   return (
-    <div className="main-page">
-      {/* 顶部导航栏 */}
-      <header className="main-header">
-        <div className="header-content">
-          <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>终身学习平台</div>
-          <div className="search-section">
-            <Input
-              className="search-input"
-              placeholder="搜索课程、认证等"
-              prefix={<SearchOutlined />}
-              value={searchValue}
-              onChange={e => setSearchValue(e.target.value)}
-              onPressEnter={handleSearch}
-            />
-            <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
-              搜索
-            </Button>
-          </div>
-          <div className="login-section">
-            <Button 
-              type="primary" 
-              icon={<ShoppingOutlined />} 
-              className="shop-btn"
-              onClick={handlePointsMallClick}
-            >
-              积分商城
-            </Button>
-            {isLoggedIn ? (
-              <Dropdown menu={{ items: getMenuItems() }} placement="bottomRight">
-                <div className="user-avatar">
-                  <Avatar 
-                    size={40} 
-                    src={userInfo?.avatar}
-                    icon={identityInfo[userRole]?.icon || <UserOutlined />}
-                    style={{ 
-                      cursor: 'pointer',
-                      backgroundColor: identityInfo[userRole]?.color || '#ccc' 
-                    }}
-                  />
-                </div>
-              </Dropdown>
-            ) : (
-              <Button onClick={() => navigate('/login')}>登录 / 注册</Button>
-            )}
-          </div>
-        </div>
-      </header>
-
-      {/* 轮播图部分 */}
-      <div className="carousel-section">
-        <Title level={2} className="section-title">热门活动</Title>
-        <div className="carousel-container">
-          <Button 
-            className="carousel-arrow carousel-arrow-left" 
-            icon={<LeftOutlined />} 
-            onClick={handlePrev}
-          />
-          <Carousel autoplay dots={true} ref={carouselRef}>
-            {activities.map((item, index) => (
-              <div key={index}>
-                <div
-                  className="carousel-item"
-                  style={{ backgroundImage: `url(${item.image})` }}
-                  onClick={() => viewActivityDetail(item)}
-                >
-                  <div className="carousel-content">
-                    <h3>{item.title}</h3>
-                    <p>{item.desc}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </Carousel>
-          <Button 
-            className="carousel-arrow carousel-arrow-right" 
-            icon={<RightOutlined />} 
-            onClick={handleNext}
-          />
-        </div>
-      </div>
-
-      {/* 实时学习动态 */}
-      <div className="updates-section">
-        <div className="updates-content">
-          <FireOutlined className="updates-icon" />
-          <div className="updates-scroll">
-            {learningUpdates.map((update, index) => (
-              <div key={index} className="update-item">
-                {update}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 功能板块 */}
-      <div className="features-section">
-        <Title level={2} className="section-title">
-          学习领域
-        </Title>
-        <Row gutter={[24, 24]}>
-          {features.map((feature, index) => (
-            <Col xs={24} sm={12} md={8} lg={8} xl={8} key={index}>
-              <Card 
-                className="feature-card"
-                hoverable
-                onClick={() => handleFeatureClick(feature)}
+      <div className="main-page">
+        {/* 顶部导航栏 */}
+        <header className="main-header">
+          <div className="header-content">
+            <div className="logo">终身学习平台</div>
+            <div className="search-section">
+              <Input
+                  className="search-input"
+                  placeholder="搜索课程、认证等"
+                  prefix={<SearchOutlined />}
+                  value={searchValue}
+                  onChange={e => setSearchValue(e.target.value)}
+                  onPressEnter={handleSearch}
+              />
+              <Button type="primary" onClick={handleSearch}>
+                搜索
+              </Button>
+            </div>
+            <div className="login-section">
+              <Button
+                  type="primary"
+                  icon={<ShoppingOutlined />}
+                  className="shop-btn"
+                  onClick={handlePointsMallClick}
               >
-                <div className="feature-icon">{feature.icon}</div>
-                <Title level={4}>{feature.title}</Title>
-                <Paragraph>{feature.desc}</Paragraph>
-                <div className="feature-count">{feature.count}</div>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </div>
+                积分商城
+              </Button>
+              {isLoggedIn ? (
+                  <Dropdown menu={{ items: getMenuItems() }} placement="bottomRight">
+                    <Avatar
+                        size={40}
+                        src={userInfo?.avatar}
+                        icon={identityInfo[userRole]?.icon || <UserOutlined />}
+                        style={{
+                          cursor: 'pointer',
+                          backgroundColor: identityInfo[userRole]?.color || '#ccc'
+                        }}
+                    />
+                  </Dropdown>
+              ) : (
+                  <Button onClick={() => navigate('/login')}>登录</Button>
+              )}
+            </div>
+          </div>
+        </header>
 
-      {/* 底部信息 */}
-      <footer className="main-footer">
-        <Space split={<Divider type="vertical" />}>
-          <Link to="/about">关于我们</Link>
-          <Link to="/contact">联系方式</Link>
-          <Link to="/terms">使用条款</Link>
-          <Link to="/privacy">隐私政策</Link>
-        </Space>
-      </footer>
-    </div>
+        {/* 轮播图部分 */}
+        <div className="carousel-section">
+          <Title level={2} className="section-title">热门活动</Title>
+          <div className="carousel-container">
+            <Button
+                className="carousel-arrow carousel-arrow-left"
+                icon={<LeftOutlined />}
+                onClick={handlePrev}
+            />
+            <Carousel autoplay dots={true} ref={carouselRef}>
+              {activities.map((item, index) => (
+                  <div key={index}>
+                    <div
+                        className="carousel-item"
+                        style={{ backgroundImage: `url(${item.image})` }}
+                        onClick={() => viewActivityDetail(item)}
+                    >
+                      <div className="carousel-content">
+                        <h3>{item.title}</h3>
+                        <p>{item.desc}</p>
+                      </div>
+                    </div>
+                  </div>
+              ))}
+            </Carousel>
+            <Button
+                className="carousel-arrow carousel-arrow-right"
+                icon={<RightOutlined />}
+                onClick={handleNext}
+            />
+          </div>
+        </div>
+
+        {/* 实时学习动态 */}
+        <div className="updates-section">
+          <div className="updates-content">
+            <FireOutlined className="updates-icon" />
+            <div className="updates-scroll">
+              {learningUpdates.map((update, index) => (
+                  <div key={index} className="update-item">
+                    {update}
+                  </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 功能板块 */}
+        <div className="features-section">
+          <Title level={2} className="section-title">
+            学习领域
+          </Title>
+          <Row gutter={[24, 24]}>
+            {features.map((feature, index) => (
+                <Col xs={24} sm={12} md={8} lg={8} xl={8} key={index}>
+                  <Card
+                      className="feature-card"
+                      hoverable
+                      onClick={() => handleFeatureClick(feature)}
+                  >
+                    <div className="feature-icon">{feature.icon}</div>
+                    <Title level={4}>{feature.title}</Title>
+                    <Paragraph>{feature.desc}</Paragraph>
+                    <div className="feature-count">{feature.count}</div>
+                  </Card>
+                </Col>
+            ))}
+          </Row>
+        </div>
+
+        {/* 底部信息 */}
+        <footer className="main-footer">
+          <Space split={<Divider type="vertical" />}>
+            <Link to="/about">关于我们</Link>
+            <Link to="/contact">联系方式</Link>
+            <Link to="/terms">使用条款</Link>
+            <Link to="/privacy">隐私政策</Link>
+          </Space>
+        </footer>
+      </div>
   );
 };
 

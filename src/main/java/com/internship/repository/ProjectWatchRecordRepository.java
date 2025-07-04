@@ -41,4 +41,8 @@ public interface ProjectWatchRecordRepository extends BaseMapper<ProjectWatchRec
      */
     @Select("SELECT pwr.* FROM project_watch_record pwr WHERE pwr.user_id = #{userId} AND pwr.watch_status = 1")
     List<ProjectWatchRecord> findCompletedProjectsByUserId(@Param("userId") Long userId);
+
+    // 添加带锁的查询方法，确保同一记录不会被同时更新
+    @Select("SELECT * FROM project_watch_record WHERE user_id = #{userId} AND project_id = #{projectId} FOR UPDATE")
+    ProjectWatchRecord findByUserIdAndProjectIdForUpdate(@Param("userId") Long userId, @Param("projectId") String projectId);
 } 

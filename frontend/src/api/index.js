@@ -55,6 +55,7 @@ api.interceptors.request.use(config => {
   // 注入令牌
   const token = localStorage.getItem('token');
   if (token) {
+    console.log('JWT Token size:', token.length, 'characters');
     config.headers['Authorization'] = `Bearer ${token}`;
   }
 

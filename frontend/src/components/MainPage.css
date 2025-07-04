@@ -3,6 +3,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
   position: relative;
+  padding-top: 64px; /* 为固定顶部导航栏预留空间 */
 }
 
 .main-page::before {
@@ -12,78 +13,78 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 10% 20%, rgba(216, 241, 230, 0.46) 0%, transparent 46%),
-    radial-gradient(circle at 90% 80%, rgba(198, 226, 255, 0.38) 0%, transparent 40%);
+  background:
+          radial-gradient(circle at 10% 20%, rgba(216, 241, 230, 0.46) 0%, transparent 46%),
+          radial-gradient(circle at 90% 80%, rgba(198, 226, 255, 0.38) 0%, transparent 40%);
   z-index: 0;
   pointer-events: none;
 }
 
-/* 顶部导航栏 */
+/* 顶部导航栏 - 新样式 */
 .main-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  height: 64px;
+  background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0;
+  z-index: 1000;
 }
 
 .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
+/* 左侧标题 */
 .logo {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
-  background: linear-gradient(45deg, #1890ff, #36cfc9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  color: #1890ff;
+  flex-shrink: 0;
+  margin-right: 48px;
 }
 
+/* 中间搜索框 */
 .search-section {
   display: flex;
-  align-items: center;
   flex: 1;
-  max-width: 500px;
+  max-width: 480px;
   margin: 0 24px;
 }
 
 .search-input {
-  margin-right: 16px;
+  flex: 1;
+  margin-right: 8px;
 }
 
+/* 右侧用户操作区 */
 .login-section {
-  margin-left: 16px;
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 16px;
+  margin-left: auto;
 }
 
 .shop-btn {
   background: linear-gradient(45deg, #ff4d4f, #ff7875);
   border: none;
-  transition: all 0.3s;
 }
 
 .shop-btn:hover {
+  background: linear-gradient(45deg, #ff7875, #ff4d4f);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 77, 79, 0.4);
-  background: linear-gradient(45deg, #ff7875, #ff4d4f);
 }
 
 /* 轮播图部分 */
 .carousel-section {
-  margin-top: 64px;
+  margin-top: 24px;
   padding: 24px;
   max-width: 1200px;
   margin-left: auto;

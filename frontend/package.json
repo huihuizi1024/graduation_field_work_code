@@ -2,7 +2,7 @@
   "name": "graduation-field-work-frontend",
   "version": "1.2.2",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
     "antd": "^5.26.2",

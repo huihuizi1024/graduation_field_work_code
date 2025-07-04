@@ -2,7 +2,7 @@ package com.internship.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.internship.dto.CourseDTO;
-import com.internship.entity.CourseWatchRecord;
+import com.internship.entity.ProjectWatchRecord;
 
 import java.util.List;
 
@@ -47,5 +47,5 @@ public interface CourseWatchService {
      * @param courseId 课程ID
      * @return 观看记录
      */
-    CourseWatchRecord checkUserWatchRecord(Long userId, String courseId);
+    ProjectWatchRecord checkUserWatchRecord(Long userId, String courseId);
 } 

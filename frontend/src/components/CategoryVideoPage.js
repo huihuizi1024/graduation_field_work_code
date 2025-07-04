@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Empty, Spin, Typography, Tag, Pagination, message, Button } from 'antd';
-import { PlayCircleOutlined, CheckCircleOutlined, HomeOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Card, Row, Col, Empty, Spin, Typography, Tag, Pagination, message, Button, Breadcrumb, Tabs, Divider } from 'antd';
+import { PlayCircleOutlined, CheckCircleOutlined, HomeOutlined, AppstoreOutlined, EyeOutlined } from '@ant-design/icons';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import api from '../api';
 import './CategoryVideoPage.css';
 
 const { Title, Text } = Typography;
+const { TabPane } = Tabs;
 
 const CategoryVideoPage = () => {
   const navigate = useNavigate();
@@ -22,34 +23,41 @@ const CategoryVideoPage = () => {
   const categoryMap = {
     '1': {
       name: '专业技能',
-      description: '专业技能学习视频，提升您的职业专业能力'
+      description: '专业技能学习视频，提升您的职业专业能力',
+      icon: '🔧'
     },
     '2': {
       name: '学术教育',
-      description: '学术知识与教育资源，助力学术与研究发展'
+      description: '学术知识与教育资源，助力学术与研究发展',
+      icon: '🎓'
     },
     '3': {
       name: '职业发展',
-      description: '职业发展与职场进阶视频，助您职场腾飞'
+      description: '职业发展与职场进阶视频，助您职场腾飞',
+      icon: '📈'
     },
     '4': {
       name: '创新创业',
-      description: '创新思维与创业实践，激发创造力与创业精神'
+      description: '创新思维与创业实践，激发创造力与创业精神',
+      icon: '💡'
     },
     '5': {
       name: '人文艺术',
-      description: '人文艺术与兴趣培养，丰富精神世界'
+      description: '人文艺术与兴趣培养，丰富精神世界',
+      icon: '🎨'
     },
     '6': {
       name: '科学技术',
-      description: '科学技术前沿，探索未知与科技创新'
+      description: '科学技术前沿，探索未知与科技创新',
+      icon: '🔬'
     }
   };
 
   // 获取当前分类信息
   const currentCategory = categoryMap[category] || {
     name: '全部视频',
-    description: '探索各类优质学习视频，提升自我'
+    description: '探索各类优质学习视频，提升自我',
+    icon: '🎬'
   };
 
   // 获取分类视频
@@ -68,8 +76,6 @@ const CategoryVideoPage = () => {
         }
       });
 
-      console.log('API响应:', response);
-
       if (response && response.code === 200) {
         const data = response.data || {};
         setVideos(data.records || []);
@@ -78,7 +84,6 @@ const CategoryVideoPage = () => {
           pageSize: pageSize,
           total: data.total || 0
         });
-        console.log(`成功获取${data.records?.length || 0}条视频数据，总数: ${data.total || 0}`);
       } else {
         console.error('获取视频失败:', response?.message || '未知错误');
         message.error(`获取视频失败: ${response?.message || '未知错误'}`);
@@ -103,12 +108,15 @@ const CategoryVideoPage = () => {
     fetchCategoryVideos(page, pageSize);
   };
 
+  // 分类切换
+  const handleCategoryChange = (categoryId) => {
+    navigate(`/category/${categoryId}`);
+  };
+
   // 监听分类变化，重新加载数据
   useEffect(() => {
-    console.log('分类变化:', category);
     // 如果未指定分类，默认加载分类1
     if (!category) {
-      console.log('未指定分类，跳转到默认分类1');
       navigate('/category/1', { replace: true });
       return;
     }
@@ -160,7 +168,7 @@ const CategoryVideoPage = () => {
             </div>
             <div className="video-card-stats">
               <span>
-                <i className="fas fa-eye"></i> {item.viewCount || 0}
+                <EyeOutlined /> {item.viewCount || 0}
               </span>
               {item.pointsReward > 0 && (
                 <Tag color="gold" className="video-points-tag">
@@ -176,13 +184,24 @@ const CategoryVideoPage = () => {
 
   return (
     <div className="category-video-page">
-      <div className="page-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <div>
-            <Title level={2}>{currentCategory.name}</Title>
-            <Text type="secondary">{currentCategory.description}</Text>
-          </div>
+      {/* 顶部导航区 */}
+      <div className="nav-header">
+        <div className="breadcrumb-container">
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to="/">
+                <HomeOutlined /> 首页
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <AppstoreOutlined /> 视频分类
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {currentCategory.icon} {currentCategory.name}
+            </Breadcrumb.Item>
+          </Breadcrumb>
           <Button 
+            className="home-btn"
             type="primary" 
             icon={<HomeOutlined />} 
             onClick={() => navigate('/')}
@@ -192,15 +211,59 @@ const CategoryVideoPage = () => {
         </div>
       </div>
 
+      {/* 分类标题区 */}
+      <div className="page-header">
+        <div className="header-content">
+          <div className="title-section">
+            <span className="category-icon">{currentCategory.icon}</span>
+            <div className="title-info">
+              <Title level={2}>{currentCategory.name}</Title>
+              <Text type="secondary">{currentCategory.description}</Text>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* 分类导航标签页 */}
+      <div className="category-tabs">
+        <Tabs 
+          activeKey={category} 
+          onChange={handleCategoryChange}
+          centered
+        >
+          {Object.entries(categoryMap).map(([key, value]) => (
+            <TabPane 
+              tab={
+                <span>
+                  <span className="tab-icon">{value.icon}</span> {value.name}
+                </span>
+              } 
+              key={key} 
+            />
+          ))}
+        </Tabs>
+      </div>
+      
+      <Divider />
+
+      {/* 内容区域 */}
       {loading ? (
         <div className="loading-container">
           <Spin size="large" tip="加载中..." />
         </div>
       ) : videos.length === 0 ? (
-        <Empty description="暂无视频" />
+        <Empty description={
+          <span>
+            暂无 <strong>{currentCategory.name}</strong> 分类的视频
+          </span>
+        } />
       ) : (
         <>
-          <Row gutter={[16, 24]}>
+          <div className="videos-summary">
+            找到 <b>{pagination.total}</b> 个{currentCategory.name}相关视频
+          </div>
+          
+          <Row gutter={[24, 24]}>
             {videos.map((video) => (
               <Col xs={24} sm={12} md={8} lg={6} xl={4.8} key={video.id}>
                 {renderVideoCard(video)}

@@ -1,0 +1,108 @@
+/* MyProjects页面样式 */
+.my-projects-container {
+  padding: 40px 30px;
+  max-width: 90%;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.project-header {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+}
+
+.project-card-cover {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.project-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 40px;
+  color: #d9d9d9;
+}
+
+.project-watched-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #52c41a;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.project-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* 响应式调整 */
+@media (min-width: 1600px) {
+  .my-projects-container {
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 992px) {
+  .project-card-cover {
+    height: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-projects-container {
+    padding: 20px 15px;
+    max-width: 95%;
+  }
+  
+  .project-card-cover {
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-projects-container {
+    padding: 15px 10px;
+    max-width: 100%;
+  }
+  
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .project-header button {
+    width: 100%;
+  }
+  
+  .project-card-cover {
+    height: 140px;
+  }
+} 

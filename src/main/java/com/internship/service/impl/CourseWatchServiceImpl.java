@@ -2,12 +2,12 @@ package com.internship.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.internship.dto.CourseDTO;
-import com.internship.entity.CourseWatchRecord;
 import com.internship.entity.PointTransaction;
 import com.internship.entity.Project;
+import com.internship.entity.ProjectWatchRecord;
 import com.internship.entity.User;
-import com.internship.repository.CourseWatchRecordRepository;
 import com.internship.repository.ProjectRepository;
+import com.internship.repository.ProjectWatchRecordRepository;
 import com.internship.repository.UserRepository;
 import com.internship.service.CourseWatchService;
 import com.internship.service.TransactionService;
@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +28,7 @@ public class CourseWatchServiceImpl implements CourseWatchService {
     private static final Logger log = LoggerFactory.getLogger(CourseWatchServiceImpl.class);
 
     @Autowired
-    private CourseWatchRecordRepository courseWatchRecordRepository;
+    private ProjectWatchRecordRepository projectWatchRecordRepository;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -43,25 +42,25 @@ public class CourseWatchServiceImpl implements CourseWatchService {
     @Override
     public boolean recordWatching(Long userId, String courseId, Integer progress) {
         try {
-            CourseWatchRecord record = courseWatchRecordRepository.findByUserIdAndCourseId(userId, courseId);
+            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, courseId);
             
             if (record == null) {
                 // 创建新记录
-                record = new CourseWatchRecord();
+                record = new ProjectWatchRecord();
                 record.setUserId(userId);
-                record.setCourseId(courseId);
+                record.setProjectId(courseId);
                 record.setWatchStatus(0); // 未完成
                 record.setWatchProgress(progress);
                 record.setIsRewarded(0); // 未获得积分
                 record.setLastWatchTime(LocalDateTime.now());
-                courseWatchRecordRepository.insert(record);
+                projectWatchRecordRepository.insert(record);
             } else {
                 // 更新进度
                 if (progress > record.getWatchProgress()) {
                     record.setWatchProgress(progress);
                 }
                 record.setLastWatchTime(LocalDateTime.now());
-                courseWatchRecordRepository.updateById(record);
+                projectWatchRecordRepository.updateById(record);
             }
             
             // 如果进度达到90%以上，自动标记为完成
@@ -80,24 +79,24 @@ public class CourseWatchServiceImpl implements CourseWatchService {
     @Transactional
     public boolean completeCourse(Long userId, String courseId) {
         try {
-            CourseWatchRecord record = courseWatchRecordRepository.findByUserIdAndCourseId(userId, courseId);
+            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, courseId);
             
             if (record == null) {
                 // 创建新记录并标记为完成
-                record = new CourseWatchRecord();
+                record = new ProjectWatchRecord();
                 record.setUserId(userId);
-                record.setCourseId(courseId);
+                record.setProjectId(courseId);
                 record.setWatchStatus(1); // 已完成
                 record.setWatchProgress(100);
                 record.setLastWatchTime(LocalDateTime.now());
                 record.setIsRewarded(0); // 未获得积分
-                courseWatchRecordRepository.insert(record);
+                projectWatchRecordRepository.insert(record);
             } else if (record.getWatchStatus() == 0) {
                 // 更新为已完成
                 record.setWatchStatus(1);
                 record.setWatchProgress(100);
                 record.setLastWatchTime(LocalDateTime.now());
-                courseWatchRecordRepository.updateById(record);
+                projectWatchRecordRepository.updateById(record);
             }
             
             // 如果已经获得过积分，则不再奖励
@@ -129,7 +128,7 @@ public class CourseWatchServiceImpl implements CourseWatchService {
                     
                     // 标记为已获得积分
                     record.setIsRewarded(1);
-                    courseWatchRecordRepository.updateById(record);
+                    projectWatchRecordRepository.updateById(record);
                 }
             }
             
@@ -143,16 +142,16 @@ public class CourseWatchServiceImpl implements CourseWatchService {
     @Override
     public Page<CourseDTO> getUserCourseRecords(Long userId, int page, int size) {
         try {
-            Page<CourseWatchRecord> recordPage = new Page<>(page, size);
-            Page<CourseWatchRecord> result = courseWatchRecordRepository.findUserCourseRecords(recordPage, userId);
+            Page<ProjectWatchRecord> recordPage = new Page<>(page, size);
+            Page<ProjectWatchRecord> result = projectWatchRecordRepository.findUserProjectRecords(recordPage, userId);
             
             Page<CourseDTO> dtoPage = new Page<>(result.getCurrent(), result.getSize(), result.getTotal());
             List<CourseDTO> dtoList = new ArrayList<>();
             
-            for (CourseWatchRecord record : result.getRecords()) {
-                Project course = projectRepository.selectById(record.getCourseId());
-                if (course != null) {
-                    CourseDTO dto = convertToDTO(course);
+            for (ProjectWatchRecord record : result.getRecords()) {
+                Project project = projectRepository.selectById(record.getProjectId());
+                if (project != null) {
+                    CourseDTO dto = convertToDTO(project);
                     dto.setIsWatched(record.getWatchStatus() == 1);
                     dto.setWatchProgress(record.getWatchProgress());
                     dtoList.add(dto);
@@ -170,11 +169,11 @@ public class CourseWatchServiceImpl implements CourseWatchService {
     @Override
     public List<CourseDTO> getCompletedCourses(Long userId) {
         try {
-            List<CourseWatchRecord> records = courseWatchRecordRepository.findCompletedCoursesByUserId(userId);
+            List<ProjectWatchRecord> records = projectWatchRecordRepository.findCompletedProjectsByUserId(userId);
             return records.stream().map(record -> {
-                Project course = projectRepository.selectById(record.getCourseId());
-                if (course != null) {
-                    CourseDTO dto = convertToDTO(course);
+                Project project = projectRepository.selectById(record.getProjectId());
+                if (project != null) {
+                    CourseDTO dto = convertToDTO(project);
                     dto.setIsWatched(true);
                     dto.setWatchProgress(100);
                     return dto;
@@ -188,8 +187,8 @@ public class CourseWatchServiceImpl implements CourseWatchService {
     }
 
     @Override
-    public CourseWatchRecord checkUserWatchRecord(Long userId, String courseId) {
-        return courseWatchRecordRepository.findByUserIdAndCourseId(userId, courseId);
+    public ProjectWatchRecord checkUserWatchRecord(Long userId, String courseId) {
+        return projectWatchRecordRepository.findByUserIdAndProjectId(userId, courseId);
     }
     
     /**

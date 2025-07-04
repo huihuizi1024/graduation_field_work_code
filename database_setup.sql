@@ -6,7 +6,7 @@
 -- 版本: 1.2.1
 -- ========================================
 
--- 设置客户端字符集
+-- 设置客户端字符集（强化设置，确保统一字符集）
 SET NAMES utf8mb4;
 SET CHARACTER SET utf8mb4;
 SET collation_connection = utf8mb4_unicode_ci;
@@ -14,6 +14,9 @@ SET collation_connection = utf8mb4_unicode_ci;
 -- 1. 创建数据库
 DROP DATABASE IF EXISTS internship_db;
 CREATE DATABASE internship_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- 设置数据库默认字符集（重要：确保新表都使用这个字符集）
+ALTER DATABASE internship_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- 2. 创建用户和授权
 DROP USER IF EXISTS 'internship_user'@'%';
@@ -32,11 +35,11 @@ USE internship_db;
 DROP TABLE IF EXISTS product;
 CREATE TABLE product (
   id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
-  name VARCHAR(100) NOT NULL COMMENT '商品名称',
-  description TEXT COMMENT '商品描述',
+  name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品名称',
+  description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '商品描述',
   points DOUBLE NOT NULL COMMENT '所需积分',
-  image_url VARCHAR(255) DEFAULT NULL COMMENT '商品图片URL',
-  category VARCHAR(50) DEFAULT NULL COMMENT '商品分类',
+  image_url VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品图片URL',
+  category VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '商品分类',
   stock INT NOT NULL DEFAULT 0 COMMENT '库存数量',
   status TINYINT NOT NULL DEFAULT 1 COMMENT '状态：1-上架，0-下架',
   create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -278,19 +281,19 @@ CREATE TABLE platform_activity (
 -- 13. 创建项目表 (project) - 根据前端ProjectList.js定义
 DROP TABLE IF EXISTS project;
 CREATE TABLE project (
-    id VARCHAR(50) PRIMARY KEY COMMENT '项目ID',
-    project_name VARCHAR(100) NOT NULL COMMENT '项目名称',
-    project_code VARCHAR(50) NOT NULL UNIQUE COMMENT '项目编码',
-    负责人 VARCHAR(50) NOT NULL COMMENT '负责人姓名',
+    id VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci PRIMARY KEY COMMENT '项目ID',
+    project_name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项目名称',
+    project_code VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE COMMENT '项目编码',
+    负责人 VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '负责人姓名',
     start_date DATE COMMENT '开始日期',
     end_date DATE COMMENT '结束日期',
     status INT NOT NULL DEFAULT 1 COMMENT '状态：1-进行中, 0-已完成',
-    description TEXT COMMENT '项目描述',
+    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '项目描述',
     creator_id BIGINT COMMENT '创建人ID',
     institution_id BIGINT COMMENT '机构ID',
     category INT COMMENT '课程分类：1-专业技能, 2-学术教育, 3-职业发展, 4-创新创业, 5-人文艺术, 6-科学技术',
-    video_url VARCHAR(255) COMMENT '课程视频URL',
-    cover_image_url VARCHAR(255) COMMENT '课程封面图URL',
+    video_url VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '课程视频URL',
+    cover_image_url VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '课程封面图URL',
     points_reward INT DEFAULT 5 COMMENT '观看完成可获得积分',
     duration INT DEFAULT 30 COMMENT '项目时长(分钟)',
     view_count INT DEFAULT 0 COMMENT '浏览量',
@@ -298,69 +301,7 @@ CREATE TABLE project (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目/课程表';
 
--- 创建课程观看记录表
-CREATE TABLE IF NOT EXISTS course_watch_record (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL COMMENT '用户ID',
-    course_id VARCHAR(64) NOT NULL COMMENT '课程ID',
-    watch_status INT DEFAULT 0 COMMENT '观看状态：0-未完成，1-已完成',
-    watch_progress INT DEFAULT 0 COMMENT '观看进度（百分比）',
-    is_rewarded INT DEFAULT 0 COMMENT '是否已获得积分：0-未获得，1-已获得',
-    last_watch_time DATETIME COMMENT '最后观看时间',
-    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    INDEX idx_user_id (user_id),
-    INDEX idx_course_id (course_id),
-    INDEX idx_user_course (user_id, course_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='课程观看记录表';
-
--- 创建外键约束
-ALTER TABLE course_watch_record
-ADD CONSTRAINT fk_course_watch_user_id
-FOREIGN KEY (user_id) REFERENCES user(id)
-ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 创建数据触发器，当course_watch_record表的watch_status从0变为1时，自动增加user表中的points_balance
-DELIMITER //
-CREATE TRIGGER IF NOT EXISTS trg_course_completed
-AFTER UPDATE ON course_watch_record
-FOR EACH ROW
-BEGIN
-    DECLARE reward INT;
-    
-    -- 如果观看状态从未完成变为已完成且未获得过积分
-    IF OLD.watch_status = 0 AND NEW.watch_status = 1 AND NEW.is_rewarded = 0 THEN
-        -- 获取课程的积分奖励
-        SELECT points_reward INTO reward FROM project WHERE id = NEW.course_id;
-        
-        IF reward > 0 THEN
-            -- 更新用户积分余额
-            UPDATE user SET points_balance = points_balance + reward WHERE id = NEW.user_id;
-            
-            -- 创建积分交易记录
-            INSERT INTO point_transaction (
-                user_id, 
-                transaction_type, 
-                points_change, 
-                balance_after, 
-                description, 
-                related_id
-            )
-            SELECT 
-                NEW.user_id, 
-                1, -- 获得积分
-                reward, 
-                (SELECT points_balance FROM user WHERE id = NEW.user_id), 
-                CONCAT('完成课程《', project_name, '》获得积分'), 
-                NEW.course_id
-            FROM project WHERE id = NEW.course_id;
-            
-            -- 更新为已获得积分
-            UPDATE course_watch_record SET is_rewarded = 1 WHERE id = NEW.id;
-        END IF;
-    END IF;
-END //
-DELIMITER ;
+-- 课程观看记录表已删除，统一使用项目观看记录表(project_watch_record)
 
 -- 创建或更新课程相关的视图
 CREATE OR REPLACE VIEW v_courses AS
@@ -402,7 +343,7 @@ LEFT JOIN
 CREATE TABLE IF NOT EXISTS project_watch_record (
   id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '记录ID',
   user_id BIGINT NOT NULL COMMENT '用户ID',
-  project_id VARCHAR(36) NOT NULL COMMENT '项目ID',
+  project_id VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项目ID',
   watch_status INT DEFAULT 0 COMMENT '观看状态：0-未完成，1-已完成',
   watch_progress INT DEFAULT 0 COMMENT '观看进度（百分比）',
   is_rewarded INT DEFAULT 0 COMMENT '是否已获得积分：0-未获得，1-已获得',
@@ -412,47 +353,7 @@ CREATE TABLE IF NOT EXISTS project_watch_record (
   INDEX idx_user_project (user_id, project_id),
   INDEX idx_user_id (user_id),
   INDEX idx_project_id (project_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目观看记录表';
-
--- 创建触发器，当用户完成项目观看且未获得过积分时，自动给予积分奖励
-DELIMITER //
-CREATE TRIGGER reward_points_after_project_complete
-AFTER UPDATE ON project_watch_record
-FOR EACH ROW
-BEGIN
-    DECLARE project_points INT;
-    
-    -- 只有当观看状态从未完成变为已完成，且未获得过积分时才执行
-    IF (OLD.watch_status = 0 AND NEW.watch_status = 1 AND NEW.is_rewarded = 0) THEN
-        -- 获取项目奖励积分
-        SELECT points_reward INTO project_points FROM project WHERE id = NEW.project_id;
-        
-        -- 如果有积分奖励，则更新用户积分并创建积分交易记录
-        IF project_points > 0 THEN
-            -- 更新用户积分
-            UPDATE user 
-            SET points_balance = points_balance + project_points
-            WHERE id = NEW.user_id;
-            
-            -- 插入积分交易记录
-            INSERT INTO point_transaction (user_id, transaction_type, points_change, description, related_id)
-            SELECT 
-                NEW.user_id, 
-                1, -- 获得积分类型
-                project_points, 
-                CONCAT('完成项目《', project_name, '》获得积分'), 
-                NEW.project_id
-            FROM project 
-            WHERE id = NEW.project_id;
-            
-            -- 标记为已获得积分
-            UPDATE project_watch_record 
-            SET is_rewarded = 1 
-            WHERE id = NEW.id;
-        END IF;
-    END IF;
-END //
-DELIMITER ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目观看记录表';
 
 -- 添加索引优化查询性能
 CREATE INDEX idx_project_institution_id ON project(institution_id);

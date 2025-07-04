@@ -11,4 +11,12 @@ public interface TransactionService {
     PointTransaction updateTransaction(Long id, PointTransaction transaction);
     void deleteTransaction(Long id);
     List<PointTransaction> getTransactionsByUsername(String username);
+
+    /**
+     * 检查用户是否已有指定项目的奖励交易
+     * @param userId 用户ID
+     * @param projectId 项目ID
+     * @return 是否已有奖励交易
+     */
+    boolean hasRewardTransaction(Long userId, String projectId);
 }

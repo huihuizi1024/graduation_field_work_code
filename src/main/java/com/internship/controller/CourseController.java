@@ -3,10 +3,11 @@ package com.internship.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.internship.dto.ApiResponse;
 import com.internship.dto.CourseDTO;
-import com.internship.entity.CourseWatchRecord;
+import com.internship.entity.ProjectWatchRecord;
 import com.internship.entity.Project;
 import com.internship.entity.User;
 import com.internship.repository.ProjectRepository;
+import com.internship.repository.UserRepository;
 import com.internship.service.CourseWatchService;
 import com.internship.service.ProjectService;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 课程控制器
@@ -39,6 +41,9 @@ public class CourseController {
 
     @Autowired
     private ProjectRepository projectRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * 获取课程列表（分页）
@@ -120,7 +125,7 @@ public class CourseController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication != null && authentication.getPrincipal() instanceof User) {
                 User user = (User) authentication.getPrincipal();
-                CourseWatchRecord record = courseWatchService.checkUserWatchRecord(user.getId(), id);
+                ProjectWatchRecord record = courseWatchService.checkUserWatchRecord(user.getId(), id);
                 if (record != null) {
                     courseDTO.setIsWatched(record.getWatchStatus() == 1);
                     courseDTO.setWatchProgress(record.getWatchProgress());
@@ -203,17 +208,30 @@ public class CourseController {
             @RequestParam(defaultValue = "10") int size) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
-                return ResponseEntity.badRequest().body(ApiResponse.error("未登录"));
+            log.debug("获取课程记录，认证信息: {}", authentication);
+            
+            if (authentication == null || !authentication.isAuthenticated() || 
+                "anonymousUser".equals(authentication.getPrincipal())) {
+                log.warn("用户未登录或认证信息不完整");
+                return ResponseEntity.status(401).body(ApiResponse.error("未登录或认证信息不完整"));
             }
             
-            User user = (User) authentication.getPrincipal();
-            Page<CourseDTO> records = courseWatchService.getUserCourseRecords(user.getId(), page, size);
+            String username = authentication.getName();
+            Optional<User> userOpt = userRepository.findByUsername(username);
+            
+            if (!userOpt.isPresent()) {
+                log.warn("无法获取用户信息，用户名为: {}", username);
+                return ResponseEntity.status(401).body(ApiResponse.error("无法获取用户信息"));
+            }
+            User currentUser = userOpt.get();
+            
+            log.info("获取用户ID为{}的课程记录", currentUser.getId());
+            Page<CourseDTO> records = courseWatchService.getUserCourseRecords(currentUser.getId(), page, size);
             
             return ResponseEntity.ok(ApiResponse.success(records));
         } catch (Exception e) {
             log.error("获取课程观看记录失败", e);
-            return ResponseEntity.badRequest().body(ApiResponse.error("获取课程观看记录失败"));
+            return ResponseEntity.badRequest().body(ApiResponse.error("获取课程观看记录失败: " + e.getMessage()));
         }
     }
 
@@ -225,17 +243,30 @@ public class CourseController {
     public ResponseEntity<?> getMyCompletedCourses() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
-                return ResponseEntity.badRequest().body(ApiResponse.error("未登录"));
+            log.debug("获取已完成课程，认证信息: {}", authentication);
+            
+            if (authentication == null || !authentication.isAuthenticated() || 
+                "anonymousUser".equals(authentication.getPrincipal())) {
+                log.warn("用户未登录或认证信息不完整");
+                return ResponseEntity.status(401).body(ApiResponse.error("未登录或认证信息不完整"));
             }
             
-            User user = (User) authentication.getPrincipal();
-            List<CourseDTO> courses = courseWatchService.getCompletedCourses(user.getId());
+            String username = authentication.getName();
+            Optional<User> userOpt = userRepository.findByUsername(username);
+            
+            if (!userOpt.isPresent()) {
+                log.warn("无法获取用户信息，用户名为: {}", username);
+                return ResponseEntity.status(401).body(ApiResponse.error("无法获取用户信息"));
+            }
+            User currentUser = userOpt.get();
+            
+            log.info("获取用户ID为{}的已完成课程", currentUser.getId());
+            List<CourseDTO> courses = courseWatchService.getCompletedCourses(currentUser.getId());
             
             return ResponseEntity.ok(ApiResponse.success(courses));
         } catch (Exception e) {
             log.error("获取已完成课程失败", e);
-            return ResponseEntity.badRequest().body(ApiResponse.error("获取已完成课程失败"));
+            return ResponseEntity.badRequest().body(ApiResponse.error("获取已完成课程失败: " + e.getMessage()));
         }
     }
 } 
