@@ -14,6 +14,7 @@ public class CertificateApplicationDTO {
     private Long standardId;
     private String standardName;
     private String evidenceUrl;
+    private String description;
     private Integer status;
     private LocalDateTime applyTime;
     private LocalDateTime reviewTime;
@@ -27,6 +28,7 @@ public class CertificateApplicationDTO {
         dto.setUserId(app.getUserId());
         dto.setStandardId(app.getStandardId());
         dto.setEvidenceUrl(app.getEvidenceUrl());
+        dto.setDescription(app.getDescription());
         dto.setStatus(app.getStatus());
         dto.setApplyTime(app.getApplyTime());
         dto.setReviewTime(app.getReviewTime());

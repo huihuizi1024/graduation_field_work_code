@@ -249,8 +249,9 @@ CREATE TABLE certificate_application (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申请ID',
     user_id BIGINT NOT NULL COMMENT '申请人用户ID',
     standard_id BIGINT NOT NULL COMMENT '关联认证标准ID',
-    evidence_url VARCHAR(255) COMMENT '证明材料(URL 或说明)',
-    status INT NOT NULL DEFAULT 0 COMMENT '申请状态：0-待审核，1-已通过，2-已拒绝',
+    evidence_url VARCHAR(255) COMMENT '证明材料文件URL，多个用 || 分隔',
+    description TEXT COMMENT '补充说明或文字描述',
+    status INT NOT NULL DEFAULT 0 COMMENT '申请状态：0-待审核，1-已通过，2-已拒绝，3-已取消',
     apply_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
     review_time DATETIME COMMENT '审核时间',
     reviewer_id BIGINT COMMENT '审核人ID',
@@ -693,16 +694,6 @@ INSERT INTO conversion_history (
 (2, 1, 200.00, 20.00, 1, '积分转学分成功'),
 (3, 3, 300.00, 60.00, 1, '积分转职业证书成功');
 
--- ========================================
--- 添加商品示例数据
--- ========================================
-INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
-('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
-('Python编程入门课程', '零基础入门Python编程的在线课程', 2000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
-('便携式电子词典', '随时随地查询单词，提升学习效率', 1500, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
-('职业规划咨询课程', '一对一职业发展指导课程', 3000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
-('智能学习平板', '支持手写笔记的学习平板', 5000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
-('英语口语课程', '实用英语口语训练课程', 2500, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1);
 
 -- 添加product_order表的外键约束
 ALTER TABLE product_order 

@@ -6,6 +6,10 @@ import { getApplicationById } from '../api/certificate';
 
 const { Paragraph, Text } = Typography;
 
+// 假设后端服务运行在 localhost:8080，这应该根据实际部署环境进行配置
+// 在生产环境中，这通常会从环境变量或配置文件中读取
+const BACKEND_BASE_URL = 'http://localhost:8080'; 
+
 /**
  * 证书申请材料查看页面
  * 支持展示文字描述、图片预览以及其他文件下载
@@ -41,27 +45,29 @@ const CertificateApplicationView = () => {
   }, [application, id]);
 
   const renderMaterials = () => {
-    if (!application?.evidenceUrl) return <Text type="secondary">暂无材料</Text>;
+    if (!application?.evidenceUrl) return <Text type="secondary">暂无文件材料</Text>;
     const parts = application.evidenceUrl.split('||').filter(Boolean);
     return parts.map((part, idx) => {
-      const isUrl = /^(http|https):\/\//i.test(part.trim());
-      if (!isUrl) {
-        // 纯文本
-        return (
-          <Paragraph key={idx} style={{ whiteSpace: 'pre-wrap' }}>{part}</Paragraph>
-        );
+      let materialPath = part.trim();
+      const isAbsoluteUrl = /^(http|https):\/\//i.test(materialPath);
+
+      // 如果不是绝对URL，但以/uploads/开头，则认为是相对路径，需要拼接后端URL
+      if (!isAbsoluteUrl && materialPath.startsWith('/uploads/')) {
+        materialPath = BACKEND_BASE_URL + materialPath;
       }
-      const lower = part.toLowerCase();
+
+      const lower = materialPath.toLowerCase();
       const isImage = lower.match(/\.(png|jpe?g|gif|bmp|webp)$/i);
       const isPdf = lower.endsWith('.pdf');
-      const fileName = part.split('/').pop();
+      const fileName = materialPath.split('/').pop();
+      
       if (isImage) {
-        return <Image key={idx} src={part} style={{ maxWidth: '100%', marginBottom: 16 }} />;
+        return <Image key={idx} src={materialPath} style={{ maxWidth: '100%', marginBottom: 16 }} />;
       } else if (isPdf) {
         return (
           <iframe
             key={idx}
-            src={part}
+            src={materialPath}
             title={`pdf-${idx}`}
             style={{ width: '100%', height: 600, border: 'none', marginBottom: 16 }}
           />
@@ -73,7 +79,7 @@ const CertificateApplicationView = () => {
           key={idx}
           type="link"
           icon={<DownloadOutlined />}
-          href={part}
+          href={materialPath}
           target="_blank"
           rel="noreferrer"
           style={{ padding: 0, marginBottom: 8 }}
@@ -109,8 +115,13 @@ const CertificateApplicationView = () => {
             <Paragraph>
               <Text strong>申请时间：</Text>{application.applyTime}
             </Paragraph>
+            {application.description && (
+              <Paragraph>
+                <Text strong>补充说明：</Text>{application.description}
+              </Paragraph>
+            )}
             <Paragraph>
-              <Text strong>证明材料：</Text>
+              <Text strong>证明文件：</Text>
             </Paragraph>
             {renderMaterials()}
           </>

@@ -25,8 +25,11 @@ public class CertificateApplication {
     /** 关联认证标准ID */
     private Long standardId;
 
-    /** 证明材料（可为文件 URL 或描述） */
+    /** 证明材料（文件 URL，多个用 || 分隔） */
     private String evidenceUrl;
+
+    /** 补充说明或文字描述 */
+    private String description;
 
     /** 申请状态：0-待审核，1-已通过，2-已拒绝 */
     private Integer status;

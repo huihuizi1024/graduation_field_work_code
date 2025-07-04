@@ -13,10 +13,11 @@ export const reviewApplication = (id, reviewStatus, reviewComment = '') => {
 };
 
 // 学生提交证书申请
-export const applyCertificate = (standardId, evidenceUrl = '') => {
+export const applyCertificate = (standardId, evidenceUrl = '', description = '') => {
   return api.post('/api/certification-applications', {
     standardId,
-    evidenceUrl
+    evidenceUrl,
+    description
   });
 };
 

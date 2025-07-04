@@ -108,8 +108,7 @@ const StudentCertificatePage = () => {
       onOk: async () => {
         try {
           setApplyLoading(true);
-          const combined = [evidenceText, evidenceFile].filter(Boolean).join('||');
-          await applyCertificate(record.id, combined);
+          await applyCertificate(record.id, evidenceFile, evidenceText);
           message.success('申请已提交，等待审核');
         } catch (e) {
           message.error(e.response?.data?.message || '提交失败');
@@ -211,7 +210,7 @@ const UploadEvidence = ({ onUploaded }) => {
 
   const props = {
     name: 'file',
-    action: (process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080') + '/api/upload/image',
+    action: (process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080') + '/api/upload/file',
     headers: {
       Authorization: 'Bearer ' + (localStorage.getItem('token') || '')
     },
@@ -239,7 +238,7 @@ const UploadEvidence = ({ onUploaded }) => {
   return (
     <Upload {...props}>
       <Button icon={<UploadOutlined />} loading={uploading}>
-        上传证明图片
+        上传证明文件
       </Button>
     </Upload>
   );

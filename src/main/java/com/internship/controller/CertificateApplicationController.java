@@ -38,7 +38,7 @@ public class CertificateApplicationController {
     public ApiResponse<CertificateApplication> apply(@RequestBody CertificateApplicationRequest request,
                                                      Principal principal) {
         Long userId = getCurrentUserId(principal);
-        return ApiResponse.success(applicationService.apply(userId, request.getStandardId(), request.getEvidenceUrl()));
+        return ApiResponse.success(applicationService.apply(userId, request.getStandardId(), request.getEvidenceUrl(), request.getDescription()));
     }
 
     /**

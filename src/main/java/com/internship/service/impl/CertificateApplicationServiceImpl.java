@@ -38,7 +38,7 @@ public class CertificateApplicationServiceImpl implements CertificateApplication
 
     @Override
     @Transactional
-    public CertificateApplication apply(Long userId, Long standardId, String evidenceUrl) {
+    public CertificateApplication apply(Long userId, Long standardId, String evidenceUrl, String description) {
         CertificationStandard standard = certificationStandardRepository.selectById(standardId);
         if (standard == null || standard.getStatus() != 1) {
             throw new BusinessException("认证标准不存在或已失效");
@@ -65,6 +65,7 @@ public class CertificateApplicationServiceImpl implements CertificateApplication
         app.setUserId(userId);
         app.setStandardId(standardId);
         app.setEvidenceUrl(evidenceUrl);
+        app.setDescription(description);
         app.setStatus(0);
         app.setApplyTime(LocalDateTime.now());
         applicationRepository.insert(app);

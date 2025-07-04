@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CertificateApplicationService {
 
-    com.internship.entity.CertificateApplication apply(Long userId, Long standardId, String evidenceUrl);
+    com.internship.entity.CertificateApplication apply(Long userId, Long standardId, String evidenceUrl, String description);
 
     List<CertificateApplicationDTO> getMyApplications(Long userId);
 

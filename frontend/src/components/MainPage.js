@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu, Modal } from 'antd';
+import { Input, Button, Carousel, Card, Row, Col, Typography, Space, Divider, Tag, message, Dropdown, Avatar, Menu, Modal, Spin } from 'antd';
 import { SearchOutlined, UserOutlined, RightOutlined, FireOutlined, ScheduleOutlined, ShoppingOutlined, LogoutOutlined, CalendarOutlined, EnvironmentOutlined, TeamOutlined, LeftOutlined, CheckCircleOutlined, IdcardOutlined } from '@ant-design/icons';
 import './MainPage.css';
 import { useNavigate, Link } from 'react-router-dom';
@@ -286,84 +286,67 @@ const MainPage = () => {
   };
 
   return (
-      <div className="main-page">
-        {/* 顶部导航栏 */}
-        <header className="main-header">
-          <div className="header-content">
-            <div className="logo">终身学习平台</div>
-            <div className="search-section">
-              <Input
-                  className="search-input"
-                  placeholder="搜索课程、认证等"
-                  prefix={<SearchOutlined />}
-                  value={searchValue}
-                  onChange={e => setSearchValue(e.target.value)}
-                  onPressEnter={handleSearch}
-              />
-              <Button type="primary" onClick={handleSearch}>
-                搜索
-              </Button>
-            </div>
-            <div className="login-section">
-              <Button
-                  type="primary"
-                  icon={<ShoppingOutlined />}
-                  className="shop-btn"
-                  onClick={handlePointsMallClick}
-              >
-                积分商城
-              </Button>
-              {isLoggedIn ? (
-                  <Dropdown menu={{ items: getMenuItems() }} placement="bottomRight">
-                    <Avatar
-                        size={40}
-                        src={userInfo?.avatar}
-                        icon={identityInfo[userRole]?.icon || <UserOutlined />}
-                        style={{
-                          cursor: 'pointer',
-                          backgroundColor: identityInfo[userRole]?.color || '#ccc'
-                        }}
-                    />
-                  </Dropdown>
-              ) : (
-                  <Button onClick={() => navigate('/login')}>登录</Button>
-              )}
-            </div>
-          </div>
-        </header>
+    <div className="main-page">
+      {/* 顶部导航栏，固定在顶部，并有背景色 */}
+      <div style={{ padding: '10px 24px', background: '#fff', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {/* 左侧：终身学习平台 */}
+        <Link to="/">
+          <Title level={3} style={{ margin: 0, color: '#1890ff', whiteSpace: 'nowrap' }}>终身学习平台</Title>
+        </Link>
 
-        {/* 轮播图部分 */}
-        <div className="carousel-section">
-          <Title level={2} className="section-title">热门活动</Title>
-          <div className="carousel-container">
-            <Button
-                className="carousel-arrow carousel-arrow-left"
-                icon={<LeftOutlined />}
-                onClick={handlePrev}
-            />
-            <Carousel autoplay dots={true} ref={carouselRef}>
-              {activities.map((item, index) => (
-                  <div key={index}>
-                    <div
-                        className="carousel-item"
-                        style={{ backgroundImage: `url(${item.image})` }}
-                        onClick={() => viewActivityDetail(item)}
-                    >
-                      <div className="carousel-content">
-                        <h3>{item.title}</h3>
-                        <p>{item.desc}</p>
-                      </div>
-                    </div>
-                  </div>
-              ))}
-            </Carousel>
-            <Button
-                className="carousel-arrow carousel-arrow-right"
-                icon={<RightOutlined />}
-                onClick={handleNext}
-            />
-          </div>
+        {/* 中间：搜索框 */}
+        <div style={{ flexGrow: 1, maxWidth: 600, margin: '0 20px' }}>
+          <Input.Search
+            placeholder="搜索课程、认证等"
+            allowClear
+            enterButton="搜索"
+            size="large"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onSearch={handleSearch}
+          />
         </div>
+
+        {/* 右侧：积分商城和用户菜单 */}
+        <Space size="middle">
+          <Button
+            type="primary"
+            icon={<ShoppingOutlined />}
+            size="large"
+            style={{ background: '#f5222d', borderColor: '#f5222d' }}
+            onClick={handlePointsMallClick}
+          >
+            积分商城
+          </Button>
+          <Dropdown overlay={<Menu items={getMenuItems()} />} placement="bottomRight" arrow>
+            <Avatar size="large" icon={isLoggedIn && userInfo ? (identityInfo[userRole]?.icon || <UserOutlined />) : <UserOutlined /> } style={{ cursor: 'pointer', backgroundColor: isLoggedIn && userInfo ? (identityInfo[userRole]?.color || '#87d068') : '#cccccc' }}>
+              {isLoggedIn && userInfo ? userInfo.username[0].toUpperCase() : ''}
+            </Avatar>
+          </Dropdown>
+        </Space>
+      </div>
+
+      {/* 页面主体内容，留出顶部栏高度 */}
+      <div style={{ paddingTop: 70 }}> {/* 根据顶部栏高度调整此值 */}
+        {/* 轮播图 */}
+        <Spin spinning={loadingActivities} tip="活动加载中...">
+          <Carousel autoplay effect="fade" ref={carouselRef} dots={false} style={{ width: '100%', height: 400, overflow: 'hidden' }}>
+            {activities.map((item, index) => (
+              <div key={index}>
+                <div
+                  className="carousel-item"
+                  style={{ backgroundImage: `url(${item.image})` }}
+                  onClick={() => viewActivityDetail(item)}
+                >
+                  <div className="carousel-content">
+                    <h3>{item.title}</h3>
+                    <p>{item.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Carousel>
+        </Spin>
 
         {/* 实时学习动态 */}
         <div className="updates-section">
@@ -371,9 +354,9 @@ const MainPage = () => {
             <FireOutlined className="updates-icon" />
             <div className="updates-scroll">
               {learningUpdates.map((update, index) => (
-                  <div key={index} className="update-item">
-                    {update}
-                  </div>
+                <div key={index} className="update-item">
+                  {update}
+                </div>
               ))}
             </div>
           </div>
@@ -386,18 +369,18 @@ const MainPage = () => {
           </Title>
           <Row gutter={[24, 24]}>
             {features.map((feature, index) => (
-                <Col xs={24} sm={12} md={8} lg={8} xl={8} key={index}>
-                  <Card
-                      className="feature-card"
-                      hoverable
-                      onClick={() => handleFeatureClick(feature)}
-                  >
-                    <div className="feature-icon">{feature.icon}</div>
-                    <Title level={4}>{feature.title}</Title>
-                    <Paragraph>{feature.desc}</Paragraph>
-                    <div className="feature-count">{feature.count}</div>
-                  </Card>
-                </Col>
+              <Col xs={24} sm={12} md={8} lg={8} xl={8} key={index}>
+                <Card
+                  className="feature-card"
+                  hoverable
+                  onClick={() => handleFeatureClick(feature)}
+                >
+                  <div className="feature-icon">{feature.icon}</div>
+                  <Title level={4}>{feature.title}</Title>
+                  <Paragraph>{feature.desc}</Paragraph>
+                  <div className="feature-count">{feature.count}</div>
+                </Card>
+              </Col>
             ))}
           </Row>
         </div>
@@ -412,6 +395,7 @@ const MainPage = () => {
           </Space>
         </footer>
       </div>
+    </div>
   );
 };
 

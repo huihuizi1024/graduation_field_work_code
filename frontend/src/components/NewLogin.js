@@ -209,14 +209,14 @@ const NewLogin = ({ onLoginSuccess }) => {
                 <i className="fa fa-graduation-cap text-xl"></i>
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                学分银行系统
+                终身学习平台
               </span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom font-medium">首页</a>
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom font-medium">关于我们</a>
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom font-medium">帮助中心</a>
-              <a href="#" className="text-neutral-600 hover:text-primary transition-custom font-medium">联系我们</a>
+              <a href="/" className="text-neutral-600 hover:text-primary transition-custom font-medium">返回主页</a>
+              <a href="/about" className="text-neutral-600 hover:text-primary transition-custom font-medium">关于我们</a>
+              <a href="/privacy" className="text-neutral-600 hover:text-primary transition-custom font-medium">隐私政策</a>
+              <a href="/contact" className="text-neutral-600 hover:text-primary transition-custom font-medium">联系我们</a>
             </nav>
             <div className="md:hidden">
               <button className="text-neutral-600 focus:outline-none hover:text-primary transition-custom">
@@ -233,7 +233,7 @@ const NewLogin = ({ onLoginSuccess }) => {
           {/* 页面标题 */}
           <div className="text-center mb-16">
             <h1 className="text-[clamp(2rem,5vw,3rem)] font-bold bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 leading-tight">
-              欢迎使用学分银行系统
+              欢迎使用终身学习平台
             </h1>
             <p className="text-neutral-600 text-lg max-w-3xl mx-auto leading-relaxed">
               选择您的身份进行登录，获取个性化的学习服务和管理功能，开启您的终身学习之旅

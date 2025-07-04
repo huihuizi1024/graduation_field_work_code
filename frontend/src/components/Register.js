@@ -990,7 +990,9 @@ const Register = () => {
               <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white mr-3">
                 <i className="fa fa-graduation-cap text-xl"></i>
               </div>
-              <span className="text-xl font-bold text-neutral-700">学分银行系统</span>
+              <span className="text-xl font-bold text-neutral-700">
+                终身学习平台
+              </span>
             </div>
             <nav className="hidden md:flex space-x-8">
               <button onClick={() => navigate('/')} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
@@ -1012,8 +1014,12 @@ const Register = () => {
         <div className="container mx-auto max-w-2xl">
           {/* 页面标题 */}
           <div className="text-center mb-10">
-            <h1 className="text-[clamp(1.5rem,3vw,2rem)] font-bold text-neutral-700 mb-2">创建新账号</h1>
-            <p className="text-neutral-500">请填写以下信息完成注册</p>
+            <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-700 mb-4">
+              注册终身学习平台
+            </h1>
+            <p className="text-neutral-500 text-base max-w-sm mx-auto leading-relaxed mb-8">
+              创建一个新账号，开启您的学习之旅
+            </p>
           </div>
           
           {/* 注册表单 */}

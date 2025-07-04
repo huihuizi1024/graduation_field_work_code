@@ -9,6 +9,9 @@ public class CertificateApplicationRequest {
     @Schema(description = "认证标准ID", required = true)
     private Long standardId;
 
-    @Schema(description = "证明材料URL或描述", required = false)
+    @Schema(description = "证明材料URL", required = false)
     private String evidenceUrl;
+
+    @Schema(description = "补充说明或文字描述", required = false)
+    private String description;
 } 

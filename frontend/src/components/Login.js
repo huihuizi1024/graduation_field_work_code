@@ -240,7 +240,7 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
               <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white mr-3">
                 <i className="fa fa-graduation-cap text-xl"></i>
               </div>
-              <span className="text-xl font-bold text-neutral-700">学分银行系统</span>
+              <span className="text-xl font-bold text-neutral-700">终身学习平台</span>
             </div>
             <nav className="hidden md:flex space-x-8">
               <button onClick={handleBackClick} className="text-neutral-600 hover:text-primary transition-custom">返回主页</button>
@@ -249,7 +249,7 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
               <button onClick={() => navigate('/contact')} className="text-neutral-600 hover:text-primary transition-custom">联系我们</button>
             </nav>
             <div className="md:hidden">
-              <button className="text-neutral-600 focus:outline-none">
+              <button className="text-neutral-600 focus:outline-none hover:text-primary transition-custom">
                 <i className="fa fa-bars text-xl"></i>
               </button>
             </div>
@@ -258,12 +258,16 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
       </header>
 
       {/* 主内容区 */}
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center">
         <div className="container mx-auto max-w-6xl">
           {/* 页面标题 */}
-          <div className="text-center mb-12">
-            <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-700 mb-4">欢迎使用学分银行系统</h1>
-            <p className="text-neutral-500 text-lg max-w-2xl mx-auto">选择您的身份进行登录，获取个性化的学习服务和管理功能</p>
+          <div className="text-center mb-16">
+            <h1 className="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral-700 mb-6 leading-tight">
+              欢迎使用终身学习平台
+            </h1>
+            <p className="text-neutral-600 text-lg max-w-3xl mx-auto leading-relaxed">
+              选择您的身份进行登录，获取个性化的学习服务和管理功能，开启您的终身学习之旅
+            </p>
           </div>
 
           {/* 身份选择区 */}

@@ -25,12 +25,12 @@ public class FileUploadController {
     @Value("${file.upload-dir:./uploads}")
     private String uploadDir;
 
-    @PostMapping("/image")
-    public ResponseEntity<ApiResponse<Map<String, String>>> uploadImage(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/file")
+    public ResponseEntity<ApiResponse<Map<String, String>>> uploadFile(@RequestParam("file") MultipartFile file) {
         logger.info("开始处理文件上传请求");
-        logger.debug("文件信息 - 名称: {}, 大小: {}, 类型: {}", 
-            file.getOriginalFilename(), 
-            file.getSize(), 
+        logger.debug("文件信息 - 名称: {}, 大小: {}, 类型: {}",
+            file.getOriginalFilename(),
+            file.getSize(),
             file.getContentType());
         
         try {
@@ -40,11 +40,18 @@ public class FileUploadController {
                 return ResponseEntity.badRequest().body(ApiResponse.error("上传的文件为空"));
             }
 
-            // 检查文件类型
+            // 检查文件类型，允许图片和常见文档类型
             String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
+            if (contentType == null || !(contentType.startsWith("image/") ||
+                                        contentType.equals("application/pdf") ||
+                                        contentType.equals("application/msword") ||
+                                        contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+                                        contentType.equals("application/vnd.ms-excel") ||
+                                        contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") ||
+                                        contentType.equals("application/vnd.ms-powerpoint") ||
+                                        contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation"))) {
                 logger.error("不支持的文件类型: {}", contentType);
-                return ResponseEntity.badRequest().body(ApiResponse.error("只支持图片文件上传"));
+                return ResponseEntity.badRequest().body(ApiResponse.error("只支持图片、PDF和常见文档文件上传"));
             }
 
             // 创建上传目录
