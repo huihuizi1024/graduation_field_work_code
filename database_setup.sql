@@ -227,7 +227,7 @@ CREATE TABLE certification_standard (
     issuing_organization VARCHAR(255) COMMENT '颁发机构',
     effective_start_time DATETIME COMMENT '有效期开始时间',
     effective_end_time DATETIME COMMENT '有效期结束时间',
-    point_value DECIMAL(10,2) DEFAULT 0 COMMENT '获得此证书可奖励的积分值',
+    point_value DOUBLE DEFAULT 0 COMMENT '获得此证书可奖励的积分值',
     status INT NOT NULL DEFAULT 1 COMMENT '状态：1-有效，0-无效',
     creator_id BIGINT COMMENT '创建人ID',
     creator_name VARCHAR(100) COMMENT '创建人姓名',
@@ -250,9 +250,9 @@ CREATE TABLE certificate_application (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申请ID',
     user_id BIGINT NOT NULL COMMENT '申请人用户ID',
     standard_id BIGINT NOT NULL COMMENT '关联认证标准ID',
-    evidence_url VARCHAR(255) COMMENT '证明材料文件URL，多个用 || 分隔',
-    description TEXT COMMENT '补充说明或文字描述',
-    status INT NOT NULL DEFAULT 0 COMMENT '申请状态：0-待审核，1-已通过，2-已拒绝，3-已取消',
+    evidence_url VARCHAR(255) COMMENT '证明材料(URL 或说明)',
+    description TEXT COMMENT '证明材料文字描述',
+    status INT NOT NULL DEFAULT 0 COMMENT '申请状态：0-待审核，1-已通过，2-已拒绝',
     apply_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '申请时间',
     review_time DATETIME COMMENT '审核时间',
     reviewer_id BIGINT COMMENT '审核人ID',
@@ -665,8 +665,6 @@ INSERT INTO user (
 INSERT INTO expert (id, name, expertise, contact, status, description) VALUES 
 (3, '张专家', '职业技能培训,数字化转型', '13800138003', 1, '具有10年职业技能培训经验，专注数字化人才培养');
 
-
-
 -- 插入商品数据
 INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
 ('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
@@ -694,7 +692,6 @@ INSERT INTO conversion_history (
 (1, 1, 100.00, 10.00, 1, '积分转学分成功'),
 (2, 1, 200.00, 20.00, 1, '积分转学分成功'),
 (3, 3, 300.00, 60.00, 1, '积分转职业证书成功');
-
 
 -- 添加product_order表的外键约束
 ALTER TABLE product_order 
