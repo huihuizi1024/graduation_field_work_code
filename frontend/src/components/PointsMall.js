@@ -207,13 +207,38 @@ const PointsMall = () => {
         remark: values.remark || ''
       };
       
+      console.log('发送购买请求:', purchaseData);
       const response = await orderAPI.purchaseProduct(purchaseData);
+      console.log('购买响应:', response);
       
       if (response.code === 200) {
         message.success('兑换成功！');
         setIsModalVisible(false);
-        // 更新用户积分
-        fetchCurrentUser();
+        
+        // 立即更新本地积分显示（防止延迟）
+        if (userInfo && selectedProduct) {
+          const newBalance = userInfo.pointsBalance - selectedProduct.points;
+          console.log('更新积分余额:', userInfo.pointsBalance, '-', selectedProduct.points, '=', newBalance);
+          
+          const updatedUserInfo = {
+            ...userInfo,
+            pointsBalance: newBalance
+          };
+          
+          setUserInfo(updatedUserInfo);
+          localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+        }
+        
+        // 延迟从服务器获取最新数据确保一致性
+        setTimeout(async () => {
+          try {
+            await fetchCurrentUser();
+            console.log('已刷新用户积分数据');
+          } catch (error) {
+            console.error('刷新用户数据失败:', error);
+          }
+        }, 1000);
+        
       } else {
         message.error(response.message || '兑换失败，请稍后重试');
       }

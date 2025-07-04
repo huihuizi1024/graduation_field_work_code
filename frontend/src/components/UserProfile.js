@@ -28,6 +28,7 @@ import MyProjects from './MyProjects';
 import './UserProfile.css';
 import axios from 'axios';
 import { getToken } from '../api/index';
+import { validateImage, FILE_SIZE_LIMITS } from '../utils/fileValidator';
 
 const { Header, Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -67,7 +68,7 @@ const UserProfile = () => {
         pointsBalance: userData.pointsBalance || 0,
         institution: userData.institution || '',
         status: userData.status === 1 ? '正常' : '禁用',
-        avatar: userData.avatar || ''
+        avatar: userData.avatarUrl || userData.avatar || ''
       });
       // 更新localStorage缓存
       localStorage.setItem('userInfo', JSON.stringify(userData));
@@ -124,6 +125,10 @@ const UserProfile = () => {
     if (storedUserInfo) {
       try {
         const parsedUserInfo = JSON.parse(storedUserInfo);
+        // 确保头像字段正确映射
+        if (parsedUserInfo.avatarUrl && !parsedUserInfo.avatar) {
+          parsedUserInfo.avatar = parsedUserInfo.avatarUrl;
+        }
         setUserInfo(parsedUserInfo);
       } catch (error) {
         console.error('解析localStorage用户信息失败:', error);
@@ -205,14 +210,8 @@ const UserProfile = () => {
       Authorization: `Bearer ${localStorage.getItem('token') || ''}`
     },
     beforeUpload: (file) => {
-      const isImage = file.type.startsWith('image/');
-      if (!isImage) {
-        message.error('只能上传图片文件！');
-        return false;
-      }
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        message.error('图片大小不能超过2MB！');
+      // 使用统一的文件验证工具
+      if (!validateImage(file)) {
         return false;
       }
       return true; // 继续上传
@@ -220,12 +219,25 @@ const UserProfile = () => {
     onSuccess: async (res) => {
       if (res.code === 200 && res.data?.url) {
         try {
-          await updateUserInfo({ avatarUrl: res.data.url });
-          setUserInfo((prev) => ({ ...prev, avatar: res.data.url }));
-          localStorage.setItem('userInfo', JSON.stringify({ ...userInfo, avatar: res.data.url }));
-          message.success('头像更新成功！');
+          const updateResponse = await updateUserInfo({ avatarUrl: res.data.url });
+          if (updateResponse && updateResponse.code === 200) {
+            // 更新本地状态
+            const updatedUserInfo = { ...userInfo, avatar: res.data.url };
+            setUserInfo(updatedUserInfo);
+            
+            // 更新localStorage
+            localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+            
+            // 重新获取用户信息以确保同步
+            await fetchCurrentUser();
+            
+            message.success('头像更新成功！');
+          } else {
+            message.error('保存头像失败：' + (updateResponse?.message || '未知错误'));
+          }
         } catch (e) {
-          message.error('保存头像失败');
+          console.error('保存头像失败:', e);
+          message.error('保存头像失败：' + (e.response?.data?.message || e.message));
         }
       } else {
         message.error(res.message || '上传失败');
@@ -274,32 +286,25 @@ const UserProfile = () => {
       ) : userInfo ? (
         <>
           <div className="avatar-wrapper">
-            <Upload {...uploadProps}>
-              <Badge 
-                count={
-                  <div
-                    style={{
-                      width: 24,
-                      height: 24,
-                      lineHeight: '24px',
-                      borderRadius: '50%',
-                      backgroundColor: '#1890ff',
-                      color: '#fff',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <UploadOutlined style={{ fontSize: '14px' }} />
+            <div className="avatar-upload-container">
+              <Upload {...uploadProps}>
+                <div className="avatar-upload-area">
+                  <Avatar 
+                    size={200}
+                    src={userInfo.avatar} 
+                    icon={<UserOutlined style={{ fontSize: '80px' }} />}
+                  />
+                  <div className="avatar-upload-overlay">
+                    <UploadOutlined style={{ color: '#fff' }} />
+                    <div style={{ color: '#fff' }}>点击更换头像</div>
                   </div>
-                } 
-                offset={[-12, 85]}
-              >
-                <Avatar 
-                  size={120}
-                  src={userInfo.avatar} 
-                  icon={<UserOutlined />}
-                />
-              </Badge>
-            </Upload>
+                </div>
+              </Upload>
+              <div className="avatar-upload-button">
+                <UploadOutlined style={{ marginRight: '4px' }} />
+                点击头像上传
+              </div>
+            </div>
             <div 
               className="points-display-profile"
               onClick={() => navigate('/points-mall')}

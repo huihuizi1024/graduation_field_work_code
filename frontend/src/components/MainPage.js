@@ -47,7 +47,12 @@ const MainPage = ({
       const storedUserInfo = localStorage.getItem('userInfo');
       const storedRole = localStorage.getItem('role');
       if (storedUserInfo) {
-        setUserInfo(JSON.parse(storedUserInfo));
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        // 确保头像字段正确映射
+        if (parsedUserInfo.avatarUrl && !parsedUserInfo.avatar) {
+          parsedUserInfo.avatar = parsedUserInfo.avatarUrl;
+        }
+        setUserInfo(parsedUserInfo);
       }
       if (storedRole) {
         setUserRole(storedRole);
@@ -69,7 +74,7 @@ const MainPage = ({
         }
       });
 
-      if (response.code === 200 && response.data?.records) {
+      if (response.code === 200 && response.data?.records && response.data.records.length > 0) {
         // 将API返回的数据转换为轮播图所需的格式
         const formattedActivities = response.data.records.map(activity => ({
           id: activity.id,
@@ -83,12 +88,53 @@ const MainPage = ({
         }));
         setActivities(formattedActivities);
       } else {
-        console.error('获取平台活动数据失败:', response.message);
-        setActivities([]);
+        console.log('API未返回活动数据，使用默认轮播图数据');
+        // 设置默认的轮播图数据
+        setActivities([
+          {
+            id: 1,
+            title: "2024年终身学习节",
+            image: "https://picsum.photos/1200/400?random=1",
+            desc: "终身学习，成就未来。全平台课程限时优惠，快来参与学习吧！"
+          },
+          {
+            id: 2,
+            title: "技能认证专场",
+            image: "https://picsum.photos/1200/400?random=2", 
+            desc: "专业技能认证，提升职场竞争力。多种认证项目等你来挑战！"
+          },
+          {
+            id: 3,
+            title: "在线学习新体验",
+            image: "https://picsum.photos/1200/400?random=3",
+            desc: "全新的在线学习平台，随时随地享受优质教育资源。"
+          }
+        ]);
       }
     } catch (error) {
       console.error('获取平台活动数据出错:', error);
-      setActivities([]);
+      console.log('使用默认轮播图数据');
+      // 网络错误时也使用默认数据
+      setActivities([
+        {
+          id: 1,
+          title: "2024年终身学习节",
+          image: "https://picsum.photos/1200/400?random=1",
+          desc: "终身学习，成就未来。全平台课程限时优惠，快来参与学习吧！"
+        },
+        {
+          id: 2,
+          title: "技能认证专场",
+          image: "https://picsum.photos/1200/400?random=2", 
+          desc: "专业技能认证，提升职场竞争力。多种认证项目等你来挑战！"
+        },
+        {
+          id: 3,
+          title: "在线学习新体验",
+          image: "https://picsum.photos/1200/400?random=3",
+          desc: "全新的在线学习平台，随时随地享受优质教育资源。"
+        }
+      ]);
     } finally {
       setLoadingActivities(false);
     }
@@ -338,9 +384,15 @@ const MainPage = ({
             积分商城
           </Button>
           <Dropdown overlay={<Menu items={getMenuItems()} />} placement="bottomRight" arrow>
-            <Avatar size="large" icon={isLoggedIn && userInfo ? (identityInfo[userRole]?.icon || <UserOutlined />) : <UserOutlined /> } style={{ cursor: 'pointer', backgroundColor: isLoggedIn && userInfo ? (identityInfo[userRole]?.color || '#87d068') : '#cccccc' }}>
-              {isLoggedIn && userInfo ? userInfo.username[0].toUpperCase() : ''}
-            </Avatar>
+            <Avatar 
+              size="large" 
+              src={isLoggedIn && userInfo?.avatar ? userInfo.avatar : null}
+              icon={!isLoggedIn || !userInfo?.avatar ? <UserOutlined /> : null}
+              style={{ 
+                cursor: 'pointer',
+                backgroundColor: !isLoggedIn || !userInfo?.avatar ? (identityInfo[userRole]?.color || '#cccccc') : 'transparent'
+              }}
+            />
           </Dropdown>
         </Space>
       </div>

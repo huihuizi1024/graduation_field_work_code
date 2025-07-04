@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import dayjs from 'dayjs';
+import { validateImage, validateVideo, FILE_SIZE_LIMITS, formatFileSize } from '../utils/fileValidator';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -438,6 +439,13 @@ const InstitutionCourseManagement = () => {
               fileList={fileList}
               onChange={handleCoverChange}
               maxCount={1}
+              beforeUpload={(file) => {
+                // 验证图片文件
+                if (!validateImage(file)) {
+                  return Upload.LIST_IGNORE;
+                }
+                return true;
+              }}
             >
               {fileList.length < 1 && (
                 <div>
@@ -446,6 +454,9 @@ const InstitutionCourseManagement = () => {
                 </div>
               )}
             </Upload>
+            <div style={{ marginTop: 8, color: '#666', fontSize: '12px' }}>
+              支持 JPG、PNG、GIF、WEBP 格式，最大 {FILE_SIZE_LIMITS.IMAGE}MB
+            </div>
           </Form.Item>
           
           <Form.Item
@@ -463,12 +474,19 @@ const InstitutionCourseManagement = () => {
               fileList={videoFileList}
               onChange={handleVideoChange}
               maxCount={1}
+              beforeUpload={(file) => {
+                // 验证视频文件
+                if (!validateVideo(file)) {
+                  return Upload.LIST_IGNORE;
+                }
+                return true;
+              }}
             >
               <Button icon={<UploadOutlined />}>上传视频</Button>
             </Upload>
-            <Text type="secondary" style={{ display: 'block', marginTop: 8 }}>
-              支持mp4、webm等格式，建议大小不超过500MB
-            </Text>
+            <div style={{ marginTop: 8, color: '#666', fontSize: '12px' }}>
+              支持 MP4、WEBM、OGG、AVI、MOV 格式，最大 {FILE_SIZE_LIMITS.VIDEO}MB
+            </div>
           </Form.Item>
         </Form>
       </Modal>

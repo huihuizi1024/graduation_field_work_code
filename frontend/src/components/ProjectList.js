@@ -3,6 +3,7 @@ import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, 
 import { PlusOutlined, EditOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import api from '../api';
+import { validateImage, FILE_SIZE_LIMITS } from '../utils/fileValidator';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -178,19 +179,8 @@ const ProjectList = () => {
   };
 
   const handleUploadBeforeUpload = (file) => {
-    const isImage = file.type.startsWith('image/');
-    if (!isImage) {
-      message.error('只能上传图片文件!');
-      return false;
-    }
-    
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('图片必须小于2MB!');
-      return false;
-    }
-    
-    return true;
+    // 使用统一的文件验证工具
+    return validateImage(file);
   };
 
   // 获取项目分类名称

@@ -4,6 +4,7 @@ import { FileAddOutlined, UploadOutlined, InfoCircleOutlined, SwapOutlined } fro
 import { getCertificationStandards } from '../api/standard';
 import { applyCertificate, getMyApplications, getMyCertificates, cancelApplication } from '../api/certificate';
 import { getConversionRules } from '../api';
+import { validateDocument, FILE_SIZE_LIMITS } from '../utils/fileValidator';
 
 const { Text } = Typography;
 const { TabPane } = Tabs;
@@ -355,8 +356,14 @@ const UploadEvidence = ({ onUploaded }) => {
       Authorization: 'Bearer ' + (localStorage.getItem('token') || '')
     },
     showUploadList: false,
-    beforeUpload: () => {
+    beforeUpload: (file) => {
+      // 验证文档文件
+      if (!validateDocument(file)) {
+        setUploading(false);
+        return false;
+      }
       setUploading(true);
+      return true;
     },
     onChange(info) {
       if (info.file.status === 'done') {
@@ -376,11 +383,16 @@ const UploadEvidence = ({ onUploaded }) => {
   };
 
   return (
-    <Upload {...props}>
-      <Button icon={<UploadOutlined />} loading={uploading}>
-        上传证明文件
-      </Button>
-    </Upload>
+    <div>
+      <Upload {...props}>
+        <Button icon={<UploadOutlined />} loading={uploading}>
+          上传证明文件
+        </Button>
+      </Upload>
+      <div style={{ marginTop: 8, color: '#666', fontSize: '12px' }}>
+        支持 PDF、DOC、DOCX 格式，最大 {FILE_SIZE_LIMITS.DOCUMENT}MB
+      </div>
+    </div>
   );
 };
 

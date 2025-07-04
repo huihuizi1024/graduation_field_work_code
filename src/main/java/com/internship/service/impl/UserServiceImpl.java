@@ -152,9 +152,22 @@ public class UserServiceImpl extends ServiceImpl<UserRepository, User> implement
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setFullName(userUpdateDTO.getFullName());
-            user.setEmail(userUpdateDTO.getEmail());
-            user.setPhone(userUpdateDTO.getPhone());
+            
+            // 只更新非空字段
+            if (userUpdateDTO.getFullName() != null && !userUpdateDTO.getFullName().trim().isEmpty()) {
+                user.setFullName(userUpdateDTO.getFullName());
+            }
+            if (userUpdateDTO.getEmail() != null && !userUpdateDTO.getEmail().trim().isEmpty()) {
+                user.setEmail(userUpdateDTO.getEmail());
+            }
+            if (userUpdateDTO.getPhone() != null && !userUpdateDTO.getPhone().trim().isEmpty()) {
+                user.setPhone(userUpdateDTO.getPhone());
+            }
+            if (userUpdateDTO.getAvatarUrl() != null && !userUpdateDTO.getAvatarUrl().trim().isEmpty()) {
+                user.setAvatarUrl(userUpdateDTO.getAvatarUrl());
+            }
+            
+            user.setUpdateTime(LocalDateTime.now());
             return userRepository.updateById(user) > 0;
         }
         return false;

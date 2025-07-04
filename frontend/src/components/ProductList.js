@@ -3,6 +3,7 @@ import { Table, Button, Modal, Form, Input, Select, Space, message, Popconfirm, 
 import { PlusOutlined, EditOutlined, DeleteOutlined, UploadOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import * as productAPI from '../api/product';
 import * as uploadAPI from '../api/upload';
+import { validateImage, FILE_SIZE_LIMITS } from '../utils/fileValidator';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -290,17 +291,8 @@ const ProductList = () => {
         lastModified: file.lastModified
       });
       
-      // 检查文件类型
-      const isImage = file.type.startsWith('image/');
-      if (!isImage) {
-        message.error('只能上传图片文件!');
-        return Upload.LIST_IGNORE;
-      }
-      
-      // 检查文件大小（10MB = 10 * 1024 * 1024 bytes）
-      const isLt10M = file.size / 1024 / 1024 < 10;
-      if (!isLt10M) {
-        message.error('图片大小不能超过10MB!');
+      // 使用统一的文件验证工具
+      if (!validateImage(file)) {
         return Upload.LIST_IGNORE;
       }
       
@@ -447,7 +439,7 @@ const ProductList = () => {
               )}
             </Upload>
             <div style={{ marginTop: 8, color: '#888' }}>
-              支持JPG、PNG格式，文件大小不超过10MB
+              支持 JPG、PNG、GIF、WEBP 格式，最大 {FILE_SIZE_LIMITS.IMAGE}MB
             </div>
           </Form.Item>
           

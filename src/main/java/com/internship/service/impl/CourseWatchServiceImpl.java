@@ -110,18 +110,11 @@ public class CourseWatchServiceImpl implements CourseWatchService {
                 // 给用户奖励积分
                 User user = userRepository.selectById(userId);
                 if (user != null) {
-                    
-                    // 更新用户积分
-                    double newBalance = user.getPointsBalance() + course.getPointsReward();
-                    user.setPointsBalance(newBalance);
-                    userRepository.updateById(user);
-                    
-                    // 创建积分交易记录
+                    // 创建积分交易记录（TransactionService会自动更新用户积分余额）
                     PointTransaction transaction = new PointTransaction();
                     transaction.setUserId(userId);
                     transaction.setTransactionType(1); // 获得
                     transaction.setPointsChange((double) course.getPointsReward());
-                    transaction.setBalanceAfter(newBalance);
                     transaction.setDescription("完成课程《" + course.getProjectName() + "》获得积分");
                     transaction.setRelatedId(courseId);
                     transactionService.createTransaction(transaction);

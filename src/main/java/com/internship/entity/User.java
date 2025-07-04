@@ -19,6 +19,7 @@ public class User {
     private Long institutionId;
     private Integer status;
     private Double pointsBalance = 0.0;
+    private String avatarUrl;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
