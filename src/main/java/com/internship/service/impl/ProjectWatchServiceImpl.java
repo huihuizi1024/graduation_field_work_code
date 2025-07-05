@@ -44,8 +44,10 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
     @Override
     public boolean recordWatching(Long userId, String projectId, Integer progress) {
         try {
-            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
-            
+            // 变更：查询多条记录并取最新的一条
+            List<ProjectWatchRecord> records = projectWatchRecordRepository.findListByUserIdAndProjectId(userId, projectId);
+            ProjectWatchRecord record = records.isEmpty() ? null : records.get(0);
+
             if (record == null) {
                 // 创建新记录
                 record = new ProjectWatchRecord();
@@ -66,8 +68,14 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
             }
             
             // 如果进度达到90%以上，自动标记为完成
-            if (progress >= 90 && record.getWatchStatus() == 0) {
-                return completeProject(userId, projectId);
+            if (progress >= 90 && (record == null || record.getWatchStatus() == 0)) {
+                // 如果record是新创建的，需要先保存获取ID
+                if (record == null) {
+                    record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
+                }
+                if(record.getWatchStatus() == 0) {
+                    return completeProject(userId, projectId);
+                }
             }
             
             return true;
@@ -82,10 +90,16 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
     public synchronized boolean completeProject(Long userId, String projectId) {
         try {
             log.info("开始处理项目完成请求 - 用户ID: {}, 项目ID: {}", userId, projectId);
+
+            // 变更：查询多条记录并取最新的一条进行加锁
+            List<ProjectWatchRecord> records = projectWatchRecordRepository.findListByUserIdAndProjectIdForUpdate(userId, projectId);
+            if (records.isEmpty()) {
+                 log.warn("在completeProject中未找到观看记录 - 用户ID: {}, 项目ID: {}", userId, projectId);
+                 // 即使没有记录，也可能需要创建。下面的逻辑会处理。
+            }
             
-            // 使用悲观锁查询，确保处理过程中记录不被其他事务修改
-            ProjectWatchRecord record = projectWatchRecordRepository.findByUserIdAndProjectIdForUpdate(userId, projectId);
-            
+            ProjectWatchRecord record = records.isEmpty() ? null : records.get(0);
+
             // 如果记录已经存在且已经获得过积分，则不再奖励
             if (record != null && record.getIsRewarded() == 1) {
                 log.info("用户已获得过该项目积分，不再重复奖励 - 用户ID: {}, 项目ID: {}", userId, projectId);
@@ -217,7 +231,9 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
 
     @Override
     public ProjectWatchRecord checkUserWatchRecord(Long userId, String projectId) {
-        return projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
+        // 变更：查询多条记录并取最新的一条
+        List<ProjectWatchRecord> records = projectWatchRecordRepository.findListByUserIdAndProjectId(userId, projectId);
+        return records.isEmpty() ? null : records.get(0);
     }
     
     /**

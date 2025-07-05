@@ -59,7 +59,7 @@ const MyCourses = ({ isEmbedded = false }) => {
   };
 
   const handleCourseClick = (courseId) => {
-    navigate(`/course/${courseId}`);
+    navigate(`/projects/${courseId}`);
   };
 
   // 获取分类颜色

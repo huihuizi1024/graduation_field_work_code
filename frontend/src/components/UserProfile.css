@@ -87,8 +87,92 @@
 }
 
 .profile-content {
-  padding: 40px 24px !important;
+  padding: 24px !important;
   background: transparent;
+}
+
+.profile-info-container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.profile-avatar-card {
+  flex: 0 0 280px;
+  text-align: center;
+}
+
+.profile-avatar-card .ant-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-avatar-container {
+  position: relative;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  width: 128px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-avatar-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar-container .ant-avatar {
+  width: 100%;
+  height: 100%;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-upload-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 14px;
+}
+
+.profile-avatar-container:hover .avatar-upload-overlay {
+  opacity: 1;
+}
+
+.avatar-upload-overlay .anticon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.user-points-card {
+  background-color: #fffbe6;
+  border: 1px solid #ffe58f;
+  color: #d48806;
+  padding: 8px 16px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-details-card {
+  flex: 1;
 }
 
 .profile-info {
@@ -96,7 +180,7 @@
   width: 100%;
   max-width: 100%;
   margin-top: 0 !important;
-  padding-top: 220px;
+  padding-top: 20px;
 }
 
 .avatar-wrapper {
@@ -110,12 +194,12 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  background: #fff;
-  padding: 25px 40px;
-  border-radius: 40px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-  min-width: 300px;
-  margin-top: 20px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  min-width: auto;
+  margin-top: 0;
 }
 
 .avatar-wrapper .ant-avatar {
@@ -123,9 +207,9 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   margin-bottom: 0;
   transition: all 0.3s ease;
-  width: 200px !important;
-  height: 200px !important;
-  line-height: 200px !important;
+  width: 128px !important;
+  height: 128px !important;
+  line-height: 128px !important;
 }
 
 .avatar-wrapper .ant-avatar:hover {
@@ -133,20 +217,20 @@
 }
 
 .avatar-wrapper .ant-avatar > * {
-  font-size: 80px !important;
-  line-height: 200px !important;
+  font-size: 64px !important;
+  line-height: 128px !important;
 }
 
 .avatar-wrapper .user-name {
   color: #1890ff;
-  font-size: 24px;
+  font-size: 22px;
   margin: 8px 0 4px;
   font-weight: 600;
 }
 
 .points-display-profile {
   color: #f5a623;
-  font-size: 15px;
+  font-size: 14px;
   padding: 4px 12px;
   background: rgba(245, 166, 35, 0.1);
   border-radius: 16px;

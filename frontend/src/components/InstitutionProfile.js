@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag, Row, Col } from 'antd';
-import { BankOutlined, MailOutlined, PhoneOutlined, UserOutlined, EditOutlined, ArrowLeftOutlined, IdcardOutlined, EnvironmentOutlined, InfoCircleOutlined, GiftOutlined, HomeOutlined } from '@ant-design/icons';
+import { Card, Avatar, Descriptions, Spin, Alert, Button, message, Tag, Layout, Upload, Breadcrumb } from 'antd';
+import { 
+    BankOutlined, MailOutlined, PhoneOutlined, UserOutlined, EditOutlined, 
+    HomeOutlined, GiftOutlined, InfoCircleOutlined, EnvironmentOutlined, UploadOutlined
+} from '@ant-design/icons';
 import { getCurrentInstitution, updateCurrentInstitution } from '../api';
 import EditProfileModal from './EditProfileModal'; 
 import './UserProfile.css';
+
+const { Content } = Layout;
 
 const InstitutionProfile = () => {
     const navigate = useNavigate();
@@ -18,7 +23,6 @@ const InstitutionProfile = () => {
             setLoading(true);
             const response = await getCurrentInstitution();
             if (response && response.data) {
-                // 直接使用从后端获取的机构信息
                 setInstitutionData(response.data);
             } else {
                 throw new Error('无效的API响应');
@@ -26,7 +30,6 @@ const InstitutionProfile = () => {
         } catch (err) {
             const errorMessage = err.response?.data?.message || err.message || '获取机构信息失败';
             setError(errorMessage);
-            message.error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -47,13 +50,9 @@ const InstitutionProfile = () => {
     const handleUpdateProfile = async (values) => {
         try {
             setLoading(true);
-            // 调用API更新机构信息
             const response = await updateCurrentInstitution(values);
-            
             if (response && response.code === 200) {
-                // 重新获取机构信息以确保数据一致性
                 await fetchCurrentInstitution();
-                
                 setIsModalVisible(false);
                 message.success('机构信息更新成功！');
             } else {
@@ -66,31 +65,43 @@ const InstitutionProfile = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="profile-info flex-center" style={{ paddingTop: '100px', minHeight: '50vh' }}>
-                <Spin size="large" tip="正在加载机构信息..." />
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="profile-info flex-center" style={{ paddingTop: '100px' }}>
-                <Alert message="加载失败" description={error} type="error" showIcon />
-            </div>
-        );
-    }
-
-    if (!institutionData) {
-        return (
-            <div className="profile-info flex-center" style={{ paddingTop: '100px' }}>
-                <Alert message="信息" description="无法加载机构信息。" type="info" showIcon />
-            </div>
-        );
-    }
+    const uploadProps = {
+        name: 'file',
+        showUploadList: false,
+        action: '/api/upload/file',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token') || ''}`
+        },
+        beforeUpload: (file) => {
+            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+            if (!isJpgOrPng) {
+                message.error('您只能上传 JPG/PNG 格式的图片!');
+            }
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isLt2M) {
+                message.error('图片大小必须小于 2MB!');
+            }
+            return isJpgOrPng && isLt2M;
+        },
+        onChange: async (info) => {
+            if (info.file.status === 'done') {
+                const res = info.file.response;
+                if (res.code === 200 && res.data?.url) {
+                    try {
+                        await handleUpdateProfile({ avatarUrl: res.data.url });
+                        message.success('头像更新成功！');
+                    } catch (e) {
+                        message.error('保存头像失败');
+                    }
+                } else {
+                    message.error(res.message || '上传失败');
+                }
+            } else if (info.file.status === 'error') {
+                message.error('上传失败');
+            }
+        },
+    };
     
-    // 获取机构类型名称
     const getInstitutionTypeName = (type) => {
         switch(type) {
             case 1: return '高等院校';
@@ -101,7 +112,6 @@ const InstitutionProfile = () => {
         }
     };
 
-    // 获取机构级别名称
     const getInstitutionLevelName = (level) => {
         switch(level) {
             case 1: return '国家级';
@@ -112,7 +122,6 @@ const InstitutionProfile = () => {
         }
     };
 
-    // 获取认证等级名称
     const getCertificationLevelName = (level) => {
         switch(level) {
             case 1: return 'AAA级';
@@ -124,76 +133,103 @@ const InstitutionProfile = () => {
         }
     };
 
-    return (
-        <div className="profile-info">
-            <div className="avatar-wrapper">
-                <Avatar size={100} icon={<BankOutlined />} />
-                <h2 className="user-name">{institutionData.institutionName}</h2>
-                <Tag color="green">@{institutionData.username}</Tag>
-                <div className="points-display-profile" style={{ cursor: 'pointer' }} onClick={() => navigate('/points-mall')}>
-                    <GiftOutlined /> {institutionData.pointsBalance || 0} 积分
-                </div>
-            </div>
-            
-            <Card
-                title={
-                    <Button type="link" icon={<HomeOutlined />} onClick={() => navigate('/')} style={{ padding: 0 }}>
-                        返回首页
-                    </Button>
-                }
-                extra={<Button icon={<EditOutlined />} onClick={handleEdit}>编辑信息</Button>}
-                className="profile-details-card"
-            >
-                <Descriptions bordered column={1} layout="horizontal" contentStyle={{ textAlign: 'right' }}>
-                    <Descriptions.Item label={<><InfoCircleOutlined /> 机构名称</>}>
-                        {institutionData.institutionName || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><IdcardOutlined /> 社会信用代码</>}>
-                        {institutionData.socialCreditCode || '未填写'}
-                    </Descriptions.Item>
-                     <Descriptions.Item label={<><UserOutlined /> 法定代表人</>}>
-                        {institutionData.legalRepresentative || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><UserOutlined /> 联系人</>}>
-                        {institutionData.contactPerson || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><MailOutlined /> 联系邮箱</>}>
-                        {institutionData.contactEmail || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><PhoneOutlined /> 联系电话</>}>
-                        {institutionData.contactPhone || '未填写'}
-                    </Descriptions.Item>
-                    <Descriptions.Item label={<><EnvironmentOutlined /> 机构地址</>}>
-                        {(institutionData.province || institutionData.city || institutionData.district) ? 
-                            `${institutionData.province || ''} ${institutionData.city || ''} ${institutionData.district || ''} ${institutionData.address || ''}` 
-                            : (institutionData.address || '未填写')}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="机构类型">
-                        {getInstitutionTypeName(institutionData.institutionType)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="机构级别">
-                        {getInstitutionLevelName(institutionData.institutionLevel)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="认证等级">
-                        {getCertificationLevelName(institutionData.certificationLevel)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="机构简介">
-                        {institutionData.institutionDescription || '该机构很低调，什么都没留下。'}
-                    </Descriptions.Item>
-                </Descriptions>
-            </Card>
+    if (loading) {
+        return <div className="spinner-container"><Spin size="large" /></div>;
+    }
+    if (error) {
+        return <div className="page-container"><Alert message="加载失败" description={error} type="error" showIcon /></div>;
+    }
+    if (!institutionData) {
+        return <div className="page-container"><Alert message="信息" description="无法加载机构信息。" type="info" showIcon /></div>;
+    }
 
-            {institutionData && (
-                <EditProfileModal
-                    visible={isModalVisible}
-                    onCancel={handleCancelModal}
-                    onOk={handleUpdateProfile}
-                    initialData={institutionData}
-                    role="institution"
-                />
-            )}
-        </div>
+    return (
+        <Layout className="my-courses-layout">
+            <Content className="content-container" style={{maxWidth: '1200px', margin: 'auto'}}>
+                <div className="page-header">
+                     <Breadcrumb>
+                        <Breadcrumb.Item href="/">
+                            <HomeOutlined />
+                            <span>首页</span>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>机构中心</Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
+
+                <div className="profile-info-container">
+                    <Card className="profile-avatar-card">
+                         <Upload {...uploadProps}>
+                            <div className="profile-avatar-container">
+                                <Avatar size={128} icon={<BankOutlined />} src={institutionData.avatarUrl} />
+                                <div className="avatar-upload-overlay">
+                                    <UploadOutlined />
+                                    <span>更换头像</span>
+                                </div>
+                            </div>
+                        </Upload>
+                        <h2 className="user-name">{institutionData.institutionName}</h2>
+                        <Tag color="purple">@{institutionData.username}</Tag>
+                        <div className="user-points-card" style={{marginTop: '12px'}}>
+                            <GiftOutlined /> {institutionData.pointsBalance || 0} 积分
+                        </div>
+                        <Button type="primary" icon={<EditOutlined />} onClick={handleEdit} style={{ marginTop: 16 }}>
+                            编辑信息
+                        </Button>
+                    </Card>
+
+                    <Card title="机构详细信息" className="profile-details-card">
+                        <Descriptions bordered column={2} layout="horizontal">
+                            <Descriptions.Item label={<InfoCircleOutlined />} span={2}>
+                                {institutionData.institutionName || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="社会信用代码" span={2}>
+                                {institutionData.socialCreditCode || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="法定代表人">
+                                {institutionData.legalRepresentative || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="联系人">
+                                {institutionData.contactPerson || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="联系邮箱">
+                                {institutionData.contactEmail || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="联系电话">
+                                {institutionData.contactPhone || '未填写'}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="机构地址" span={2}>
+                                {(institutionData.province || institutionData.city || institutionData.district) ? 
+                                    `${institutionData.province || ''} ${institutionData.city || ''} ${institutionData.district || ''} ${institutionData.address || ''}` 
+                                    : (institutionData.address || '未填写')}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="机构类型">
+                                <Tag>{getInstitutionTypeName(institutionData.institutionType)}</Tag>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="机构级别">
+                                <Tag>{getInstitutionLevelName(institutionData.institutionLevel)}</Tag>
+                            </Descriptions.Item>
+                             <Descriptions.Item label="认证等级">
+                                <Tag color="gold">{getCertificationLevelName(institutionData.certificationLevel)}</Tag>
+                            </Descriptions.Item>
+                            <Descriptions.Item label="机构简介" span={2}>
+                                {institutionData.institutionDescription || '该机构很低调，什么都没留下。'}
+                            </Descriptions.Item>
+                        </Descriptions>
+                    </Card>
+                </div>
+
+                {institutionData && (
+                    <EditProfileModal
+                        visible={isModalVisible}
+                        onCancel={handleCancelModal}
+                        onOk={handleUpdateProfile}
+                        initialData={institutionData}
+                        role="institution"
+                    />
+                )}
+            </Content>
+        </Layout>
     );
 };
 
-export default InstitutionProfile; 
+export default InstitutionProfile;
