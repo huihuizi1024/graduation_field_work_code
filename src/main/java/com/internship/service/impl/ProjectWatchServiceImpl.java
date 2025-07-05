@@ -42,13 +42,17 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
     private TransactionService transactionService;
 
     @Override
-    public boolean recordWatching(Long userId, String projectId, Integer progress) {
+    @Transactional
+    public synchronized boolean recordWatching(Long userId, String projectId, Integer progress) {
         try {
             // 变更：查询多条记录并取最新的一条
             List<ProjectWatchRecord> records = projectWatchRecordRepository.findListByUserIdAndProjectId(userId, projectId);
             ProjectWatchRecord record = records.isEmpty() ? null : records.get(0);
 
             if (record == null) {
+                // 首次观看，增加观看次数
+                projectRepository.incrementViewCount(projectId);
+                
                 // 创建新记录
                 record = new ProjectWatchRecord();
                 record.setUserId(userId);
@@ -65,17 +69,6 @@ public class ProjectWatchServiceImpl implements ProjectWatchService {
                 }
                 record.setLastWatchTime(LocalDateTime.now());
                 projectWatchRecordRepository.updateById(record);
-            }
-            
-            // 如果进度达到90%以上，自动标记为完成
-            if (progress >= 90 && (record == null || record.getWatchStatus() == 0)) {
-                // 如果record是新创建的，需要先保存获取ID
-                if (record == null) {
-                    record = projectWatchRecordRepository.findByUserIdAndProjectId(userId, projectId);
-                }
-                if(record.getWatchStatus() == 0) {
-                    return completeProject(userId, projectId);
-                }
             }
             
             return true;

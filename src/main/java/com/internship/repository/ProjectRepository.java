@@ -5,6 +5,7 @@ import com.internship.entity.Project;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -48,4 +49,10 @@ public interface ProjectRepository extends BaseMapper<Project> {
      */
     @Select("SELECT COUNT(*) FROM project WHERE status = #{status}")
     long countByStatus(@Param("status") Integer status);
+
+    /**
+     * 增加项目观看量
+     */
+    @Update("UPDATE project SET view_count = view_count + 1 WHERE id = #{projectId}")
+    void incrementViewCount(@Param("projectId") String projectId);
 }

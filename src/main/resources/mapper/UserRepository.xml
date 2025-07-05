@@ -5,6 +5,10 @@
         SELECT * FROM user WHERE username = #{username}
     </select>
     
+    <select id="findByPhone" resultType="com.internship.entity.User">
+        SELECT * FROM user WHERE phone = #{phone}
+    </select>
+    
     <select id="existsByUsername" resultType="boolean">
         SELECT COUNT(1) > 0 FROM user WHERE username = #{username}
     </select>

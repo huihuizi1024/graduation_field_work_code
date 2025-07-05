@@ -497,7 +497,7 @@ const UserProfile = () => {
     <Layout className="user-profile-layout">
       <div className="profile-header">
         <Button 
-          type="primary" 
+          type="link" 
           icon={<HomeOutlined />}
           onClick={() => navigate('/')}
           className="back-button"

@@ -167,9 +167,6 @@ const CategoryVideoPage = () => {
               <Text type="secondary">{item.manager || '未知讲师'}</Text>
             </div>
             <div className="video-card-stats">
-              <span>
-                <EyeOutlined /> {item.viewCount || 0}
-              </span>
               {item.pointsReward > 0 && (
                 <Tag color="gold" className="video-points-tag">
                   {item.pointsReward}积分
@@ -247,41 +244,35 @@ const CategoryVideoPage = () => {
       <Divider />
 
       {/* 内容区域 */}
-      {loading ? (
-        <div className="loading-container">
-          <Spin size="large" tip="加载中..." />
-        </div>
-      ) : videos.length === 0 ? (
-        <Empty description={
-          <span>
-            暂无 <strong>{currentCategory.name}</strong> 分类的视频
-          </span>
-        } />
-      ) : (
-        <>
-          <div className="videos-summary">
-            找到 <b>{pagination.total}</b> 个{currentCategory.name}相关视频
-          </div>
-          
-          <Row gutter={[24, 24]}>
-            {videos.map((video) => (
-              <Col xs={24} sm={12} md={8} lg={6} xl={4.8} key={video.id}>
-                {renderVideoCard(video)}
-              </Col>
-            ))}
-          </Row>
-          
-          <div className="pagination-container">
-            <Pagination
-              current={pagination.current}
-              pageSize={pagination.pageSize}
-              total={pagination.total}
-              onChange={handlePageChange}
-              showSizeChanger={false}
+      <div className="page-content">
+        <Spin spinning={loading} size="large">
+          {videos.length === 0 && !loading ? (
+            <Empty
+              description={`暂无 "${currentCategory.name}" 分类下的视频`}
+              style={{ marginTop: '50px' }}
             />
-          </div>
-        </>
-      )}
+          ) : (
+            <>
+              <Row gutter={[24, 24]}>
+                {videos.map(item => (
+                  <Col key={item.id} xs={24} sm={12} md={8} lg={6} xl={4}>
+                    {renderVideoCard(item)}
+                  </Col>
+                ))}
+              </Row>
+              <div className="pagination-container">
+                <Pagination
+                  current={pagination.current}
+                  pageSize={pagination.pageSize}
+                  total={pagination.total}
+                  onChange={handlePageChange}
+                  showSizeChanger={false}
+                />
+              </div>
+            </>
+          )}
+        </Spin>
+      </div>
     </div>
   );
 };

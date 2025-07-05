@@ -6,7 +6,7 @@ import { applyCertificate, getMyApplications, getMyCertificates, cancelApplicati
 import { getConversionRules } from '../api';
 import { validateDocument, FILE_SIZE_LIMITS } from '../utils/fileValidator';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
 const statusTag = (status) => {
@@ -328,14 +328,16 @@ const StudentCertificatePage = () => {
               </Card>
               
               <Card title="转换规则说明" style={{ marginBottom: '24px' }}>
-                <ul style={{ paddingLeft: '20px' }}>
-                  <li>通过认证考试可获得相应证书</li>
-                  <li>证书可根据规则转换为学分或积分</li>
-                  <li>不同级别证书的转换比例不同</li>
-                  <li>转换后的学分可用于学历提升或课程抵扣</li>
-                  <li>转换规则可能会根据教育政策调整</li>
-                  <li>部分转换需要提交申请并经过审核</li>
-                </ul>
+                <Paragraph>
+                  <ul style={{ paddingLeft: '20px', listStyleType: 'disc' }}>
+                    <li>通过认证考试可获得相应证书</li>
+                    <li>证书可根据规则转换为学分或积分</li>
+                    <li>不同级别证书的转换比例不同</li>
+                    <li>转换后的学分可用于学历提升或课程抵扣</li>
+                    <li>转换规则可能会根据教育政策调整</li>
+                    <li>部分转换需要提交申请并经过审核</li>
+                  </ul>
+                </Paragraph>
               </Card>
             </div>
           )

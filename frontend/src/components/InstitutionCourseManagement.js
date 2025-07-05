@@ -27,7 +27,6 @@ const InstitutionCourseManagement = () => {
   const [currentCourse, setCurrentCourse] = useState(null);
   const [fileList, setFileList] = useState([]);
   const [videoFileList, setVideoFileList] = useState([]);
-  const [activeTab, setActiveTab] = useState('1');
 
   // 获取课程列表
   const fetchCourses = async () => {
@@ -285,11 +284,8 @@ const InstitutionCourseManagement = () => {
         </Space>
       </div>
 
-      <Tabs activeKey={activeTab} onChange={setActiveTab}>
-        <TabPane 
-          tab={<span><VideoCameraOutlined /> 课程列表</span>} 
-          key="1"
-        >
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="课程列表" key="1">
           <div className="table-operations">
             <Button 
               type="primary" 
@@ -307,16 +303,6 @@ const InstitutionCourseManagement = () => {
             loading={loading}
             pagination={{ pageSize: 10 }}
           />
-        </TabPane>
-        
-        <TabPane 
-          tab={<span><BarChartOutlined /> 数据统计</span>} 
-          key="2"
-        >
-          <div className="stats-container">
-            <Title level={3}>课程数据统计</Title>
-            <Text>即将推出数据统计功能，敬请期待！</Text>
-          </div>
         </TabPane>
       </Tabs>
 
