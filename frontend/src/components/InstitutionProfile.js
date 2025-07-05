@@ -5,8 +5,9 @@ import {
     BankOutlined, MailOutlined, PhoneOutlined, UserOutlined, EditOutlined, 
     HomeOutlined, GiftOutlined, InfoCircleOutlined, EnvironmentOutlined, UploadOutlined
 } from '@ant-design/icons';
-import { getCurrentInstitution, updateCurrentInstitution } from '../api';
+import { getCurrentInstitution, updateCurrentInstitution, updateUserInfo } from '../api';
 import EditProfileModal from './EditProfileModal'; 
+import { validateImage } from '../utils/fileValidator';
 import './UserProfile.css';
 
 const { Content } = Layout;
@@ -73,32 +74,27 @@ const InstitutionProfile = () => {
             Authorization: `Bearer ${localStorage.getItem('token') || ''}`
         },
         beforeUpload: (file) => {
-            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-            if (!isJpgOrPng) {
-                message.error('您只能上传 JPG/PNG 格式的图片!');
-            }
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isLt2M) {
-                message.error('图片大小必须小于 2MB!');
-            }
-            return isJpgOrPng && isLt2M;
+            return validateImage(file);
         },
-        onChange: async (info) => {
-            if (info.file.status === 'done') {
-                const res = info.file.response;
-                if (res.code === 200 && res.data?.url) {
-                    try {
-                        await handleUpdateProfile({ avatarUrl: res.data.url });
+        onSuccess: async (res) => {
+            if (res.code === 200 && res.data?.url) {
+                try {
+                    const updateResponse = await updateUserInfo({ avatarUrl: res.data.url });
+                    if (updateResponse && updateResponse.code === 200) {
                         message.success('头像更新成功！');
-                    } catch (e) {
-                        message.error('保存头像失败');
+                        setInstitutionData(prev => ({ ...prev, avatarUrl: res.data.url }));
+                    } else {
+                        message.error(updateResponse.message || '保存头像失败');
                     }
-                } else {
-                    message.error(res.message || '上传失败');
+                } catch (e) {
+                    message.error('保存头像失败');
                 }
-            } else if (info.file.status === 'error') {
-                message.error('上传失败');
+            } else {
+                message.error(res.message || '上传失败');
             }
+        },
+        onError: () => {
+            message.error('上传失败');
         },
     };
     

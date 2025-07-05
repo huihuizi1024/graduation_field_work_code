@@ -452,7 +452,7 @@ const Login = ({ onLoginSuccess, onGoToRegister }) => {
                   </div>
                   
                   <div className="mb-4 p-3 bg-blue-50 text-blue-600 rounded-lg text-sm text-center">
-                    💡 提示：点击"获取验证码"后，请查看浏览器控制台(F12)获取验证码
+                    💡 提示：点击"获取验证码"后，请查看后端IDEA控制台获取验证码
                   </div>
                   
                   <div className="text-center text-sm text-neutral-500">
