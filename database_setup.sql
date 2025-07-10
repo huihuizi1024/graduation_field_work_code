@@ -548,10 +548,7 @@ INSERT INTO point_rule (
 ) VALUES 
 ('完成在线课程学习', 'ONLINE_COURSE_COMPLETE', '学员完成在线课程学习并通过考核可获得积分', 1, 50.00, 1, 1, NULL, 1, '系统管理员', 1),
 ('参与平台活动', 'ACTIVITY_PARTICIPATE', '用户参与平台组织的各类学习活动获得积分', 2, 30.00, 1, 2, 90, 1, '系统管理员', 1),
-('分享学习心得', 'SHARE_EXPERIENCE', '用户分享学习经验和心得体会获得积分', 3, 20.00, 1, 2, 180, 1, '系统管理员', 1),
-('完成职业认证', 'CERT_COMPLETE', '通过相关职业认证考试获得积分', 1, 200.00, 1, 1, NULL, 1, '系统管理员', 1),
-('推荐新用户注册', 'REFERRAL_BONUS', '成功推荐新用户注册平台获得积分', 3, 100.00, 1, 2, 365, 1, '系统管理员', 1);
-
+('完成证书认证', 'CERT_COMPLETE', '通过相关职业认证考试获得积分', 1, 200.00, 1, 1, NULL, 1, '系统管理员', 1);
 -- 插入转换规则数据
 INSERT INTO conversion_rule (
     rule_name, rule_code, source_type, target_type, conversion_ratio,
@@ -559,18 +556,14 @@ INSERT INTO conversion_rule (
     review_required, applicable_institution_id, applicable_institution_name,
     effective_start_time, effective_end_time, status, creator_name, review_status
 ) VALUES 
-('积分转学分', 'POINT_TO_CREDIT', 1, 2, 10.0, 
+('完成视频转积分', 'PROJECT_TO_POINT', 1, 2, 10.0,
  10.0, 1000.0, '需完成至少一门课程学习', 
  1, 1, '北京大学',
  '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
 
-('学分转证书', 'CREDIT_TO_CERT', 2, 3, 1.0,
- 1.0, 100.0, '需通过相关考试',
- 1, 1, '北京大学',
- '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1),
 
-('积分转职业证书', 'POINT_TO_VOC_CERT', 1, 3, 5.0,
- 50.0, 500.0, '需完成对应技能培训课程',
+('职业证书转积分', 'VOC_CERT_TO_POINT', 1, 3, 5.0,
+ 50.0, 500.0, '需完成证书认定',
  1, 3, '北京职业技术学院',
  '2024-01-01 00:00:00', '2025-12-31 23:59:59', 1, '系统管理员', 1);
 
@@ -579,15 +572,22 @@ INSERT INTO certification_standard (
     standard_name, standard_code, standard_description, category, issuing_organization,
     effective_start_time, effective_end_time, point_value, status, creator_name, review_status
 ) VALUES 
-('在线课程完成认证', 'ONLINE_COURSE_CERT', '完成在线课程学习并通过考核的认证标准', 1, '国家开放大学', 
+
+ 
+('四级证书', 'CET_4', '四级考试>425分', 5, '教育部',
  '2024-01-01 00:00:00', '2025-12-31 23:59:59', 50.00, 1, '系统管理员', 1),
 
-('职业技能等级证书', 'VOC_SKILL_CERT', '通过职业技能鉴定考试获得的等级证书标准', 4, '人力资源和社会保障部', 
- '2024-03-01 00:00:00', '2026-02-28 23:59:59', 30.00, 1, '系统管理员', 1),
+('六级证书', 'CET_6', '六级考试>425分', 5, '教育部',
+ '2024-03-01 00:00:00', '2026-02-28 23:59:59', 80.00, 1, '系统管理员', 1),
 
-('数字化技能认证', 'DIGITAL_SKILL_CERT', '数字化时代必备技能认证标准', 2, '工业和信息化部', 
- '2024-01-01 00:00:00', '2025-12-31 23:59:59', 20.00, 1, '系统管理员', 1);
+('驾驶证', 'DRIVE_CERT', '获得任意驾驶证书', 5, '交管部门',
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 30.00, 1, '系统管理员', 1),
 
+('普通话证书', 'CHINESE_CER', '普通话等级二甲及以上', 5, '交管部门',
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 50.00, 1, '系统管理员', 1),
+ 
+ ('教师资格证书证书', 'TEACH_CER', '获得教师资格证', 5, '教育部',
+ '2024-01-01 00:00:00', '2025-12-31 23:59:59', 80.00, 1, '系统管理员', 1);
 -- 插入业务流程数据
 INSERT INTO business_process (
     process_name, process_code, process_description, category, responsible_department, status, creator_name
@@ -668,14 +668,14 @@ INSERT INTO expert (id, name, expertise, contact, status, description) VALUES
 
 -- 插入商品数据
 INSERT INTO product (name, description, points, image_url, category, stock, status) VALUES
-('高级学习笔记本', '优质纸张，方便记录学习笔记', 500, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
-('Python编程入门课程', '零基础入门Python编程的在线课程', 2000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
-('便携式电子词典', '随时随地查询单词，提升学习效率', 1500, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
-('职业规划咨询课程', '一对一职业发展指导课程', 3000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
-('智能学习平板', '支持手写笔记的学习平板', 5000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
-('英语口语课程', '实用英语口语训练课程', 2500, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1),
-('数据分析工具包', '包含Excel、Python数据分析教程', 1800, 'https://img.freepik.com/free-photo/data-analysis-concept_53876-124355.jpg', '技能培训', 25, 1),
-('编程键盘', '机械键盘，程序员专用', 3500, 'https://img.freepik.com/free-photo/keyboard-technology-computer-device_53876-124567.jpg', '电子设备', 15, 1);
+('学习笔记本', '优质纸张，方便记录学习笔记', 50000, 'https://img.freepik.com/free-psd/notebook-mockup_1310-1458.jpg', '学习用品', 100, 1),
+('Python编程入门课程教材', '零基础入门Python编程的在线课程', 100000, 'https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg', '在线课程', 50, 1),
+('便携式电子词典', '随时随地查询单词，提升学习效率', 30000, 'https://img.freepik.com/free-vector/electronic-dictionary-abstract-concept-illustration_335657-3875.jpg', '学习工具', 30, 1),
+('零食大礼包', '包含多种零食的大礼包', 30000, 'https://img.freepik.com/free-photo/business-planning-concept-with-wooden-blocks-papers_176474-7323.jpg', '咨询服务', 20, 1),
+('智能学习平板', '支持手写笔记的学习平板', 1000000, 'https://img.freepik.com/free-psd/digital-tablet-mockup_1310-706.jpg', '电子设备', 10, 1),
+('英语课程教材', '实用英语口语训练课程', 120000, 'https://img.freepik.com/free-photo/english-british-england-language-education-concept_53876-124286.jpg', '在线课程', 40, 1),
+('文具盒', '多功能文具盒，方便携带适用', 100000, 'https://img.freepik.com/free-photo/data-analysis-concept_53876-124355.jpg', '技能培训', 25, 1),
+('编程键盘', '机械键盘，程序员专用', 200000, 'https://img.freepik.com/free-photo/keyboard-technology-computer-device_53876-124567.jpg', '电子设备', 15, 1);
 
 -- 插入订单数据
 INSERT INTO product_order (
@@ -690,9 +690,8 @@ INSERT INTO product_order (
 INSERT INTO conversion_history (
     user_id, conversion_rule_id, source_amount, target_amount, status, remark
 ) VALUES 
-(1, 1, 100.00, 10.00, 1, '积分转学分成功'),
-(2, 1, 200.00, 20.00, 1, '积分转学分成功'),
-(3, 3, 300.00, 60.00, 1, '积分转职业证书成功');
+(1, 1, 100.00, 10.00, 1, '课程转积分成功'),
+(2, 1, 200.00, 20.00, 1, '职业证书转积分成功');
 
 -- 添加product_order表的外键约束
 ALTER TABLE product_order 
