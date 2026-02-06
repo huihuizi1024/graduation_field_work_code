@@ -1,5 +1,134 @@
 #!/bin/bash
 
+# Windows 兼容性设置
+export MSYS_NO_PATHCONV=1
+export MSYS2_ARG_CONV_EXCL="*"
+
+# 检测是否在 Windows 环境中运行
+is_windows() {
+    case "$(uname -s)" in
+        MINGW*|MSYS*|CYGWIN*)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+# Windows 路径转换函数
+convert_path() {
+    if is_windows; then
+        echo "$1" | sed 's/\\/\//g'
+    else
+        echo "$1"
+    fi
+}
+
+# 修改文件检查函数
+check_file_exists() {
+    local file="$1"
+    if [ ! -f "$(convert_path "$file")" ]; then
+        return 1
+    fi
+    return 0
+}
+
+# 修改端口检查函数 - Windows 兼容版
+check_port_windows() {
+    local port=$1
+    if command -v netstat >/dev/null 2>&1; then
+        netstat -ano 2>/dev/null | grep -E ":$port\s+" >/dev/null
+        return $?
+    else
+        # 如果 netstat 不可用，尝试使用 PowerShell
+        if command -v powershell >/dev/null 2>&1; then
+            powershell -Command "Get-NetTCPConnection -LocalPort $port 2>$null" >/dev/null 2>&1
+            return $?
+        fi
+    fi
+    return 1
+}
+
+# 修改进度条函数 - Windows 兼容版
+show_progress_windows() {
+    local duration=$1
+    local steps=20
+    local step_duration=$((duration / steps))
+    
+    for ((i=0; i<=steps; i++)); do
+        local progress=$((i * 100 / steps))
+        printf "\r[%-${steps}s] %d%%" "$(printf '#%.0s' $(seq 1 $i))" "$progress"
+        sleep $step_duration
+    done
+    echo
+}
+
+# 修改日志函数 - Windows 兼容版
+log_message() {
+    local timestamp
+    if is_windows; then
+        timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    else
+        timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    fi
+    echo "$timestamp - $1" >> "$(convert_path "$LOG_FILE")"
+}
+
+# 修改备份函数 - Windows 兼容版
+backup_database_windows() {
+    print_step "创建数据库备份..."
+    local backup_dir="backups"
+    local backup_file="${backup_dir}/backup_$(date +%Y%m%d_%H%M%S).sql"
+    
+    # 创建备份目录
+    mkdir -p "$(convert_path "$backup_dir")"
+    
+    # 执行备份
+    print_info "正在备份数据库到 $backup_file ..."
+    if is_windows; then
+        docker exec $CONTAINER_NAME mysqldump -u root -p$ROOT_PASS --databases $DATABASE_NAME > "$(convert_path "$backup_file")" 2>/dev/null
+    else
+        docker exec $CONTAINER_NAME mysqldump -u root -p$ROOT_PASS --databases $DATABASE_NAME > "$backup_file" 2>/dev/null
+    fi
+    
+    if [ $? -eq 0 ]; then
+        print_success "数据库备份成功: $backup_file"
+        # 压缩备份文件
+        if command -v gzip >/dev/null 2>&1; then
+            gzip "$(convert_path "$backup_file")"
+            print_success "备份文件已压缩: ${backup_file}.gz"
+        else
+            print_warning "gzip 不可用，跳过压缩"
+        fi
+    else
+        print_error "数据库备份失败"
+        return 1
+    fi
+}
+
+# 替换原有的平台检测函数
+detect_platform() {
+    if is_windows; then
+        echo "windows"
+    else
+        case "$(uname -s)" in
+            Darwin*)
+                echo "macos"
+                ;;
+            Linux*)
+                echo "linux"
+                ;;
+            *)
+                echo "unknown"
+                ;;
+        esac
+    fi
+}
+
+# 在脚本开头添加 Windows 兼容性设置
+#!/bin/bash
+
 # ========================================
 # 终身学习学分银行平台积分管理系统
 # MySQL 8.0 数据库快速启动脚本(增强版)
@@ -486,10 +615,49 @@ backup_database() {
     fi
 }
 
-# 错误处理和恢复增强
+# Windows 特定的错误处理函数
+handle_windows_error() {
+    local error_code=$1
+    local error_message=$2
+    
+    case $error_code in
+        1)
+            print_warning "Windows 环境下的权限问题，尝试以管理员身份运行..."
+            if command -v powershell >/dev/null 2>&1; then
+                print_info "尝试使用 PowerShell 提升权限..."
+                powershell -Command "Start-Process -Verb RunAs 'bash' -ArgumentList '$0'"
+                exit 0
+            fi
+            ;;
+        2)
+            print_warning "Windows 环境下的路径问题，尝试修复..."
+            local fixed_path=$(convert_path "$error_message")
+            print_info "转换后的路径: $fixed_path"
+            ;;
+        3)
+            print_warning "Windows 环境下的进程占用问题..."
+            print_info "尝试结束占用进程..."
+            if command -v powershell >/dev/null 2>&1; then
+                powershell -Command "Stop-Process -Id (Get-NetTCPConnection -LocalPort $error_message).OwningProcess -Force" 2>/dev/null
+            fi
+            ;;
+        *)
+            print_error "未知的 Windows 错误"
+            ;;
+    esac
+}
+
+# 修改错误处理函数
 handle_error() {
     local error_code=$1
     local error_message=$2
+    
+    if is_windows; then
+        handle_windows_error "$error_code" "$error_message"
+        if [ $? -eq 0 ]; then
+            return 0
+        fi
+    fi
     
     print_error "发生错误 (代码: $error_code): $error_message"
     
@@ -501,13 +669,27 @@ handle_error() {
             ;;
         2)
             print_warning "尝试修复数据库结构..."
-            docker exec $CONTAINER_NAME mysql -u root -p$ROOT_PASS < database_setup.sql
+            if is_windows; then
+                docker exec $CONTAINER_NAME mysql -u root -p$ROOT_PASS < "$(convert_path "database_setup.sql")"
+            else
+                docker exec $CONTAINER_NAME mysql -u root -p$ROOT_PASS < database_setup.sql
+            fi
             ;;
         3)
             print_warning "尝试从最近的备份恢复..."
-            local latest_backup=$(ls -t backups/*.sql.gz 2>/dev/null | head -n1)
+            local latest_backup
+            if is_windows; then
+                latest_backup=$(ls -t "$(convert_path "backups")/"*.sql.gz 2>/dev/null | head -n1)
+            else
+                latest_backup=$(ls -t backups/*.sql.gz 2>/dev/null | head -n1)
+            fi
             if [ -n "$latest_backup" ]; then
-                gunzip -c "$latest_backup" | docker exec -i $CONTAINER_NAME mysql -u root -p$ROOT_PASS
+                if command -v gunzip >/dev/null 2>&1; then
+                    gunzip -c "$latest_backup" | docker exec -i $CONTAINER_NAME mysql -u root -p$ROOT_PASS
+                else
+                    print_error "Windows 环境下 gunzip 不可用"
+                    print_info "请手动解压备份文件并导入"
+                fi
             else
                 print_error "没有找到可用的备份"
             fi
@@ -583,19 +765,57 @@ if ! check_docker_service; then
 fi
 print_success "Docker服务正常运行"
 
-# 检查必要文件是否存在
+# 修改文件权限检查部分
 print_info "检查必要文件..."
-if [ ! -f "docker-compose.yml" ]; then
+if ! check_file_exists "docker-compose.yml"; then
     print_error "docker-compose.yml文件不存在"
     exit 1
 fi
 print_success "docker-compose.yml文件存在"
 
-if [ ! -f "database_setup.sql" ]; then
+if ! check_file_exists "database_setup.sql"; then
     print_error "database_setup.sql文件不存在"
     exit 1
 fi
 print_success "database_setup.sql文件存在"
+
+# 修改特殊字符显示
+if is_windows; then
+    # Windows 环境下使用简化的字符
+    INFO_ICON="[i]"
+    SUCCESS_ICON="[v]"
+    WARNING_ICON="[!]"
+    ERROR_ICON="[x]"
+    ROCKET_ICON="[>]"
+else
+    # Unix 环境下使用 emoji
+    INFO_ICON="ℹ️"
+    SUCCESS_ICON="✅"
+    WARNING_ICON="⚠️"
+    ERROR_ICON="❌"
+    ROCKET_ICON="🚀"
+fi
+
+# 修改输出函数
+print_info() {
+    echo -e "${BLUE}${INFO_ICON} $1${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}${SUCCESS_ICON} $1${NC}"
+}
+
+print_warning() {
+    echo -e "${YELLOW}${WARNING_ICON} $1${NC}"
+}
+
+print_error() {
+    echo -e "${RED}${ERROR_ICON} $1${NC}"
+}
+
+print_step() {
+    echo -e "${PURPLE}${ROCKET_ICON} $1${NC}"
+}
 
 # 检查端口占用 - 跨平台兼容
 print_info "检查端口占用..."
